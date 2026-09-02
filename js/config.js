@@ -7,14 +7,14 @@
  */
 
 export const SITE = {
-  brandName: "Aangan",
+  brandName: "Charroti",
   brandTagline: "Kitchen",
   metaDescription:
-    "Aangan Kitchen — homestyle Indian food, made fresh every day. See today's menu and order for delivery.",
+    "Charroti Kitchen — homestyle Indian food, made fresh every day. See today's menu and order for delivery.",
   contact: {
     phone: "+91 90000 00000",
     whatsapp: "919000000000", // digits only, used for wa.me links
-    email: "hello@aangankitchen.example",
+    email: "hello@charrotikitchen.example",
     location: "Sector 62, Noida, Uttar Pradesh",
     hours: "12:00 PM – 9:30 PM, all days",
   },

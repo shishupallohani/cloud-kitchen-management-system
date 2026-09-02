@@ -2,7 +2,7 @@
   "name": "cloud-kitchen-seed",
   "private": true,
   "version": "1.0.0",
-  "description": "One-time Firestore seeding helper for the Aangan Kitchen sample data. Not part of the deployed site.",
+  "description": "One-time Firestore seeding helper for the Charroti Kitchen sample data. Not part of the deployed site.",
   "scripts": {
     "seed": "node seed.js"
   },

@@ -838,11 +838,11 @@
   },
   "siteConfig": {
     "general": {
-      "brandName": "Aangan",
+      "brandName": "Charroti",
       "brandTagline": "Kitchen",
       "contactPhone": "+91 90000 00000",
       "contactWhatsapp": "919000000000",
-      "contactEmail": "hello@aangankitchen.example",
+      "contactEmail": "hello@charrotikitchen.example",
       "contactLocation": "Sector 62, Noida, Uttar Pradesh",
       "contactHours": "12:00 PM - 9:30 PM, all days"
     }

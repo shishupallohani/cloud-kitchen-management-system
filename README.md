@@ -1,4 +1,4 @@
-# Aangan Kitchen — Cloud Kitchen Website
+# Charroti Kitchen — Cloud Kitchen Website
 
 A premium, single-page website for a home-style Indian cloud kitchen, with
 a date-based daily menu managed from a no-code admin panel backed by
@@ -49,7 +49,7 @@ cloud-kitchen/
    **Add project** → name it `cloud-kitchen` (or similar). Do **not**
    reuse an existing project.
 2. Once created, go to **Project settings → General → Your apps → Add
-   app → Web (`</>`)**. Register an app (nickname anything, e.g. "Aangan
+   app → Web (`</>`)**. Register an app (nickname anything, e.g. "Charroti
    Web"). You don't need Firebase Hosting.
 3. Copy the `firebaseConfig` object shown — you'll paste it into
    `js/firebase.js` in step 5.
@@ -148,7 +148,7 @@ sample site-config document into Firestore.
 ```bash
 git init
 git add .
-git commit -m "Initial commit: Aangan Kitchen"
+git commit -m "Initial commit: Charroti Kitchen"
 git branch -M main
 git remote add origin https://github.com/<your-username>/cloud-kitchen.git
 git push -u origin main

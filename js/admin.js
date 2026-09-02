@@ -54,6 +54,23 @@ document.querySelectorAll(".admin-tab").forEach((tab) => {
   });
 });
 
+// ---------------------------------------------------------------------
+// Toasts — visible confirmation for every add/edit/remove/save action
+// ---------------------------------------------------------------------
+const toastContainer = document.getElementById("toast-container");
+
+function showToast(message, isError = false) {
+  const toast = document.createElement("div");
+  toast.className = `toast${isError ? " toast--error" : ""}`;
+  toast.textContent = message;
+  toastContainer.appendChild(toast);
+
+  setTimeout(() => {
+    toast.classList.add("toast--leaving");
+    toast.addEventListener("animationend", () => toast.remove(), { once: true });
+  }, 3200);
+}
+
 let booted = false;
 function bootDashboard() {
   if (booted) return;
@@ -127,14 +144,24 @@ function addItemRow(item = {}) {
   node.querySelector('[data-field="price"]').value = item.price ?? "";
   node.querySelector('[data-field="available"]').checked = item.available !== false;
 
-  node.querySelector('[data-action="remove"]').addEventListener("click", () => node.remove());
+  node.querySelector('[data-action="remove"]').addEventListener("click", () => {
+    const name = node.querySelector('[data-field="name"]').value || "Item";
+    node.remove();
+    showToast(`${name} removed from this menu. Click Save Menu to make it permanent.`);
+  });
   node.querySelector('[data-action="move-up"]').addEventListener("click", () => {
     const prev = node.previousElementSibling;
-    if (prev) itemsList.insertBefore(node, prev);
+    if (prev) {
+      itemsList.insertBefore(node, prev);
+      showToast("Moved up.");
+    }
   });
   node.querySelector('[data-action="move-down"]').addEventListener("click", () => {
     const next = node.nextElementSibling;
-    if (next) itemsList.insertBefore(next, node);
+    if (next) {
+      itemsList.insertBefore(next, node);
+      showToast("Moved down.");
+    }
   });
 
   itemsList.appendChild(node);
@@ -181,18 +208,26 @@ function initMenuEditor() {
     loadMenuIntoEditor(dateInput.value);
   });
 
-  document.getElementById("add-item-btn").addEventListener("click", () => addItemRow());
+  document.getElementById("add-item-btn").addEventListener("click", () => {
+    addItemRow();
+    showToast("New item row added — fill it in and click Save Menu.");
+  });
 
   document.getElementById("save-menu-btn").addEventListener("click", async () => {
-    if (!dateInput.value) return setStatus("Pick a date first.", true);
+    if (!dateInput.value) {
+      setStatus("Pick a date first.", true);
+      return showToast("Pick a date first.", true);
+    }
     const items = readItemsFromEditor();
     try {
       await saveMenuForDate(dateInput.value, { items, specialNote: specialNoteInput.value.trim() });
       setStatus(`Saved menu for ${formatDisplayDate(dateInput.value)}.`);
+      showToast(`Menu saved for ${formatDisplayDate(dateInput.value)} (${items.length} item(s)).`);
       initOverview();
     } catch (err) {
       console.error(err);
       setStatus("Couldn't save the menu. Please try again.", true);
+      showToast("Couldn't save the menu. Please try again.", true);
     }
   });
 
@@ -204,26 +239,31 @@ function initMenuEditor() {
       itemsList.innerHTML = "";
       specialNoteInput.value = "";
       setStatus(`Deleted menu for ${formatDisplayDate(dateInput.value)}.`);
+      showToast(`Menu deleted for ${formatDisplayDate(dateInput.value)}.`);
       initOverview();
     } catch (err) {
       console.error(err);
       setStatus("Couldn't delete the menu.", true);
+      showToast("Couldn't delete the menu.", true);
     }
   });
 
   document.getElementById("duplicate-menu-btn").addEventListener("click", async () => {
     if (!dateInput.value || !duplicateTargetInput.value) {
-      return setStatus("Pick both a source date and a target date.", true);
+      setStatus("Pick both a source date and a target date.", true);
+      return showToast("Pick both a source date and a target date.", true);
     }
     try {
       await duplicateMenu(dateInput.value, duplicateTargetInput.value);
-      setStatus(
-        `Copied ${formatDisplayDate(dateInput.value)} → ${formatDisplayDate(duplicateTargetInput.value)}.`
-      );
+      const msg = `Copied ${formatDisplayDate(dateInput.value)} → ${formatDisplayDate(duplicateTargetInput.value)}.`;
+      setStatus(msg);
+      showToast(msg);
       initOverview();
     } catch (err) {
       console.error(err);
-      setStatus(err.message || "Couldn't duplicate the menu.", true);
+      const msg = err.message || "Couldn't duplicate the menu.";
+      setStatus(msg, true);
+      showToast(msg, true);
     }
   });
 }
@@ -262,7 +302,7 @@ async function saveFestivalRow(node) {
     enabled: node.querySelector('[data-field="enabled"]').checked,
   };
   if (!payload.name || !payload.startDate || !payload.endDate) {
-    return setStatus("Festival needs a name, start date, and end date.", true);
+    return showToast("Festival needs a name, start date, and end date.", true);
   }
   try {
     if (node.dataset.id) {
@@ -272,21 +312,26 @@ async function saveFestivalRow(node) {
       node.dataset.id = ref.id;
     }
     setStatus(`Saved "${payload.name}".`);
+    showToast(`"${payload.name}" saved.`);
     initOverview();
   } catch (err) {
     console.error(err);
     setStatus("Couldn't save that festival.", true);
+    showToast("Couldn't save that festival.", true);
   }
 }
 
 async function removeFestivalRow(node) {
-  if (!confirm("Delete this festival?")) return;
+  const name = node.querySelector('[data-field="name"]').value || "This festival";
+  if (!confirm(`Delete ${name}?`)) return;
   try {
     if (node.dataset.id) await deleteDoc(doc(db, "festivals", node.dataset.id));
     node.remove();
+    showToast(`${name} deleted.`);
   } catch (err) {
     console.error(err);
     setStatus("Couldn't delete that festival.", true);
+    showToast("Couldn't delete that festival.", true);
   }
 }
 
@@ -295,5 +340,8 @@ async function initFestivals() {
   const snap = await getDocs(collection(db, "festivals"));
   snap.docs.forEach((d) => addFestivalRow(d.id, d.data()));
 
-  document.getElementById("add-festival-btn").addEventListener("click", () => addFestivalRow(null));
+  document.getElementById("add-festival-btn").addEventListener("click", () => {
+    addFestivalRow(null);
+    showToast("New festival row added — fill it in and click Save.");
+  });
 }
