@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard — Aangan Kitchen</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body class="admin-body">
+
+  <header class="admin-topbar">
+    <div class="admin-topbar__brand">
+      <img src="assets/icons/logo-mark.svg" alt="" width="24" height="24" />
+      <span>Aangan Admin</span>
+    </div>
+    <div class="admin-topbar__right">
+      <span id="admin-email" class="admin-topbar__email"></span>
+      <button id="logout-btn" class="btn btn--ghost btn--small">Log Out</button>
+    </div>
+  </header>
+
+  <div id="auth-gate" class="admin-gate">
+    <p>Checking your session…</p>
+  </div>
+
+  <div id="admin-app" class="admin-shell" hidden>
+    <nav class="admin-tabs" aria-label="Admin sections">
+      <button class="admin-tab is-active" data-tab="overview">Dashboard</button>
+      <button class="admin-tab" data-tab="menu">Menu Management</button>
+      <button class="admin-tab" data-tab="festivals">Festivals</button>
+    </nav>
+
+    <!-- ============ OVERVIEW ============ -->
+    <section class="admin-panel is-active" id="panel-overview">
+      <h1>Dashboard</h1>
+      <div class="admin-cards">
+        <div class="admin-card">
+          <span class="admin-card__label">Today</span>
+          <strong id="overview-today-date">—</strong>
+          <span id="overview-today-count" class="admin-card__sub">—</span>
+        </div>
+        <div class="admin-card">
+          <span class="admin-card__label">Active Festival</span>
+          <strong id="overview-festival">None</strong>
+        </div>
+      </div>
+
+      <h2 class="admin-subhead">Upcoming Menus (next 7 days)</h2>
+      <ul id="upcoming-list" class="upcoming-list"></ul>
+    </section>
+
+    <!-- ============ MENU MANAGEMENT ============ -->
+    <section class="admin-panel" id="panel-menu">
+      <h1>Menu Management</h1>
+
+      <div class="menu-editor-controls">
+        <label for="menu-date-input">Date</label>
+        <input type="date" id="menu-date-input" />
+        <button id="load-menu-btn" class="btn btn--ghost btn--small">Load</button>
+        <button id="delete-menu-btn" class="btn btn--ghost btn--small btn--danger">Delete Menu</button>
+
+        <span class="menu-editor-controls__divider"></span>
+
+        <label for="duplicate-target-input">Duplicate to</label>
+        <input type="date" id="duplicate-target-input" />
+        <button id="duplicate-menu-btn" class="btn btn--ghost btn--small">Duplicate Previous Menu</button>
+      </div>
+
+      <p id="menu-editor-status" class="admin-status" role="status"></p>
+
+      <label for="special-note-input" class="field-label">Special note (optional)</label>
+      <input type="text" id="special-note-input" placeholder="e.g. Freshly prepared today" class="field-input" />
+
+      <div class="menu-items-editor">
+        <div class="menu-items-editor__head">
+          <h2>Items</h2>
+          <button id="add-item-btn" class="btn btn--primary btn--small">Add Item</button>
+        </div>
+        <ul id="menu-items-list" class="menu-items-list"></ul>
+      </div>
+
+      <button id="save-menu-btn" class="btn btn--primary">Save Menu</button>
+    </section>
+
+    <!-- ============ FESTIVALS ============ -->
+    <section class="admin-panel" id="panel-festivals">
+      <h1>Festivals</h1>
+      <p class="admin-hint">Enable, disable, or adjust the dates and greeting for each festival. Changes apply to the public site immediately — no deploy required.</p>
+
+      <div class="menu-items-editor__head">
+        <h2>Configured Festivals</h2>
+        <button id="add-festival-btn" class="btn btn--primary btn--small">Add Festival</button>
+      </div>
+      <ul id="festivals-list" class="festivals-list"></ul>
+    </section>
+  </div>
+
+  <template id="menu-item-row-template">
+    <li class="menu-item-row">
+      <div class="menu-item-row__grid">
+        <div>
+          <label class="field-label">Name</label>
+          <input type="text" class="field-input" data-field="name" />
+        </div>
+        <div>
+          <label class="field-label">Category</label>
+          <input type="text" class="field-input" data-field="category" placeholder="e.g. Dal" />
+        </div>
+        <div class="menu-item-row__span2">
+          <label class="field-label">Description</label>
+          <input type="text" class="field-input" data-field="description" />
+        </div>
+        <div class="menu-item-row__span2">
+          <label class="field-label">Image URL (ImgBB link, optional)</label>
+          <input type="url" class="field-input" data-field="imageUrl" placeholder="https://i.ibb.co/..." />
+        </div>
+        <div>
+          <label class="field-label">Price (₹, optional)</label>
+          <input type="number" min="0" class="field-input" data-field="price" />
+        </div>
+        <div class="menu-item-row__checkbox">
+          <label><input type="checkbox" data-field="available" checked /> Available</label>
+        </div>
+      </div>
+      <div class="menu-item-row__actions">
+        <button type="button" class="icon-btn" data-action="move-up" title="Move up">↑</button>
+        <button type="button" class="icon-btn" data-action="move-down" title="Move down">↓</button>
+        <button type="button" class="icon-btn icon-btn--danger" data-action="remove" title="Remove item">✕</button>
+      </div>
+    </li>
+  </template>
+
+  <template id="festival-row-template">
+    <li class="festival-row">
+      <div class="festival-row__grid">
+        <div>
+          <label class="field-label">Name</label>
+          <input type="text" class="field-input" data-field="name" />
+        </div>
+        <div>
+          <label class="field-label">Theme key</label>
+          <input type="text" class="field-input" data-field="theme" placeholder="e.g. diwali" />
+        </div>
+        <div>
+          <label class="field-label">Start date</label>
+          <input type="date" class="field-input" data-field="startDate" />
+        </div>
+        <div>
+          <label class="field-label">End date</label>
+          <input type="date" class="field-input" data-field="endDate" />
+        </div>
+        <div class="festival-row__span2">
+          <label class="field-label">Greeting</label>
+          <input type="text" class="field-input" data-field="greeting" placeholder="e.g. Happy Diwali" />
+        </div>
+        <div class="menu-item-row__checkbox">
+          <label><input type="checkbox" data-field="enabled" checked /> Enabled</label>
+        </div>
+      </div>
+      <div class="menu-item-row__actions">
+        <button type="button" class="btn btn--ghost btn--small" data-action="save">Save</button>
+        <button type="button" class="icon-btn icon-btn--danger" data-action="remove" title="Delete festival">✕</button>
+      </div>
+    </li>
+  </template>
+
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>

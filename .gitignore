@@ -1,0 +1,4 @@
+node_modules/
+scripts/service-account.json
+.DS_Store
+.env

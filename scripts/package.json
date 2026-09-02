@@ -1,0 +1,12 @@
+{
+  "name": "cloud-kitchen-seed",
+  "private": true,
+  "version": "1.0.0",
+  "description": "One-time Firestore seeding helper for the Aangan Kitchen sample data. Not part of the deployed site.",
+  "scripts": {
+    "seed": "node seed.js"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.0.0"
+  }
+}

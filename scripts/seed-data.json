@@ -1,0 +1,850 @@
+{
+  "dailyMenus": {
+    "2026-09-01": {
+      "date": "2026-09-01",
+      "items": [
+        {
+          "name": "Dal Tadka",
+          "description": "Slow-simmered lentils with a hot ghee tempering.",
+          "category": "Dal",
+          "available": true,
+          "order": 1,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Paneer Masala",
+          "description": "Rich and flavorful paneer curry.",
+          "category": "Paneer",
+          "available": true,
+          "order": 2,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Aloo Gobi",
+          "description": "Potato and cauliflower, dry-roasted with turmeric.",
+          "category": "Vegetables",
+          "available": true,
+          "order": 3,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Chapati",
+          "description": "Hand-rolled, made fresh to order.",
+          "category": "Indian Breads",
+          "available": true,
+          "order": 4,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Jeera Rice",
+          "description": "Basmati rice tempered with cumin.",
+          "category": "Rice",
+          "available": true,
+          "order": 5,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Salad & Raita",
+          "description": "Crisp seasonal salad with cooling raita.",
+          "category": "Sides",
+          "available": true,
+          "order": 6,
+          "imageUrl": "",
+          "price": null
+        }
+      ],
+      "specialNote": "Freshly prepared today",
+      "updatedAt": "2026-09-01T18:14:09.234805Z"
+    },
+    "2026-09-02": {
+      "date": "2026-09-02",
+      "items": [
+        {
+          "name": "Rajma",
+          "description": "Kidney beans in a slow-cooked tomato gravy.",
+          "category": "Main Course",
+          "available": true,
+          "order": 1,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Bhindi Fry",
+          "description": "Okra pan-fried until crisp at the edges.",
+          "category": "Vegetables",
+          "available": true,
+          "order": 2,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Chole",
+          "description": "Chickpeas simmered overnight in a tangy masala.",
+          "category": "Main Course",
+          "available": true,
+          "order": 3,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Roti",
+          "description": "Whole-wheat, soft, finished with ghee.",
+          "category": "Indian Breads",
+          "available": true,
+          "order": 4,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Steamed Rice",
+          "description": "Plain steamed basmati, cooked fresh.",
+          "category": "Rice",
+          "available": true,
+          "order": 5,
+          "imageUrl": "",
+          "price": null
+        }
+      ],
+      "specialNote": "",
+      "updatedAt": "2026-09-01T18:14:09.234839Z"
+    },
+    "2026-09-03": {
+      "date": "2026-09-03",
+      "items": [
+        {
+          "name": "Mushroom Masala",
+          "description": "Button mushrooms in a ginger-garam masala.",
+          "category": "Main Course",
+          "available": true,
+          "order": 1,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Seasonal Vegetable Curry",
+          "description": "Whatever's freshest this week.",
+          "category": "Vegetables",
+          "available": true,
+          "order": 2,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Dal Tadka",
+          "description": "Slow-simmered lentils with a hot ghee tempering.",
+          "category": "Dal",
+          "available": true,
+          "order": 3,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Veg Pulao",
+          "description": "Fragrant rice with seasonal vegetables and whole spices.",
+          "category": "Rice",
+          "available": true,
+          "order": 4,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Chapati",
+          "description": "Hand-rolled, made fresh to order.",
+          "category": "Indian Breads",
+          "available": true,
+          "order": 5,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Salad & Raita",
+          "description": "Crisp seasonal salad with cooling raita.",
+          "category": "Sides",
+          "available": false,
+          "order": 6,
+          "imageUrl": "",
+          "price": null
+        }
+      ],
+      "specialNote": "Salad sold out early today",
+      "updatedAt": "2026-09-01T18:14:09.234867Z"
+    },
+    "2026-09-04": {
+      "date": "2026-09-04",
+      "items": [
+        {
+          "name": "Dal Tadka",
+          "description": "Slow-simmered lentils with a hot ghee tempering.",
+          "category": "Dal",
+          "available": true,
+          "order": 1,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Paneer Masala",
+          "description": "Rich and flavorful paneer curry.",
+          "category": "Paneer",
+          "available": true,
+          "order": 2,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Aloo Gobi",
+          "description": "Potato and cauliflower, dry-roasted with turmeric.",
+          "category": "Vegetables",
+          "available": true,
+          "order": 3,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Chapati",
+          "description": "Hand-rolled, made fresh to order.",
+          "category": "Indian Breads",
+          "available": true,
+          "order": 4,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Jeera Rice",
+          "description": "Basmati rice tempered with cumin.",
+          "category": "Rice",
+          "available": true,
+          "order": 5,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Salad & Raita",
+          "description": "Crisp seasonal salad with cooling raita.",
+          "category": "Sides",
+          "available": true,
+          "order": 6,
+          "imageUrl": "",
+          "price": null
+        }
+      ],
+      "specialNote": "Freshly prepared today",
+      "updatedAt": "2026-09-01T18:14:09.234902Z"
+    },
+    "2026-09-05": {
+      "date": "2026-09-05",
+      "items": [
+        {
+          "name": "Rajma",
+          "description": "Kidney beans in a slow-cooked tomato gravy.",
+          "category": "Main Course",
+          "available": true,
+          "order": 1,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Bhindi Fry",
+          "description": "Okra pan-fried until crisp at the edges.",
+          "category": "Vegetables",
+          "available": true,
+          "order": 2,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Chole",
+          "description": "Chickpeas simmered overnight in a tangy masala.",
+          "category": "Main Course",
+          "available": true,
+          "order": 3,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Roti",
+          "description": "Whole-wheat, soft, finished with ghee.",
+          "category": "Indian Breads",
+          "available": true,
+          "order": 4,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Steamed Rice",
+          "description": "Plain steamed basmati, cooked fresh.",
+          "category": "Rice",
+          "available": true,
+          "order": 5,
+          "imageUrl": "",
+          "price": null
+        }
+      ],
+      "specialNote": "",
+      "updatedAt": "2026-09-01T18:14:09.234911Z"
+    },
+    "2026-09-06": {
+      "date": "2026-09-06",
+      "items": [
+        {
+          "name": "Mushroom Masala",
+          "description": "Button mushrooms in a ginger-garam masala.",
+          "category": "Main Course",
+          "available": true,
+          "order": 1,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Seasonal Vegetable Curry",
+          "description": "Whatever's freshest this week.",
+          "category": "Vegetables",
+          "available": true,
+          "order": 2,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Dal Tadka",
+          "description": "Slow-simmered lentils with a hot ghee tempering.",
+          "category": "Dal",
+          "available": true,
+          "order": 3,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Veg Pulao",
+          "description": "Fragrant rice with seasonal vegetables and whole spices.",
+          "category": "Rice",
+          "available": true,
+          "order": 4,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Chapati",
+          "description": "Hand-rolled, made fresh to order.",
+          "category": "Indian Breads",
+          "available": true,
+          "order": 5,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Salad & Raita",
+          "description": "Crisp seasonal salad with cooling raita.",
+          "category": "Sides",
+          "available": false,
+          "order": 6,
+          "imageUrl": "",
+          "price": null
+        }
+      ],
+      "specialNote": "Salad sold out early today",
+      "updatedAt": "2026-09-01T18:14:09.234935Z"
+    },
+    "2026-09-07": {
+      "date": "2026-09-07",
+      "items": [
+        {
+          "name": "Dal Tadka",
+          "description": "Slow-simmered lentils with a hot ghee tempering.",
+          "category": "Dal",
+          "available": true,
+          "order": 1,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Paneer Masala",
+          "description": "Rich and flavorful paneer curry.",
+          "category": "Paneer",
+          "available": true,
+          "order": 2,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Aloo Gobi",
+          "description": "Potato and cauliflower, dry-roasted with turmeric.",
+          "category": "Vegetables",
+          "available": true,
+          "order": 3,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Chapati",
+          "description": "Hand-rolled, made fresh to order.",
+          "category": "Indian Breads",
+          "available": true,
+          "order": 4,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Jeera Rice",
+          "description": "Basmati rice tempered with cumin.",
+          "category": "Rice",
+          "available": true,
+          "order": 5,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Salad & Raita",
+          "description": "Crisp seasonal salad with cooling raita.",
+          "category": "Sides",
+          "available": true,
+          "order": 6,
+          "imageUrl": "",
+          "price": null
+        }
+      ],
+      "specialNote": "Freshly prepared today",
+      "updatedAt": "2026-09-01T18:14:09.234962Z"
+    },
+    "2026-09-08": {
+      "date": "2026-09-08",
+      "items": [
+        {
+          "name": "Rajma",
+          "description": "Kidney beans in a slow-cooked tomato gravy.",
+          "category": "Main Course",
+          "available": true,
+          "order": 1,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Bhindi Fry",
+          "description": "Okra pan-fried until crisp at the edges.",
+          "category": "Vegetables",
+          "available": true,
+          "order": 2,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Chole",
+          "description": "Chickpeas simmered overnight in a tangy masala.",
+          "category": "Main Course",
+          "available": true,
+          "order": 3,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Roti",
+          "description": "Whole-wheat, soft, finished with ghee.",
+          "category": "Indian Breads",
+          "available": true,
+          "order": 4,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Steamed Rice",
+          "description": "Plain steamed basmati, cooked fresh.",
+          "category": "Rice",
+          "available": true,
+          "order": 5,
+          "imageUrl": "",
+          "price": null
+        }
+      ],
+      "specialNote": "",
+      "updatedAt": "2026-09-01T18:14:09.234971Z"
+    },
+    "2026-09-09": {
+      "date": "2026-09-09",
+      "items": [
+        {
+          "name": "Mushroom Masala",
+          "description": "Button mushrooms in a ginger-garam masala.",
+          "category": "Main Course",
+          "available": true,
+          "order": 1,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Seasonal Vegetable Curry",
+          "description": "Whatever's freshest this week.",
+          "category": "Vegetables",
+          "available": true,
+          "order": 2,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Dal Tadka",
+          "description": "Slow-simmered lentils with a hot ghee tempering.",
+          "category": "Dal",
+          "available": true,
+          "order": 3,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Veg Pulao",
+          "description": "Fragrant rice with seasonal vegetables and whole spices.",
+          "category": "Rice",
+          "available": true,
+          "order": 4,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Chapati",
+          "description": "Hand-rolled, made fresh to order.",
+          "category": "Indian Breads",
+          "available": true,
+          "order": 5,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Salad & Raita",
+          "description": "Crisp seasonal salad with cooling raita.",
+          "category": "Sides",
+          "available": false,
+          "order": 6,
+          "imageUrl": "",
+          "price": null
+        }
+      ],
+      "specialNote": "Salad sold out early today",
+      "updatedAt": "2026-09-01T18:14:09.235009Z"
+    },
+    "2026-09-10": {
+      "date": "2026-09-10",
+      "items": [
+        {
+          "name": "Dal Tadka",
+          "description": "Slow-simmered lentils with a hot ghee tempering.",
+          "category": "Dal",
+          "available": true,
+          "order": 1,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Paneer Masala",
+          "description": "Rich and flavorful paneer curry.",
+          "category": "Paneer",
+          "available": true,
+          "order": 2,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Aloo Gobi",
+          "description": "Potato and cauliflower, dry-roasted with turmeric.",
+          "category": "Vegetables",
+          "available": true,
+          "order": 3,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Chapati",
+          "description": "Hand-rolled, made fresh to order.",
+          "category": "Indian Breads",
+          "available": true,
+          "order": 4,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Jeera Rice",
+          "description": "Basmati rice tempered with cumin.",
+          "category": "Rice",
+          "available": true,
+          "order": 5,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Salad & Raita",
+          "description": "Crisp seasonal salad with cooling raita.",
+          "category": "Sides",
+          "available": true,
+          "order": 6,
+          "imageUrl": "",
+          "price": null
+        }
+      ],
+      "specialNote": "Freshly prepared today",
+      "updatedAt": "2026-09-01T18:14:09.235019Z"
+    },
+    "2026-09-11": {
+      "date": "2026-09-11",
+      "items": [
+        {
+          "name": "Rajma",
+          "description": "Kidney beans in a slow-cooked tomato gravy.",
+          "category": "Main Course",
+          "available": true,
+          "order": 1,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Bhindi Fry",
+          "description": "Okra pan-fried until crisp at the edges.",
+          "category": "Vegetables",
+          "available": true,
+          "order": 2,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Chole",
+          "description": "Chickpeas simmered overnight in a tangy masala.",
+          "category": "Main Course",
+          "available": true,
+          "order": 3,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Roti",
+          "description": "Whole-wheat, soft, finished with ghee.",
+          "category": "Indian Breads",
+          "available": true,
+          "order": 4,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Steamed Rice",
+          "description": "Plain steamed basmati, cooked fresh.",
+          "category": "Rice",
+          "available": true,
+          "order": 5,
+          "imageUrl": "",
+          "price": null
+        }
+      ],
+      "specialNote": "",
+      "updatedAt": "2026-09-01T18:14:09.235026Z"
+    },
+    "2026-09-12": {
+      "date": "2026-09-12",
+      "items": [
+        {
+          "name": "Mushroom Masala",
+          "description": "Button mushrooms in a ginger-garam masala.",
+          "category": "Main Course",
+          "available": true,
+          "order": 1,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Seasonal Vegetable Curry",
+          "description": "Whatever's freshest this week.",
+          "category": "Vegetables",
+          "available": true,
+          "order": 2,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Dal Tadka",
+          "description": "Slow-simmered lentils with a hot ghee tempering.",
+          "category": "Dal",
+          "available": true,
+          "order": 3,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Veg Pulao",
+          "description": "Fragrant rice with seasonal vegetables and whole spices.",
+          "category": "Rice",
+          "available": true,
+          "order": 4,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Chapati",
+          "description": "Hand-rolled, made fresh to order.",
+          "category": "Indian Breads",
+          "available": true,
+          "order": 5,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Salad & Raita",
+          "description": "Crisp seasonal salad with cooling raita.",
+          "category": "Sides",
+          "available": false,
+          "order": 6,
+          "imageUrl": "",
+          "price": null
+        }
+      ],
+      "specialNote": "Salad sold out early today",
+      "updatedAt": "2026-09-01T18:14:09.235054Z"
+    },
+    "2026-09-13": {
+      "date": "2026-09-13",
+      "items": [
+        {
+          "name": "Dal Tadka",
+          "description": "Slow-simmered lentils with a hot ghee tempering.",
+          "category": "Dal",
+          "available": true,
+          "order": 1,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Paneer Masala",
+          "description": "Rich and flavorful paneer curry.",
+          "category": "Paneer",
+          "available": true,
+          "order": 2,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Aloo Gobi",
+          "description": "Potato and cauliflower, dry-roasted with turmeric.",
+          "category": "Vegetables",
+          "available": true,
+          "order": 3,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Chapati",
+          "description": "Hand-rolled, made fresh to order.",
+          "category": "Indian Breads",
+          "available": true,
+          "order": 4,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Jeera Rice",
+          "description": "Basmati rice tempered with cumin.",
+          "category": "Rice",
+          "available": true,
+          "order": 5,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Salad & Raita",
+          "description": "Crisp seasonal salad with cooling raita.",
+          "category": "Sides",
+          "available": true,
+          "order": 6,
+          "imageUrl": "",
+          "price": null
+        }
+      ],
+      "specialNote": "Freshly prepared today",
+      "updatedAt": "2026-09-01T18:14:09.235088Z"
+    },
+    "2026-09-14": {
+      "date": "2026-09-14",
+      "items": [
+        {
+          "name": "Rajma",
+          "description": "Kidney beans in a slow-cooked tomato gravy.",
+          "category": "Main Course",
+          "available": true,
+          "order": 1,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Bhindi Fry",
+          "description": "Okra pan-fried until crisp at the edges.",
+          "category": "Vegetables",
+          "available": true,
+          "order": 2,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Chole",
+          "description": "Chickpeas simmered overnight in a tangy masala.",
+          "category": "Main Course",
+          "available": true,
+          "order": 3,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Roti",
+          "description": "Whole-wheat, soft, finished with ghee.",
+          "category": "Indian Breads",
+          "available": true,
+          "order": 4,
+          "imageUrl": "",
+          "price": null
+        },
+        {
+          "name": "Steamed Rice",
+          "description": "Plain steamed basmati, cooked fresh.",
+          "category": "Rice",
+          "available": true,
+          "order": 5,
+          "imageUrl": "",
+          "price": null
+        }
+      ],
+      "specialNote": "",
+      "updatedAt": "2026-09-01T18:14:09.235097Z"
+    }
+  },
+  "festivals": {
+    "diwali-2026": {
+      "name": "Diwali",
+      "theme": "diwali",
+      "startDate": "2026-11-08",
+      "endDate": "2026-11-12",
+      "greeting": "Happy Diwali",
+      "enabled": true
+    },
+    "navratri-2026": {
+      "name": "Navratri",
+      "theme": "navratri",
+      "startDate": "2026-10-11",
+      "endDate": "2026-10-19",
+      "greeting": "Shubh Navratri",
+      "enabled": true
+    },
+    "janmashtami-2026": {
+      "name": "Krishna Janmashtami",
+      "theme": "janmashtami",
+      "startDate": "2026-09-04",
+      "endDate": "2026-09-05",
+      "greeting": "Happy Janmashtami",
+      "enabled": true
+    }
+  },
+  "siteConfig": {
+    "general": {
+      "brandName": "Aangan",
+      "brandTagline": "Kitchen",
+      "contactPhone": "+91 90000 00000",
+      "contactWhatsapp": "919000000000",
+      "contactEmail": "hello@aangankitchen.example",
+      "contactLocation": "Sector 62, Noida, Uttar Pradesh",
+      "contactHours": "12:00 PM - 9:30 PM, all days"
+    }
+  }
+}

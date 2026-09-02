@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400" role="img" aria-label="Steamed Rice">
+  <defs>
+    <radialGradient id="grad-steamed-rice" cx="50%" cy="42%" r="65%">
+      <stop offset="0%" stop-color="#F3EEDF" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#C89B3C" stop-opacity="0.9"/>
+    </radialGradient>
+  </defs>
+  <rect width="400" height="400" fill="#14181A"/>
+  <circle cx="200" cy="200" r="150" fill="url(#grad-steamed-rice)"/>
+  <circle cx="200" cy="200" r="150" fill="none" stroke="#EDE6D6" stroke-opacity="0.15" stroke-width="2"/>
+  <circle cx="200" cy="200" r="110" fill="none" stroke="#EDE6D6" stroke-opacity="0.12" stroke-width="1"/>
+  <text x="200" y="205" font-family="Georgia, serif" font-size="22" fill="#FBF7EF" text-anchor="middle" opacity="0.85">Steamed Rice</text>
+</svg>

@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aangan Kitchen — Homestyle Indian Food, Fresh Every Day</title>
+  <meta name="description" content="Aangan Kitchen — homestyle Indian food, made fresh every day. See today's menu and order for delivery." />
+  <meta property="og:title" content="Aangan Kitchen" />
+  <meta property="og:description" content="Homestyle Indian food, made fresh every day." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <p id="festival-banner" class="festival-banner" hidden></p>
+
+  <header class="nav" role="banner">
+    <div class="nav__inner">
+      <a href="#home" class="nav__brand">
+        <img src="assets/icons/logo-mark.svg" alt="" class="nav__mark" width="28" height="28" />
+        <span><span data-brand-name>Aangan</span> <span data-brand-tagline>Kitchen</span></span>
+      </a>
+      <nav class="nav__links" aria-label="Primary">
+        <a href="#home">Home</a>
+        <a href="#todays-menu">Today's Menu</a>
+        <a href="#our-food">Our Food</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <button class="nav__toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ================= HERO ================= -->
+    <section id="home" class="hero">
+      <div class="hero__inner">
+        <div class="hero__copy" data-reveal>
+          <p class="hero__kicker">Cooked fresh this morning, in Noida</p>
+          <h1 class="hero__headline">
+            Homestyle Indian food,<br />made fresh every day.
+          </h1>
+          <p class="hero__sub">
+            No frozen shortcuts, no yesterday's dal reheated. Aangan cooks a
+            real thali each morning — the kind you'd get at home, if home had
+            a kitchen running just for you.
+          </p>
+          <div class="hero__actions">
+            <a href="#todays-menu" class="btn btn--primary">View Today's Menu</a>
+            <a href="#our-food" class="btn btn--ghost">Explore Our Food</a>
+          </div>
+        </div>
+        <div class="hero__media" aria-hidden="true">
+          <img src="assets/images/hero-thali.svg" alt="" width="900" height="1000" />
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= TODAY'S MENU ================= -->
+    <section id="todays-menu" class="section section--today">
+      <div class="section__inner">
+        <div class="section__head">
+          <h2>Today's Menu</h2>
+          <p class="section__date" id="menu-date-label"></p>
+        </div>
+        <div id="todays-menu-list" class="menu-wrap" aria-live="polite">
+          <div class="menu-loading">Loading today's menu…</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= KITCHEN FAVORITES ================= -->
+    <section id="our-food" class="section">
+      <div class="section__inner">
+        <div class="section__head">
+          <h2>Our Kitchen Favorites</h2>
+          <p class="section__lede">The dishes we're known for, cooked the same honest way every time.</p>
+        </div>
+        <div id="catalog-filters" class="filter-bar" role="tablist" aria-label="Filter by category"></div>
+        <ul id="catalog-grid" class="food-grid" data-reveal></ul>
+      </div>
+    </section>
+
+    <!-- ================= ABOUT ================= -->
+    <section id="about" class="section section--about">
+      <div class="section__inner section__inner--split">
+        <div class="about__copy" data-reveal>
+          <h2>About the Kitchen</h2>
+          <p>
+            Aangan started as one home kitchen cooking for a handful of
+            neighbours who missed proper ghar ka khana. It's grown, but the
+            way we cook hasn't — every dal is still tempered to order, every
+            roti still comes off the tawa a few minutes before it reaches
+            you.
+          </p>
+          <p>
+            We buy what's fresh at the local mandi each morning, cook in
+            small batches, and keep the kitchen the way we'd want our own
+            family's food handled — clean, unhurried, and seasoned with a
+            little more care than a menu can really describe.
+          </p>
+        </div>
+        <ul class="about__stats" data-reveal>
+          <li><strong>7</strong><span>days a week, fresh menus</span></li>
+          <li><strong>14+</strong><span>kitchen favorites on rotation</span></li>
+          <li><strong>0</strong><span>freezers between stove and plate</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ================= WHY CHOOSE US ================= -->
+    <section class="section section--why">
+      <div class="section__inner">
+        <div class="section__head">
+          <h2>Why Choose Us</h2>
+        </div>
+        <ul class="why-grid" data-reveal>
+          <li class="why-card">
+            <h3>Fresh Every Day</h3>
+            <p>Nothing is cooked a day ahead. What you order today was made today.</p>
+          </li>
+          <li class="why-card">
+            <h3>Homestyle Taste</h3>
+            <p>Recipes from the kitchens we grew up in, not a restaurant playbook.</p>
+          </li>
+          <li class="why-card">
+            <h3>Quality Ingredients</h3>
+            <p>Local mandi produce, good ghee, and spices ground the traditional way.</p>
+          </li>
+          <li class="why-card">
+            <h3>Hygienic Kitchen</h3>
+            <p>A small, closely run kitchen with the same standards you'd hold your own to.</p>
+          </li>
+          <li class="why-card">
+            <h3>Made With Care</h3>
+            <p>Small batches, tasted before they go out, every single day.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ================= FESTIVAL EXPERIENCE ================= -->
+    <section class="section section--festival" data-reveal>
+      <div class="section__inner section__inner--narrow">
+        <h2>A Kitchen That Marks the Season</h2>
+        <p>
+          Around major festivals, Aangan's everyday thali makes a little room
+          for something special — a seasonal sweet, a dish we only cook once
+          a year, a warmer plate. The core menu stays the same kitchen you
+          know; the season just adds a quiet accent to it.
+        </p>
+      </div>
+    </section>
+
+    <!-- ================= CONTACT / ORDER ================= -->
+    <section id="contact" class="section section--contact">
+      <div class="section__inner section__inner--split">
+        <div data-reveal>
+          <h2>Order Today's Meal</h2>
+          <p>Reach out directly — we take orders by phone and WhatsApp, and cook to your delivery window.</p>
+          <a data-contact-whatsapp href="#" class="btn btn--primary">Order Today's Meal</a>
+        </div>
+        <dl class="contact-list" data-reveal>
+          <div><dt>Phone</dt><dd><a data-contact-phone href="#"></a></dd></div>
+          <div><dt>Email</dt><dd><a data-contact-email href="#"></a></dd></div>
+          <div><dt>Location</dt><dd data-contact-location></dd></div>
+          <div><dt>Hours</dt><dd data-contact-hours></dd></div>
+        </dl>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <img src="assets/icons/logo-mark.svg" alt="" width="22" height="22" />
+        <span><span data-brand-name>Aangan</span> <span data-brand-tagline>Kitchen</span></span>
+      </div>
+      <p class="footer__note">Homestyle Indian food, made fresh every day.</p>
+      <p class="footer__legal">© <span id="current-year"></span> Aangan Kitchen. All rights reserved.</p>
+      <a class="footer__admin-link" href="login.html">Admin</a>
+    </div>
+  </footer>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

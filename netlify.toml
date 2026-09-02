@@ -1,0 +1,16 @@
+[build]
+  publish = "."
+  command = ""
+
+[[headers]]
+  for = "/login.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/admin.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+# This is a static multi-page site (index.html, login.html, admin.html) —
+# no SPA fallback/redirect is needed. Netlify serves each file directly.

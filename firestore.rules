@@ -1,0 +1,44 @@
+rules_version = '2';
+
+/**
+ * Firestore Security Rules — cloud-kitchen
+ * -----------------------------------------------------------------------
+ * Public visitors can only READ the data the public website needs.
+ * Only signed-in, authorized admin accounts can WRITE anything.
+ *
+ * IMPORTANT: list the UID(s) of your admin account(s) in isAdmin() below.
+ * Find a user's UID in Firebase Console → Authentication → Users, after
+ * you've created the admin account (see README.md, step "Add the admin
+ * user"). Do not leave this list empty, and do not use `allow write: if
+ * true` anywhere in this file.
+ * -----------------------------------------------------------------------
+ */
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAdmin() {
+      return request.auth != null && request.auth.uid in [
+        "8R0axsx0iedUp83VojQW6QUU8nI3"
+      ];
+    }
+
+    match /dailyMenus/{date} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /festivals/{festivalId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /siteConfig/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
