@@ -164,32 +164,6 @@ a { color: inherit; }
 }
 main, header, footer { position: relative; z-index: 1; }
 
-/* ---------------- Festival particles ---------------- */
-/* Populated by festival.js only when a festival is active and the
-   visitor hasn't asked for reduced motion. Small themed glyphs drift
-   upward across the whole viewport, not confined to one section. */
-.festival-particles {
-  position: fixed;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  overflow: hidden;
-}
-.festival-particle {
-  position: absolute;
-  bottom: -10vh;
-  left: var(--x, 50%);
-  font-size: var(--size, 1.4rem);
-  opacity: 0;
-  animation: particle-rise var(--duration, 14s) linear var(--delay, 0s) infinite;
-}
-@keyframes particle-rise {
-  0% { opacity: 0; transform: translateY(0) rotate(0deg); }
-  10% { opacity: 0.85; }
-  90% { opacity: 0.6; }
-  100% { opacity: 0; transform: translateY(-115vh) rotate(24deg); }
-}
-
 /* ---------------- Festival banner ---------------- */
 .festival-banner {
   position: relative;

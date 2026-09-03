@@ -29,48 +29,48 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
 // Visual treatment per theme key. Adding a new festival to Firestore with
-// an unrecognized theme falls back to "default" (banner only, no extra
-// color shift or particles) — so nothing breaks if a theme key is typo'd.
+// an unrecognized theme falls back to "default" — so nothing breaks if a
+// theme key is typo'd.
 const THEME_TREATMENTS = {
   diwali: {
     accent: "#e7a93a", accent2: "#a4453f", icon: "🪔",
-    particles: ["🪔", "✨"], hindi: "दीपों का त्योहार",
+    hindi: "दीपों का त्योहार",
   },
   dussehra: {
     accent: "#c9702e", accent2: "#7a2e2e", icon: "🏹",
-    particles: ["✨"], hindi: "विजयादशमी की शुभकामनाएं",
+    hindi: "विजयादशमी की शुभकामनाएं",
   },
   navratri: {
     accent: "#c9528c", accent2: "#7a2e2e", icon: "🌸",
-    particles: ["🌸", "✨"], hindi: "नवरात्रि की धूम",
+    hindi: "नवरात्रि की धूम",
   },
   ganesh_chaturthi: {
     accent: "#d8a23c", accent2: "#a4453f", icon: "🐘",
-    particles: ["✨"], hindi: "गणपति बप्पा मोरया",
+    hindi: "गणपति बप्पा मोरया",
   },
   raksha_bandhan: {
     accent: "#c9526b", accent2: "#c89b3c", icon: "🎗️",
-    particles: ["🎗️"], hindi: "रक्षाबंधन की शुभकामनाएं",
+    hindi: "रक्षाबंधन की शुभकामनाएं",
   },
   janmashtami: {
     accent: "#4a6fc0", accent2: "#c89b3c", icon: "🪈",
-    particles: ["🪶", "✨"], hindi: "जन्माष्टमी की शुभकामनाएं",
+    hindi: "जन्माष्टमी की शुभकामनाएं",
   },
   holi: {
     accent: "#3fa37a", accent2: "#c9528c", icon: "🎨",
-    particles: ["🎨", "●"], hindi: "रंगों का त्योहार",
+    hindi: "रंगों का त्योहार",
   },
   chhath_puja: {
     accent: "#d97b3f", accent2: "#a4453f", icon: "🌅",
-    particles: ["🌅"], hindi: "छठ पूजा की शुभकामनाएं",
+    hindi: "छठ पूजा की शुभकामनाएं",
   },
   makar_sankranti: {
     accent: "#e0b23c", accent2: "#4c5b4a", icon: "🪁",
-    particles: ["🪁"], hindi: "मकर संक्रांति की शुभकामनाएं",
+    hindi: "मकर संक्रांति की शुभकामनाएं",
   },
   default: {
     accent: "#e0b955", accent2: "#a4453f", icon: "✨",
-    particles: ["✨"], hindi: "त्योहारों की रौनक",
+    hindi: "त्योहारों की रौनक",
   },
 };
 
@@ -132,32 +132,9 @@ export async function getActiveFestival() {
   }
 }
 
-function clearParticles() {
-  const layer = document.getElementById("festival-particles");
-  if (layer) layer.innerHTML = "";
-}
-
-function spawnParticles(treatment) {
-  const layer = document.getElementById("festival-particles");
-  if (!layer) return;
-  layer.innerHTML = "";
-
-  const COUNT = 7;
-  for (let i = 0; i < COUNT; i++) {
-    const span = document.createElement("span");
-    span.className = "festival-particle";
-    span.textContent = treatment.particles[i % treatment.particles.length];
-    span.style.setProperty("--x", `${Math.round(Math.random() * 92 + 4)}%`);
-    span.style.setProperty("--delay", `${(Math.random() * 12).toFixed(1)}s`);
-    span.style.setProperty("--duration", `${(14 + Math.random() * 8).toFixed(1)}s`);
-    span.style.setProperty("--size", `${(1 + Math.random() * 0.8).toFixed(2)}rem`);
-    layer.appendChild(span);
-  }
-}
-
 /**
  * Applies sitewide theming for the given festival (or clears it when
- * festival is null). Respects prefers-reduced-motion for particles.
+ * festival is null).
  */
 export function applyFestivalTheme(festival) {
   const root = document.documentElement;
@@ -165,14 +142,11 @@ export function applyFestivalTheme(festival) {
   const bannerIcon = document.getElementById("festival-banner-icon");
   const bannerText = document.getElementById("festival-banner-text");
   const hindiGreeting = document.getElementById("festival-hindi-greeting");
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
   if (!festival) {
     root.style.removeProperty("--festival-accent");
     root.style.removeProperty("--festival-accent-2");
     root.removeAttribute("data-festival-active");
     if (banner) banner.hidden = true;
-    clearParticles();
     return;
   }
 
@@ -188,11 +162,6 @@ export function applyFestivalTheme(festival) {
   }
   if (hindiGreeting) hindiGreeting.textContent = treatment.hindi;
 
-  if (reduceMotion) {
-    clearParticles();
-  } else {
-    spawnParticles(treatment);
-  }
 }
 
 export async function initFestivalTheme() {
