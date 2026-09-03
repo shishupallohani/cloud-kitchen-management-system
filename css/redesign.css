@@ -52,6 +52,34 @@
 .section--about .about__stats li { background: rgba(255, 255, 255, 0.045); border-color: var(--border-dark); }
 .section--about .about__stats strong { color: var(--gold-soft); }
 
+/* Festival experience — style.css gave this its own boxed treatment
+   (border-top/bottom, loud gold glow, pulsing divider, oversized Hindi
+   heading) from before the redesign existed, so it read as a separate
+   widget pasted onto the page. Bring it in line with how every other
+   section is headed: quiet ck-eyebrow-style label, same h2 scale/weight,
+   no box around it. */
+.section--festival {
+  background: none;
+  border: none;
+}
+.section--festival::before {
+  width: 60px;
+  height: 2px;
+  opacity: 0.7;
+  animation: none;
+}
+.section--festival__hindi {
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+  margin-bottom: 10px;
+}
+.section--festival h2 {
+  font-size: clamp(1.6rem, 6vw, 2.3rem);
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+.section--festival p { max-width: 60ch; }
+
 /* ---------------- Eyebrow label ---------------- */
 .ck-eyebrow {
   display: block;
