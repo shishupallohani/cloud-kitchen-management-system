@@ -571,3 +571,364 @@
     max-width: none;
   }
 }
+
+
+
+/* =====================================================
+   CHARROTI — FESTIVAL SECTION
+   Compact Premium Festival Card
+===================================================== */
+
+.section--festival {
+  position: relative;
+  width: 100%;
+  padding: 70px 20px;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 20% 50%,
+      rgba(91, 65, 165, 0.28),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 80% 50%,
+      rgba(63, 58, 155, 0.25),
+      transparent 32%
+    ),
+    #120d32;
+}
+
+
+/* =========================================
+   SMALL CENTER CARD
+========================================= */
+
+.section--festival .festival-card {
+  position: relative;
+
+  width: min(720px, 88%);
+  min-height: 315px;
+  padding: 44px 48px;
+
+  margin: 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  text-align: center;
+
+  background:
+    radial-gradient(
+      circle at 20% 20%,
+      rgba(255, 190, 80, 0.10),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at 80% 80%,
+      rgba(120, 80, 200, 0.12),
+      transparent 35%
+    ),
+    rgba(27, 19, 65, 0.92);
+
+  border: 1px solid rgba(247, 185, 40, 0.25);
+
+  border-radius: 24px;
+
+  box-shadow:
+    0 25px 60px rgba(0, 0, 0, 0.30),
+    inset 0 0 40px rgba(255, 255, 255, 0.015);
+}
+
+
+/* =========================================
+   CONTENT
+========================================= */
+
+.section--festival .festival-card__content {
+  position: relative;
+  z-index: 5;
+
+  width: 100%;
+  max-width: 760px;
+
+  margin: 0 auto;
+}
+
+
+/* =========================================
+   SMALL TITLE
+========================================= */
+
+.section--festival .festival-card__eyebrow {
+  display: block;
+
+  margin-bottom: 12px;
+
+  color: #f4bd42;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  letter-spacing: 4px;
+
+  text-transform: uppercase;
+}
+
+
+/* =========================================
+   ORNAMENT
+========================================= */
+
+.section--festival .festival-card__divider {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 12px;
+
+  margin: 0 auto 15px;
+
+  color: #f4bd42;
+
+  font-size: 14px;
+}
+
+.section--festival .festival-card__divider::before,
+.section--festival .festival-card__divider::after {
+  content: "";
+
+  width: 70px;
+  height: 1px;
+
+  background: #f4bd42;
+
+  opacity: 0.7;
+}
+
+
+/* =========================================
+   DYNAMIC HINDI GREETING
+========================================= */
+
+.section--festival .section--festival__hindi {
+  display: block;
+
+  margin: 5px auto 8px;
+
+  color: #ffffff;
+
+  font-size: clamp(34px, 4vw, 54px);
+
+  font-weight: 800;
+
+  line-height: 1.2;
+
+  text-shadow:
+    0 3px 10px rgba(0, 0, 0, 0.35);
+}
+
+
+/* =========================================
+   MAIN HEADING
+========================================= */
+
+.section--festival .festival-card h2 {
+  margin: 15px auto 14px;
+
+  color: #ffffff;
+
+  font-size: clamp(25px, 3vw, 36px);
+
+  font-weight: 700;
+
+  line-height: 1.2;
+}
+
+.section--festival .festival-card h2 strong {
+  color: #f4bd42;
+}
+
+
+/* =========================================
+   DESCRIPTION
+========================================= */
+
+.section--festival .festival-card p {
+  max-width: 680px;
+
+  margin: 0 auto;
+
+  color: rgba(255, 255, 255, 0.70);
+
+  font-size: 14px;
+
+  line-height: 1.7;
+}
+
+
+/* =========================================
+   DECORATIVE STARS
+========================================= */
+
+.section--festival .festival-card__decoration {
+  position: absolute;
+
+  z-index: 2;
+
+  color: #f4bd42;
+
+  pointer-events: none;
+
+  user-select: none;
+
+  opacity: 0.65;
+}
+
+
+/* LEFT */
+
+.section--festival .festival-card__decoration--left {
+  left: 18px;
+  top: 25px;
+
+  font-size: 65px;
+
+  text-shadow:
+    0 0 20px rgba(244, 189, 66, 0.25);
+}
+
+
+/* RIGHT */
+
+.section--festival .festival-card__decoration--right {
+  right: 18px;
+  bottom: 20px;
+
+  font-size: 65px;
+
+  text-shadow:
+    0 0 20px rgba(244, 189, 66, 0.25);
+}
+
+
+/* =========================================
+   EXTRA SMALL STARS
+========================================= */
+
+.section--festival .festival-card::before {
+  content: "✦";
+
+  position: absolute;
+
+  top: 38px;
+  right: 110px;
+
+  color: #f4bd42;
+
+  font-size: 18px;
+
+  opacity: 0.75;
+}
+
+.section--festival .festival-card::after {
+  content: "✦";
+
+  position: absolute;
+
+  left: 110px;
+  bottom: 40px;
+
+  color: #f4bd42;
+
+  font-size: 14px;
+
+  opacity: 0.65;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 700px) {
+
+  .section--festival {
+    padding: 45px 14px;
+  }
+
+  .section--festival .festival-card {
+    width: 92%;
+    min-height: 330px;
+    padding: 36px 16px;
+
+    border-radius: 20px;
+  }
+
+  .section--festival .festival-card__eyebrow {
+    font-size: 8px;
+
+    letter-spacing: 2.5px;
+  }
+
+  .section--festival .festival-card__divider {
+    gap: 8px;
+  }
+
+  .section--festival .festival-card__divider::before,
+  .section--festival .festival-card__divider::after {
+    width: 45px;
+  }
+
+  .section--festival .section--festival__hindi {
+    font-size: clamp(24px, 7vw, 36px);
+
+    line-height: 1.25;
+  }
+
+  .section--festival .festival-card h2 {
+    font-size: 25px;
+
+    line-height: 1.25;
+  }
+
+  .section--festival .festival-card p {
+    font-size: 13px;
+
+    line-height: 1.65;
+  }
+
+  .section--festival .festival-card__decoration--left {
+    left: 8px;
+    top: 18px;
+
+    font-size: 42px;
+  }
+
+  .section--festival .festival-card__decoration--right {
+    right: 8px;
+    bottom: 15px;
+
+    font-size: 42px;
+  }
+
+  .section--festival .festival-card::before {
+    right: 55px;
+    top: 28px;
+
+    font-size: 13px;
+  }
+
+  .section--festival .festival-card::after {
+    left: 55px;
+    bottom: 28px;
+
+    font-size: 11px;
+  }
+}
