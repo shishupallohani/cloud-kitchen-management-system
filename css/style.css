@@ -4,7 +4,11 @@
    sage as secondary Indian-rooted accents. Deliberately avoiding the
    cream+terracotta combo that reads as a generic AI default.
    Type: Fraunces (display, warm serif with personality) + Manrope
-   (UI/body, clean geometric sans).
+   (UI/body, clean geometric sans) + Yatra One for Hindi/Devanagari
+   accent moments.
+   Built mobile-first: base rules below target small screens; see
+   responsive.css for the min-width layers that scale up to tablet
+   and desktop.
 ------------------------------------------------------------------- */
 
 :root {
@@ -12,25 +16,35 @@
   --bg-raised: #1b2124;
   --bg-light: #fbf7ef;
   --bg-light-raised: #f3ecdd;
-  --ink: #ede6d6;
-  --ink-dim: #b9b2a2;
+  --ink: #f6f2e7;
+  --ink-dim: #cfc8b6;
   --ink-on-light: #221d16;
   --ink-on-light-dim: #5a5346;
   --gold: #c89b3c;
-  --gold-soft: #d8b34a;
-  --maroon: #7a2e2e;
-  --sage: #4c5b4a;
-  --border-dark: rgba(237, 230, 214, 0.12);
+  --gold-soft: #e0b955;
+  --maroon: #a4453f;
+  --sage: #5d7159;
+  --border-dark: rgba(246, 242, 231, 0.14);
+  --border-dark-strong: rgba(246, 242, 231, 0.26);
   --border-light: rgba(34, 29, 22, 0.1);
-  --festival-accent: var(--gold);
+
+  /* Default festival accent = gold-soft, so the site looks the same
+     as today when no festival is active. festival.js overrides this
+     (and --festival-accent-2) whenever a festival is configured, and
+     every hover/highlight touch below reads from this variable —
+     that's how the festive "jhalak" reaches the whole site at once. */
+  --festival-accent: var(--gold-soft);
+  --festival-accent-2: var(--maroon);
 
   --font-display: "Fraunces", Georgia, serif;
   --font-body: "Manrope", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-hindi: "Yatra One", "Fraunces", serif;
 
-  --radius-s: 6px;
-  --radius-m: 14px;
-  --radius-l: 28px;
+  --radius-s: 8px;
+  --radius-m: 16px;
+  --radius-l: 30px;
   --shadow-soft: 0 20px 50px -25px rgba(0, 0, 0, 0.6);
+  --shadow-lift: 0 16px 34px -18px rgba(0, 0, 0, 0.55);
   --content-width: 1180px;
 }
 
@@ -49,6 +63,8 @@ body {
   font-size: 16px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  position: relative;
+  overflow-x: hidden;
 }
 
 h1, h2, h3 {
@@ -63,6 +79,12 @@ p { margin: 0 0 1em; max-width: 62ch; }
 img { max-width: 100%; display: block; }
 a { color: inherit; }
 
+.hindi-accent {
+  font-family: var(--font-hindi);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
 .skip-link {
   position: absolute;
   left: -999px;
@@ -71,25 +93,126 @@ a { color: inherit; }
   color: #14181a;
   padding: 10px 16px;
   border-radius: 0 0 var(--radius-s) 0;
-  z-index: 200;
+  z-index: 300;
 }
 .skip-link:focus { left: 0; }
 
 :focus-visible {
-  outline: 2px solid var(--gold);
+  outline: 2px solid var(--gold-soft);
   outline-offset: 3px;
+}
+
+/* ---------------- Ambient background ---------------- */
+/* A few large, soft, blurred fields of color that drift slowly behind
+   everything — this is the "mast/sexy" depth layer instead of a flat
+   solid background. One of the blobs reads var(--festival-accent), so
+   when a festival is active the whole page's ambience shifts with it,
+   not just one banner. */
+.bg-decor {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.bg-decor__blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.35;
+  mix-blend-mode: screen;
+  will-change: transform;
+}
+.bg-decor__blob--1 {
+  width: 60vmax;
+  height: 60vmax;
+  top: -20vmax;
+  left: -18vmax;
+  background: radial-gradient(circle, var(--maroon), transparent 70%);
+  animation: drift-a 26s ease-in-out infinite;
+}
+.bg-decor__blob--2 {
+  width: 50vmax;
+  height: 50vmax;
+  top: 20vh;
+  right: -22vmax;
+  background: radial-gradient(circle, var(--festival-accent), transparent 70%);
+  animation: drift-b 32s ease-in-out infinite;
+}
+.bg-decor__blob--3 {
+  width: 46vmax;
+  height: 46vmax;
+  bottom: -18vmax;
+  left: 10vw;
+  background: radial-gradient(circle, var(--sage), transparent 70%);
+  animation: drift-c 30s ease-in-out infinite;
+}
+@keyframes drift-a {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(4vw, 5vh) scale(1.08); }
+}
+@keyframes drift-b {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-5vw, 4vh) scale(1.06); }
+}
+@keyframes drift-c {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(3vw, -4vh) scale(1.1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bg-decor__blob { animation: none; }
+}
+main, header, footer { position: relative; z-index: 1; }
+
+/* ---------------- Festival particles ---------------- */
+/* Populated by festival.js only when a festival is active and the
+   visitor hasn't asked for reduced motion. Small themed glyphs drift
+   upward across the whole viewport, not confined to one section. */
+.festival-particles {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+}
+.festival-particle {
+  position: absolute;
+  bottom: -10vh;
+  left: var(--x, 50%);
+  font-size: var(--size, 1.4rem);
+  opacity: 0;
+  animation: particle-rise var(--duration, 14s) linear var(--delay, 0s) infinite;
+}
+@keyframes particle-rise {
+  0% { opacity: 0; transform: translateY(0) rotate(0deg); }
+  10% { opacity: 0.85; }
+  90% { opacity: 0.6; }
+  100% { opacity: 0; transform: translateY(-115vh) rotate(24deg); }
 }
 
 /* ---------------- Festival banner ---------------- */
 .festival-banner {
+  position: relative;
+  z-index: 3;
   margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 16px;
   text-align: center;
-  padding: 8px 16px;
-  background: var(--festival-accent);
-  color: #14181a;
-  font-weight: 600;
-  font-size: 0.9rem;
+  color: #1a1408;
+  font-weight: 700;
+  font-size: 0.95rem;
   letter-spacing: 0.01em;
+  background: linear-gradient(120deg, var(--festival-accent), var(--festival-accent-2), var(--festival-accent));
+  background-size: 220% 100%;
+  animation: banner-shimmer 6s ease-in-out infinite;
+}
+.festival-banner__icon { font-size: 1.15em; }
+@keyframes banner-shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
 /* ---------------- Navigation ---------------- */
@@ -97,24 +220,24 @@ a { color: inherit; }
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(20, 24, 26, 0.7);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: rgba(20, 24, 26, 0.65);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
   border-bottom: 1px solid transparent;
   transition: border-color 0.3s ease, background 0.3s ease;
 }
 .nav--scrolled {
-  background: rgba(20, 24, 26, 0.92);
+  background: rgba(20, 24, 26, 0.9);
   border-bottom-color: var(--border-dark);
 }
 .nav__inner {
   max-width: var(--content-width);
   margin: 0 auto;
-  padding: 16px 24px;
+  padding: 14px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
+  gap: 20px;
 }
 .nav__brand {
   display: flex;
@@ -122,28 +245,38 @@ a { color: inherit; }
   gap: 10px;
   text-decoration: none;
   font-family: var(--font-display);
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   color: var(--ink);
 }
+.nav__mark { transition: transform 0.35s ease; }
+.nav__brand:hover .nav__mark { transform: rotate(-14deg) scale(1.08); }
 .nav__links {
   display: flex;
-  gap: 28px;
+  gap: 26px;
   list-style: none;
 }
 .nav__links a {
+  position: relative;
   text-decoration: none;
   color: var(--ink-dim);
   font-size: 0.95rem;
   font-weight: 500;
   padding-bottom: 4px;
-  border-bottom: 1px solid transparent;
-  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.nav__links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 100%;
+  bottom: 0;
+  height: 2px;
+  background: var(--festival-accent);
+  transition: right 0.25s ease;
 }
 .nav__links a:hover,
-.nav__links a.is-active {
-  color: var(--ink);
-  border-bottom-color: var(--gold);
-}
+.nav__links a.is-active { color: var(--ink); }
+.nav__links a:hover::after,
+.nav__links a.is-active::after { right: 0; }
 .nav__toggle {
   display: none;
   flex-direction: column;
@@ -151,13 +284,14 @@ a { color: inherit; }
   background: none;
   border: none;
   cursor: pointer;
-  padding: 6px;
+  padding: 8px;
 }
 .nav__toggle span {
   width: 22px;
   height: 2px;
   background: var(--ink);
   border-radius: 2px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
 /* ---------------- Buttons ---------------- */
@@ -166,67 +300,91 @@ a { color: inherit; }
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 13px 26px;
+  width: 100%;
+  padding: 15px 26px;
   border-radius: 999px;
   text-decoration: none;
-  font-weight: 600;
-  font-size: 0.95rem;
+  font-weight: 700;
+  font-size: 0.97rem;
   border: 1px solid transparent;
-  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
   cursor: pointer;
 }
-.btn:hover { transform: translateY(-1px); }
+.btn:hover { transform: translateY(-2px); }
 .btn--primary {
   background: var(--gold);
   color: #1c1608;
+  box-shadow: 0 0 0 0 rgba(200, 155, 60, 0.5);
 }
-.btn--primary:hover { background: var(--gold-soft); }
+.btn--primary:hover {
+  background: var(--gold-soft);
+  box-shadow: 0 10px 30px -8px rgba(200, 155, 60, 0.6);
+}
 .btn--ghost {
-  border-color: var(--border-dark);
+  border-color: var(--border-dark-strong);
   color: var(--ink);
-  background: transparent;
+  background: rgba(255, 255, 255, 0.03);
 }
-.btn--ghost:hover { border-color: var(--gold); }
+.btn--ghost:hover { border-color: var(--festival-accent); color: var(--festival-accent); }
 
 /* ---------------- Hero ---------------- */
 .hero {
-  padding: 64px 24px 96px;
+  padding: 44px 20px 60px;
   position: relative;
   overflow: hidden;
 }
 .hero__inner {
   max-width: var(--content-width);
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
-  gap: 48px;
-  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
 }
 .hero__kicker {
-  color: var(--gold-soft);
+  color: var(--festival-accent);
   font-size: 0.95rem;
   font-weight: 600;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 .hero__headline {
-  font-size: clamp(2.4rem, 4.4vw, 3.6rem);
-  max-width: 14ch;
+  font-size: clamp(2.1rem, 8vw, 3.6rem);
+  max-width: 16ch;
 }
 .hero__sub {
   color: var(--ink-dim);
-  font-size: 1.08rem;
+  font-size: 1.05rem;
   max-width: 46ch;
 }
 .hero__actions {
   display: flex;
-  gap: 14px;
-  margin-top: 32px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 28px;
 }
-.hero__media img {
-  width: 100%;
+.hero__media { order: -1; }
+.hero__media-frame {
+  position: relative;
   border-radius: var(--radius-l);
+  overflow: hidden;
   box-shadow: var(--shadow-soft);
+  border: 1px solid var(--border-dark);
+}
+.hero__media img { width: 100%; }
+.hero__badge {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border-radius: 999px;
+  background: rgba(20, 24, 26, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-dark-strong);
+  font-family: var(--font-hindi);
+  font-size: 0.95rem;
+  color: var(--gold-soft);
 }
 .hero__copy {
   opacity: 0;
@@ -241,20 +399,19 @@ a { color: inherit; }
 }
 
 /* ---------------- Sections ---------------- */
-.section { padding: 88px 24px; }
+.section { padding: 64px 20px; position: relative; }
 .section__inner { max-width: var(--content-width); margin: 0 auto; }
 .section__inner--narrow { max-width: 720px; text-align: center; }
 .section__inner--split {
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 56px;
-  align-items: start;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
 }
-.section__head { margin-bottom: 40px; max-width: 60ch; }
-.section__head h2 { font-size: clamp(1.7rem, 3vw, 2.3rem); }
+.section__head { margin-bottom: 32px; max-width: 60ch; }
+.section__head h2 { font-size: clamp(1.6rem, 6vw, 2.3rem); }
 .section__lede { color: var(--ink-dim); }
 .section__date {
-  color: var(--gold-soft);
+  color: var(--festival-accent);
   font-weight: 600;
   margin: 0;
 }
@@ -267,10 +424,10 @@ a { color: inherit; }
 [data-reveal].is-revealed { opacity: 1; transform: none; }
 
 /* ---------------- Today's Menu ---------------- */
-.section--today { background: var(--bg-raised); }
+.section--today { background: rgba(27, 33, 36, 0.6); backdrop-filter: blur(2px); }
 .menu-wrap { min-height: 80px; }
 .menu-loading, .menu-empty {
-  padding: 32px;
+  padding: 28px 20px;
   border: 1px dashed var(--border-dark);
   border-radius: var(--radius-m);
   color: var(--ink-dim);
@@ -278,7 +435,7 @@ a { color: inherit; }
 }
 .menu-empty__sub { font-size: 0.9rem; margin-top: 6px; }
 .menu-note {
-  color: var(--gold-soft);
+  color: var(--festival-accent);
   font-style: italic;
 }
 .menu-list {
@@ -286,21 +443,27 @@ a { color: inherit; }
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 20px;
+  grid-template-columns: 1fr;
+  gap: 16px;
 }
 .menu-item {
   display: flex;
   gap: 14px;
-  background: var(--bg);
+  background: rgba(255, 255, 255, 0.035);
   border: 1px solid var(--border-dark);
   border-radius: var(--radius-m);
   padding: 14px;
+  transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+}
+.menu-item:hover {
+  transform: translateY(-3px);
+  border-color: var(--festival-accent);
+  background: rgba(255, 255, 255, 0.06);
 }
 .menu-item--unavailable { opacity: 0.55; }
 .menu-item__media {
-  width: 64px;
-  height: 64px;
+  width: 60px;
+  height: 60px;
   flex-shrink: 0;
   border-radius: 50%;
   overflow: hidden;
@@ -323,9 +486,9 @@ a { color: inherit; }
   gap: 8px;
   align-items: baseline;
 }
-.menu-item__body h3 { font-size: 1.05rem; margin-bottom: 4px; }
-.menu-item__body p { font-size: 0.88rem; color: var(--ink-dim); margin-bottom: 6px; }
-.menu-item__price { font-weight: 700; color: var(--gold-soft); font-size: 0.9rem; }
+.menu-item__body h3 { font-size: 1.02rem; margin-bottom: 4px; }
+.menu-item__body p { font-size: 0.87rem; color: var(--ink-dim); margin-bottom: 6px; }
+.menu-item__price { font-weight: 700; color: var(--festival-accent); font-size: 0.9rem; }
 .menu-item__tag {
   display: inline-block;
   font-size: 0.75rem;
@@ -334,57 +497,65 @@ a { color: inherit; }
   border: 1px solid var(--border-dark);
   color: var(--ink-dim);
 }
-.menu-item__tag--out { border-color: var(--maroon); color: #e0a3a3; margin-left: 6px; }
+.menu-item__tag--out { border-color: var(--maroon); color: #f0b3ae; margin-left: 6px; }
 
 /* ---------------- Filters + food grid ---------------- */
 .filter-bar {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 32px;
+  gap: 8px;
+  margin-bottom: 28px;
+  overflow-x: auto;
+  padding-bottom: 4px;
 }
 .filter-pill {
   border: 1px solid var(--border-dark);
-  background: transparent;
+  background: rgba(255, 255, 255, 0.03);
   color: var(--ink-dim);
-  padding: 8px 18px;
+  padding: 8px 16px;
   border-radius: 999px;
   cursor: pointer;
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   font-family: var(--font-body);
-  transition: border-color 0.2s ease, color 0.2s ease;
+  white-space: nowrap;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
 }
-.filter-pill:hover { color: var(--ink); }
+.filter-pill:hover { color: var(--ink); border-color: var(--border-dark-strong); }
 .filter-pill.is-active {
-  border-color: var(--gold);
-  color: var(--gold-soft);
+  border-color: var(--festival-accent);
+  color: var(--festival-accent);
+  background: color-mix(in srgb, var(--festival-accent) 14%, transparent);
 }
 .food-grid {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-  gap: 22px;
+  grid-template-columns: 1fr;
+  gap: 20px;
 }
 .food-card {
   border: 1px solid var(--border-dark);
   border-radius: var(--radius-m);
   overflow: hidden;
-  background: var(--bg-raised);
-  transition: transform 0.25s ease, border-color 0.25s ease;
+  background: rgba(255, 255, 255, 0.035);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
-.food-card:hover { transform: translateY(-4px); border-color: var(--gold); }
+.food-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--festival-accent);
+  box-shadow: var(--shadow-lift);
+}
 .food-card.is-hidden { display: none; }
 .food-card__media { aspect-ratio: 4/3; overflow: hidden; }
 .food-card__media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
-.food-card:hover .food-card__media img { transform: scale(1.06); }
+.food-card:hover .food-card__media img { transform: scale(1.07) rotate(-1deg); }
 .food-card__body { padding: 16px 18px 20px; }
 .food-card__body h3 { font-size: 1.05rem; }
 .food-card__body p { font-size: 0.88rem; color: var(--ink-dim); margin-bottom: 10px; }
 .food-card__tag {
   font-size: 0.72rem;
-  color: var(--gold-soft);
+  color: var(--festival-accent);
   border: 1px solid var(--border-dark);
   padding: 3px 10px;
   border-radius: 999px;
@@ -394,19 +565,27 @@ a { color: inherit; }
 .section--about { background: var(--bg-light); color: var(--ink-on-light); }
 .section--about h2 { color: var(--ink-on-light); }
 .section--about p { color: var(--ink-on-light-dim); }
+.about__quote {
+  font-family: var(--font-hindi);
+  font-size: 1.2rem;
+  color: var(--maroon);
+  margin: 20px 0;
+}
 .about__stats {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 20px;
+  gap: 16px;
 }
 .about__stats li {
   border: 1px solid var(--border-light);
   border-radius: var(--radius-m);
-  padding: 22px;
+  padding: 20px;
   background: var(--bg-light-raised);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+.about__stats li:hover { transform: translateY(-3px); box-shadow: 0 14px 28px -18px rgba(34, 29, 22, 0.35); }
 .about__stats strong {
   display: block;
   font-family: var(--font-display);
@@ -421,37 +600,42 @@ a { color: inherit; }
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
+  grid-template-columns: 1fr;
+  gap: 16px;
 }
 .why-card {
   border: 1px solid var(--border-dark);
   border-radius: var(--radius-m);
-  padding: 24px 20px;
-  background: var(--bg-raised);
+  padding: 22px 20px;
+  background: rgba(255, 255, 255, 0.035);
+  transition: transform 0.25s ease, border-color 0.25s ease;
 }
-.why-card h3 { font-size: 1.05rem; margin-bottom: 8px; color: var(--gold-soft); }
+.why-card:hover { transform: translateY(-4px); border-color: var(--festival-accent); }
+.why-card h3 { font-size: 1.05rem; margin-bottom: 8px; color: var(--festival-accent); }
 .why-card p { font-size: 0.9rem; color: var(--ink-dim); margin: 0; }
 
 /* ---------------- Festival experience ---------------- */
 .section--festival {
-  background: radial-gradient(ellipse at 50% 0%, color-mix(in srgb, var(--festival-accent) 18%, transparent), transparent 60%), var(--bg);
+  background: radial-gradient(ellipse at 50% 0%, color-mix(in srgb, var(--festival-accent) 22%, transparent), transparent 60%);
   border-top: 1px solid var(--border-dark);
   border-bottom: 1px solid var(--border-dark);
 }
 .section--festival h2 { color: var(--festival-accent); }
 .section--festival p { margin: 0 auto; color: var(--ink-dim); }
+.section--festival__hindi {
+  display: block;
+  font-family: var(--font-hindi);
+  font-size: 1.3rem;
+  color: var(--festival-accent);
+  margin-bottom: 14px;
+}
 
-/* Subtle festival particle layer, toggled via [data-festival-particle] on <html> */
-html[data-festival-particle="glow"] .section--festival::before,
-html[data-festival-particle="color"] .section--festival::before,
-html[data-festival-particle="pattern"] .section--festival::before,
-html[data-festival-particle="feather"] .section--festival::before {
+.section--festival::before {
   content: "";
   display: block;
   height: 3px;
-  width: 120px;
-  margin: 0 auto 28px;
+  width: 100px;
+  margin: 0 auto 24px;
   border-radius: 999px;
   background: var(--festival-accent);
   animation: festival-pulse 3.2s ease-in-out infinite;
@@ -462,34 +646,36 @@ html[data-festival-particle="feather"] .section--festival::before {
 }
 
 /* ---------------- Contact ---------------- */
-.section--contact { background: var(--bg-raised); }
+.section--contact { background: rgba(27, 33, 36, 0.6); }
 .contact-list {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 16px;
+  gap: 12px;
 }
 .contact-list div {
   display: flex;
   justify-content: space-between;
   border-bottom: 1px solid var(--border-dark);
-  padding-bottom: 12px;
+  padding: 10px 8px;
+  border-radius: var(--radius-s);
+  transition: background 0.2s ease;
 }
+.contact-list div:hover { background: rgba(255, 255, 255, 0.04); }
 .contact-list dt { color: var(--ink-dim); font-size: 0.9rem; }
 .contact-list dd { margin: 0; font-weight: 600; }
 .contact-list a { text-decoration: none; }
-.contact-list a:hover { color: var(--gold-soft); }
+.contact-list a:hover { color: var(--festival-accent); }
 
 /* ---------------- Footer ---------------- */
-.footer { padding: 40px 24px; border-top: 1px solid var(--border-dark); }
+.footer { padding: 36px 20px; border-top: 1px solid var(--border-dark); position: relative; z-index: 1; }
 .footer__inner {
   max-width: var(--content-width);
   margin: 0 auto;
   display: flex;
-  flex-wrap: wrap;
-  gap: 12px 24px;
-  align-items: center;
+  flex-direction: column;
+  gap: 12px;
   color: var(--ink-dim);
   font-size: 0.85rem;
 }
@@ -500,11 +686,12 @@ html[data-festival-particle="feather"] .section--festival::before {
   font-family: var(--font-display);
   color: var(--ink);
 }
-.footer__note { margin: 0; }
-.footer__legal { margin: 0 0 0 auto; }
+.footer__note { margin: 0; font-family: var(--font-hindi); color: var(--ink-dim); }
+.footer__legal { margin: 0; }
 .footer__admin-link {
   color: var(--ink-dim);
   text-decoration: none;
   border-bottom: 1px dotted var(--border-dark);
+  align-self: flex-start;
 }
-.footer__admin-link:hover { color: var(--gold-soft); }
+.footer__admin-link:hover { color: var(--festival-accent); border-color: var(--festival-accent); }

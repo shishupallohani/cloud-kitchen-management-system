@@ -1,0 +1,366 @@
+/* =====================================================================
+   redesign.css — Charroti Kitchen "Faasos-inspired" homepage layer
+   =====================================================================
+   Loaded ONLY by index.html (see the <link> in <head>). css/style.css
+   and css/responsive.css are never edited by this file — login.html and
+   admin.html include neither this file nor its effects.
+
+   Strategy:
+   1. Re-declare the shared design tokens (--bg, --ink, --gold, --font-*,
+      etc.) at :root. Because style.css's existing components (nav,
+      buttons, cards, footer, menu items…) already read these variables,
+      overriding the values here reskins the whole page automatically —
+      no need to rewrite every component selector.
+   2. Add new, clearly namespaced `ck-*` classes for the pieces that are
+      structurally new (hero copy treatment, marquee, mood cards,
+      section eyebrows, footer columns, entrance animation).
+   Nothing in this file uses a bare/unprefixed class name that could
+   collide with style.css — every new selector is `ck-`-prefixed or
+   scoped under one.
+   ===================================================================== */
+
+:root {
+  /* ---- Faasos-inspired palette: deep navy/purple ground, warm gold,
+     soft lavender accent. Same variable names as style.css, new values,
+     so every existing component picks this up automatically. ---- */
+  --bg: #171235;
+  --bg-raised: #1f1a44;
+  --bg-light: #1f1a44;
+  --bg-light-raised: #241d4f;
+  --ink: #f6f3ea;
+  --ink-dim: #b6aed6;
+  --ink-on-light: #f6f3ea;
+  --ink-on-light-dim: #b6aed6;
+  --gold: #f0a83c;
+  --gold-soft: #f7c36a;
+  --maroon: #b6a6ea;
+  --border-dark: rgba(246, 243, 234, 0.12);
+  --border-dark-strong: rgba(246, 243, 234, 0.24);
+  --border-light: rgba(246, 243, 234, 0.12);
+  --festival-accent: var(--gold-soft);
+
+  --font-display: "Poppins", "Fraunces", sans-serif;
+
+  --ck-lavender: #b6a6ea;
+  --ck-lavender-soft: #cabdf0;
+  --shadow-soft: 0 24px 60px -24px rgba(5, 3, 20, 0.75);
+  --shadow-lift: 0 18px 40px -18px rgba(5, 3, 20, 0.7);
+}
+
+/* About section no longer flips to a light card style now that the
+   whole page shares one dark ground — soften its raised card tone. */
+.section--about .about__stats li { background: rgba(255, 255, 255, 0.045); border-color: var(--border-dark); }
+.section--about .about__stats strong { color: var(--gold-soft); }
+
+/* ---------------- Eyebrow label ---------------- */
+.ck-eyebrow {
+  display: block;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 14px;
+}
+
+.ck-accent-gold { color: var(--gold); }
+.ck-accent-lavender { color: var(--ck-lavender); font-style: italic; }
+
+/* ---------------- Nav ---------------- */
+.ck-nav.nav { background: rgba(23, 18, 53, 0.6); }
+.ck-nav.nav--scrolled,
+.ck-nav.nav.nav--scrolled { background: rgba(23, 18, 53, 0.92); }
+.ck-nav .nav__inner { gap: 14px; }
+.ck-nav__cta {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border-radius: 999px;
+  background: var(--gold);
+  color: #1c1608;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.ck-nav__cta:hover { background: var(--gold-soft); transform: translateY(-2px); }
+
+/* ---------------- Hero entrance animation ---------------- */
+/* Cancel style.css's whole-block fade (equal-or-lower specificity single
+   class) so each child can stagger independently instead of double-fading. */
+.ck-hero__copy.hero__copy { opacity: 1; transform: none; animation: none; }
+
+.ck-anim {
+  opacity: 0;
+  transform: translateY(22px);
+  animation: ck-fade-up 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.ck-anim--1 { animation-delay: 0.05s; }
+.ck-anim--2 { animation-delay: 0.18s; }
+.ck-anim--3 { animation-delay: 0.34s; }
+.ck-anim--4 { animation-delay: 0.48s; }
+.ck-anim--5 { animation-delay: 0.28s; transform: translateY(16px) scale(0.97); }
+@keyframes ck-fade-up {
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ck-anim { opacity: 1; transform: none; animation: none; }
+}
+
+/* ---------------- Hero ---------------- */
+.ck-hero { padding-top: 36px; padding-bottom: 8px; }
+.ck-hero__kicker {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.ck-headline {
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  font-size: clamp(2.4rem, 10vw, 4.4rem);
+  max-width: 13ch;
+}
+.ck-hero__media-frame {
+  position: relative;
+  isolation: isolate;
+}
+.ck-hero__media-frame::before {
+  content: "";
+  position: absolute;
+  inset: -12%;
+  z-index: -1;
+  background: radial-gradient(circle, var(--gold) 0%, var(--ck-lavender) 55%, transparent 72%);
+  filter: blur(60px);
+  opacity: 0.45;
+}
+.ck-hero__media-frame img { position: relative; }
+
+/* ---------------- Marquee ---------------- */
+.ck-marquee {
+  position: relative;
+  overflow: hidden;
+  background: var(--gold);
+  padding: 14px 0;
+  margin-top: 28px;
+}
+.ck-marquee__inner {
+  display: flex;
+  width: max-content;
+  animation: ck-marquee-scroll 32s linear infinite;
+}
+.ck-marquee__group {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  padding-right: 26px;
+  white-space: nowrap;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #241a08;
+}
+.ck-marquee__dot { font-size: 0.8rem; opacity: 0.7; }
+@keyframes ck-marquee-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ck-marquee__inner { animation: none; }
+}
+
+/* ---------------- Section rhythm ---------------- */
+.ck-section .section__head h2,
+.ck-mood__heading,
+.ck-why__heading {
+  font-weight: 700;
+}
+
+/* Split head: eyebrow+heading left, lede right, like the reference's
+   "Explore the menu" row. Mobile-first: stacked by default. */
+.ck-split-head {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.ck-split-head .section__lede { max-width: 42ch; color: var(--ink-dim); }
+
+/* ---------------- Menu grid card polish ---------------- */
+/* Reorders the existing food-card markup with pure CSS so the category
+   tag reads as a small label above the title — no JS/markup change. */
+.ck-menu-grid .food-card__body {
+  display: flex;
+  flex-direction: column;
+}
+.ck-menu-grid .food-card__tag {
+  order: -1;
+  align-self: flex-start;
+  margin-bottom: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.68rem;
+  border-color: transparent;
+  background: color-mix(in srgb, var(--festival-accent) 18%, transparent);
+}
+.ck-menu-grid .food-card__body h3 { order: 0; }
+.ck-menu-grid .food-card__body p { order: 1; }
+
+/* ---------------- Mood section ---------------- */
+.ck-mood__heading {
+  font-size: clamp(1.7rem, 6vw, 2.6rem);
+  max-width: 16ch;
+  margin-bottom: 32px;
+}
+.ck-mood__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 18px;
+}
+.ck-mood__card {
+  flex: 1 1 240px;
+  max-width: 320px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-m);
+  padding: 22px 20px;
+  transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+}
+.ck-mood__card:hover {
+  transform: translateY(-5px);
+  border-color: var(--gold);
+  background: rgba(255, 255, 255, 0.07);
+}
+.ck-mood__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--gold) 22%, transparent);
+  font-size: 1.3rem;
+  margin-bottom: 14px;
+}
+.ck-mood__card h3 { font-size: 1.05rem; margin-bottom: 6px; }
+.ck-mood__card p { font-size: 0.88rem; color: var(--ink-dim); margin: 0; }
+
+/* ---------------- Why section polish ---------------- */
+.ck-why__heading {
+  font-size: clamp(1.8rem, 6.5vw, 2.7rem);
+  margin-bottom: 10px;
+}
+.ck-why__sub { color: var(--ink-dim); margin-bottom: 32px; }
+.ck-why .why-grid { margin-top: 8px; }
+.ck-why__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--gold) 22%, transparent);
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+}
+
+/* ---------------- Footer ---------------- */
+.ck-footer { background: var(--bg-raised); border-top-color: var(--border-dark); }
+.ck-footer__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+.ck-footer__brand { max-width: 340px; }
+.ck-footer__desc { font-size: 0.88rem; color: var(--ink-dim); margin: 10px 0 18px; }
+.ck-footer__social { display: flex; gap: 10px; }
+.ck-footer__social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--border-dark-strong);
+  color: var(--ink-dim);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+.ck-footer__social-icon:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  transform: translateY(-2px);
+}
+.ck-footer__col { display: flex; flex-direction: column; gap: 10px; }
+.ck-footer__col-title {
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 4px;
+}
+.ck-footer__col a,
+.ck-footer__col span {
+  color: var(--ink-dim);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+.ck-footer__col a:hover { color: var(--gold-soft); }
+.ck-footer__bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-dark);
+}
+.ck-footer__bottom .footer__legal { margin: 0; }
+
+/* =====================================================================
+   Responsive layer for the ck-* additions above (mobile-first: base
+   rules already apply on phones; these min-width rules match the same
+   breakpoints style.css/responsive.css already use elsewhere).
+   ===================================================================== */
+
+@media (min-width: 860px) {
+  .ck-nav__cta { display: inline-flex; }
+}
+
+@media (min-width: 900px) {
+  .ck-split-head {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 40px;
+  }
+  .ck-split-head .section__lede { text-align: right; }
+
+  .ck-footer__inner {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  .ck-footer__bottom {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border-top: none;
+    padding-top: 0;
+    width: 100%;
+  }
+}
+
+@media (min-width: 640px) {
+  .ck-mood__card { flex-basis: 30%; }
+}

@@ -1,19 +1,46 @@
 /* -------------------------------------------------------------------
-   Responsive adjustments. Mobile-specific layout, not a naive shrink.
+   Responsive layers — style.css is mobile-first (base = phone). These
+   min-width rules progressively enhance the layout for tablet/desktop;
+   nothing here is required for the site to look complete on a phone.
 ------------------------------------------------------------------- */
 
-@media (max-width: 960px) {
-  .hero__inner { grid-template-columns: 1fr; gap: 40px; }
-  .hero__media { order: -1; max-width: 420px; margin: 0 auto; }
-  .section__inner--split { grid-template-columns: 1fr; gap: 36px; }
+/* ---- Small phones: tighten a touch further ---- */
+@media (max-width: 380px) {
+  .hero__headline { font-size: 1.9rem; }
+  .section { padding: 48px 16px; }
 }
 
-@media (max-width: 720px) {
+/* ---- Tablet and up ---- */
+@media (min-width: 640px) {
+  .hero__actions { flex-direction: row; }
+  .hero__actions .btn { width: auto; }
+  .why-grid { grid-template-columns: repeat(2, 1fr); }
+  .food-grid { grid-template-columns: repeat(2, 1fr); }
+  .menu-list { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ---- Desktop nav takes over from the hamburger ---- */
+@media (min-width: 860px) {
+  .nav__toggle { display: none; }
+  .nav__links {
+    position: static;
+    inset: auto;
+    background: none;
+    border: none;
+    flex-direction: row;
+    padding: 0;
+    transform: none;
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+@media (max-width: 859px) {
   .nav__toggle { display: flex; }
   .nav__links {
     position: fixed;
     inset: 64px 16px auto 16px;
-    background: var(--bg-raised);
+    background: rgba(27, 33, 36, 0.96);
+    backdrop-filter: blur(16px);
     border: 1px solid var(--border-dark);
     border-radius: var(--radius-m);
     flex-direction: column;
@@ -23,6 +50,7 @@
     opacity: 0;
     pointer-events: none;
     transition: transform 0.2s ease, opacity 0.2s ease;
+    z-index: 150;
   }
   .nav__links.is-open {
     transform: translateY(0);
@@ -31,24 +59,44 @@
   }
   .nav__links a {
     padding: 12px 10px;
-    border-bottom: none;
     border-radius: var(--radius-s);
   }
+  .nav__links a::after { display: none; }
   .nav__links a:hover,
   .nav__links a.is-active {
-    background: rgba(200, 155, 60, 0.1);
+    background: color-mix(in srgb, var(--festival-accent) 14%, transparent);
   }
-
-  .hero { padding: 40px 18px 64px; }
-  .section { padding: 64px 18px; }
-
-  .hero__actions .btn { flex: 1 1 auto; text-align: center; }
-
-  .footer__inner { flex-direction: column; align-items: flex-start; text-align: left; }
-  .footer__legal { margin-left: 0; }
 }
 
-@media (max-width: 480px) {
-  .hero__headline { font-size: 2rem; }
-  .menu-list, .food-grid { grid-template-columns: 1fr; }
+/* ---- Wider layouts: hero and split sections go two-column ---- */
+@media (min-width: 900px) {
+  .hero { padding: 72px 24px 100px; }
+  .hero__inner {
+    flex-direction: row;
+    align-items: center;
+    gap: 48px;
+  }
+  .hero__copy { flex: 1.05; }
+  .hero__media { order: 0; flex: 0.95; }
+  .hero__headline { max-width: 14ch; }
+
+  .section { padding: 88px 24px; }
+  .section__inner--split {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 56px;
+  }
+  .section__inner--split > * { flex: 1; }
+
+  .why-grid { grid-template-columns: repeat(3, 1fr); }
+  .food-grid { grid-template-columns: repeat(3, 1fr); }
+  .menu-list { grid-template-columns: repeat(3, 1fr); }
+
+  .footer__inner { flex-direction: row; align-items: center; }
+  .footer__legal { margin: 0 0 0 auto; }
+  .footer__admin-link { align-self: auto; }
+}
+
+@media (min-width: 1180px) {
+  .food-grid, .menu-list { grid-template-columns: repeat(4, 1fr); }
 }

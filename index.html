@@ -12,16 +12,30 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700&family=Poppins:wght@500;600;700;800;900&family=Yatra+One&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/responsive.css" />
+  <!-- Redesign layer: new tokens + new namespaced (ck-*) classes only.
+       Loaded on this page alone — style.css/responsive.css are untouched,
+       so login.html and admin.html keep their original look. -->
+  <link rel="stylesheet" href="css/redesign.css" />
 </head>
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
-  <p id="festival-banner" class="festival-banner" hidden></p>
+  <div class="bg-decor" aria-hidden="true">
+    <span class="bg-decor__blob bg-decor__blob--1"></span>
+    <span class="bg-decor__blob bg-decor__blob--2"></span>
+    <span class="bg-decor__blob bg-decor__blob--3"></span>
+  </div>
+  <div id="festival-particles" class="festival-particles" aria-hidden="true"></div>
 
-  <header class="nav" role="banner">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div id="festival-banner" class="festival-banner" hidden>
+    <span class="festival-banner__icon" id="festival-banner-icon"></span>
+    <span id="festival-banner-text"></span>
+  </div>
+
+  <header class="nav ck-nav" role="banner">
     <div class="nav__inner">
       <a href="#home" class="nav__brand">
         <img src="assets/icons/logo-mark.svg" alt="" class="nav__mark" width="28" height="28" />
@@ -34,6 +48,7 @@
         <a href="#about">About</a>
         <a href="#contact">Contact</a>
       </nav>
+      <a href="#contact" class="ck-nav__cta">Order Now <span aria-hidden="true">↗</span></a>
       <button class="nav__toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
         <span></span><span></span><span></span>
       </button>
@@ -42,32 +57,58 @@
 
   <main id="main">
     <!-- ================= HERO ================= -->
-    <section id="home" class="hero">
-      <div class="hero__inner">
-        <div class="hero__copy" data-reveal>
-          <p class="hero__kicker">Cooked fresh this morning, in Noida</p>
-          <h1 class="hero__headline">
-            Homestyle Indian food,<br />made fresh every day.
+    <section id="home" class="hero ck-hero">
+      <div class="hero__inner ck-hero__inner">
+        <div class="hero__copy ck-hero__copy">
+          <p class="hero__kicker ck-hero__kicker ck-anim ck-anim--1">Cooked fresh this morning, in Noida</p>
+          <h1 class="hero__headline ck-headline ck-anim ck-anim--2">
+            Every thali, packed with <span class="ck-accent-gold">ghar ka</span> <span class="ck-accent-lavender">pyaar.</span>
           </h1>
-          <p class="hero__sub">
+          <p class="hero__sub ck-anim ck-anim--3">
             No frozen shortcuts, no yesterday's dal reheated. Charroti cooks a
             real thali each morning — the kind you'd get at home, if home had
             a kitchen running just for you.
           </p>
-          <div class="hero__actions">
+          <div class="hero__actions ck-anim ck-anim--4">
             <a href="#todays-menu" class="btn btn--primary">View Today's Menu</a>
             <a href="#our-food" class="btn btn--ghost">Explore Our Food</a>
           </div>
         </div>
-        <div class="hero__media" aria-hidden="true">
-          <img src="assets/images/hero-thali.svg" alt="" width="900" height="1000" />
+        <div class="hero__media ck-hero__media ck-anim ck-anim--5" aria-hidden="true">
+          <div class="hero__media-frame ck-hero__media-frame">
+            <img src="assets/images/hero-thali-redesign.svg" alt="" width="900" height="1000" />
+            <span class="hero__badge hindi-accent">ताज़ा हर दिन</span>
+          </div>
         </div>
       </div>
     </section>
 
+    <!-- ================= MARQUEE ================= -->
+    <div class="ck-marquee" aria-hidden="true">
+      <div class="ck-marquee__inner">
+        <div class="ck-marquee__group">
+          <span>Charroti Kitchen</span><span class="ck-marquee__dot">✦</span>
+          <span>Ghar Ka Khana</span><span class="ck-marquee__dot">✦</span>
+          <span>Bold Bhartiya Swaad</span><span class="ck-marquee__dot">✦</span>
+          <span>Fresh Every Day</span><span class="ck-marquee__dot">✦</span>
+          <span>Built For Every Mood</span><span class="ck-marquee__dot">✦</span>
+          <span>Unmistakably Charroti</span><span class="ck-marquee__dot">✦</span>
+        </div>
+        <div class="ck-marquee__group">
+          <span>Charroti Kitchen</span><span class="ck-marquee__dot">✦</span>
+          <span>Ghar Ka Khana</span><span class="ck-marquee__dot">✦</span>
+          <span>Bold Bhartiya Swaad</span><span class="ck-marquee__dot">✦</span>
+          <span>Fresh Every Day</span><span class="ck-marquee__dot">✦</span>
+          <span>Built For Every Mood</span><span class="ck-marquee__dot">✦</span>
+          <span>Unmistakably Charroti</span><span class="ck-marquee__dot">✦</span>
+        </div>
+      </div>
+    </div>
+
     <!-- ================= TODAY'S MENU ================= -->
-    <section id="todays-menu" class="section section--today">
+    <section id="todays-menu" class="section section--today ck-section">
       <div class="section__inner">
+        <span class="ck-eyebrow">Live From The Kitchen</span>
         <div class="section__head">
           <h2>Today's Menu</h2>
           <p class="section__date" id="menu-date-label"></p>
@@ -79,22 +120,25 @@
     </section>
 
     <!-- ================= KITCHEN FAVORITES ================= -->
-    <section id="our-food" class="section">
+    <section id="our-food" class="section ck-section ck-menu-section">
       <div class="section__inner">
-        <div class="section__head">
-          <h2>Our Kitchen Favorites</h2>
-          <p class="section__lede">The dishes we're known for, cooked the same honest way every time.</p>
+        <span class="ck-eyebrow">Explore The Menu</span>
+        <div class="section__head ck-split-head">
+          <h2>Whatever The Thali<br />Calls For.</h2>
+          <p class="section__lede">Flavours for every mood and appetite — from a quick office lunch to a full Sunday family spread.</p>
         </div>
         <div id="catalog-filters" class="filter-bar" role="tablist" aria-label="Filter by category"></div>
-        <ul id="catalog-grid" class="food-grid" data-reveal></ul>
+        <ul id="catalog-grid" class="food-grid ck-menu-grid" data-reveal></ul>
       </div>
     </section>
 
     <!-- ================= ABOUT ================= -->
-    <section id="about" class="section section--about">
+    <section id="about" class="section section--about ck-section">
       <div class="section__inner section__inner--split">
         <div class="about__copy" data-reveal>
+          <span class="ck-eyebrow">Our Story</span>
           <h2>About the Kitchen</h2>
+          <p class="about__quote hindi-accent">घर जैसा स्वाद, अपनों जैसी देखभाल</p>
           <p>
             Charroti started as one home kitchen cooking for a handful of
             neighbours who missed proper ghar ka khana. It's grown, but the
@@ -117,30 +161,76 @@
       </div>
     </section>
 
-    <!-- ================= WHY CHOOSE US ================= -->
-    <section class="section section--why">
+    <!-- ================= MOOD MOMENTS ================= -->
+    <section class="section ck-section ck-mood">
       <div class="section__inner">
-        <div class="section__head">
-          <h2>Why Choose Us</h2>
-        </div>
+        <span class="ck-eyebrow">Your Day. Your Craving. Your Thali.</span>
+        <h2 class="ck-mood__heading">
+          Life doesn't come in one mood.<br />
+          <span class="ck-accent-lavender">Neither does hunger.</span>
+        </h2>
+        <ul class="ck-mood__grid" data-reveal>
+          <li class="ck-mood__card">
+            <span class="ck-mood__icon">🏠</span>
+            <h3>Ghar Ki Yaad</h3>
+            <p>Away from home and missing that familiar plate? This one's built for that ache.</p>
+          </li>
+          <li class="ck-mood__card">
+            <span class="ck-mood__icon">💼</span>
+            <h3>Office Lunch Break</h3>
+            <p>Twenty minutes between meetings, a proper thali instead of another sad sandwich.</p>
+          </li>
+          <li class="ck-mood__card">
+            <span class="ck-mood__icon">🌙</span>
+            <h3>Late Night Cravings</h3>
+            <p>Deadline running long? A warm roti and dal hits different at midnight.</p>
+          </li>
+          <li class="ck-mood__card">
+            <span class="ck-mood__icon">👨‍👩‍👧‍👦</span>
+            <h3>Family Sunday Thali</h3>
+            <p>No cooking, no cleanup — just everyone at the table, plates full.</p>
+          </li>
+          <li class="ck-mood__card">
+            <span class="ck-mood__icon">🎉</span>
+            <h3>Festival Feast</h3>
+            <p>Come festival season, the everyday thali makes room for something extra special.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ================= WHY CHOOSE US ================= -->
+    <section class="section section--why ck-section ck-why">
+      <div class="section__inner">
+        <span class="ck-eyebrow">The Charroti Difference</span>
+        <h2 class="ck-why__heading">
+          Fresh beats frozen.<br />
+          <span class="ck-accent-gold">Every single time.</span>
+        </h2>
+        <p class="ck-why__sub">Because ghar ka khana shouldn't have to wait.</p>
         <ul class="why-grid" data-reveal>
           <li class="why-card">
+            <span class="ck-why__icon">🔥</span>
             <h3>Fresh Every Day</h3>
             <p>Nothing is cooked a day ahead. What you order today was made today.</p>
           </li>
           <li class="why-card">
+            <span class="ck-why__icon">🍽️</span>
             <h3>Homestyle Taste</h3>
             <p>Recipes from the kitchens we grew up in, not a restaurant playbook.</p>
           </li>
           <li class="why-card">
+            <span class="ck-why__icon">🌿</span>
             <h3>Quality Ingredients</h3>
             <p>Local mandi produce, good ghee, and spices ground the traditional way.</p>
           </li>
           <li class="why-card">
+            <span class="ck-why__icon">🧼</span>
             <h3>Hygienic Kitchen</h3>
             <p>A small, closely run kitchen with the same standards you'd hold your own to.</p>
           </li>
           <li class="why-card">
+            <span class="ck-why__icon">❤️</span>
             <h3>Made With Care</h3>
             <p>Small batches, tasted before they go out, every single day.</p>
           </li>
@@ -149,8 +239,9 @@
     </section>
 
     <!-- ================= FESTIVAL EXPERIENCE ================= -->
-    <section class="section section--festival" data-reveal>
+    <section class="section section--festival ck-section" data-reveal>
       <div class="section__inner section__inner--narrow">
+        <span class="section--festival__hindi hindi-accent" id="festival-hindi-greeting">त्योहारों की रौनक</span>
         <h2>A Kitchen That Marks the Season</h2>
         <p>
           Around major festivals, Charroti's everyday thali makes a little room
@@ -162,9 +253,10 @@
     </section>
 
     <!-- ================= CONTACT / ORDER ================= -->
-    <section id="contact" class="section section--contact">
+    <section id="contact" class="section section--contact ck-section">
       <div class="section__inner section__inner--split">
         <div data-reveal>
+          <span class="ck-eyebrow">Order Direct</span>
           <h2>Order Today's Meal</h2>
           <p>Reach out directly — we take orders by phone and WhatsApp, and cook to your delivery window.</p>
           <a data-contact-whatsapp href="#" class="btn btn--primary">Order Today's Meal</a>
@@ -179,15 +271,42 @@
     </section>
   </main>
 
-  <footer class="footer">
-    <div class="footer__inner">
-      <div class="footer__brand">
-        <img src="assets/icons/logo-mark.svg" alt="" width="22" height="22" />
-        <span><span data-brand-name>Charroti</span> <span data-brand-tagline>Kitchen</span></span>
+  <footer class="footer ck-footer">
+    <div class="footer__inner ck-footer__inner">
+      <div class="ck-footer__brand">
+        <div class="footer__brand">
+          <img src="assets/icons/logo-mark.svg" alt="" width="26" height="26" />
+          <span><span data-brand-name>Charroti</span> <span data-brand-tagline>Kitchen</span></span>
+        </div>
+        <p class="footer__note hindi-accent">घर जैसा खाना, हर दिन ताज़ा</p>
+        <p class="ck-footer__desc">Homestyle Indian thalis, cooked fresh every morning — one plate, one family's recipe at a time.</p>
+        <div class="ck-footer__social">
+          <a data-contact-whatsapp href="#" aria-label="Message us on WhatsApp" class="ck-footer__social-icon">WA</a>
+          <a href="#" aria-label="Instagram" class="ck-footer__social-icon">IG</a>
+          <a href="#" aria-label="YouTube" class="ck-footer__social-icon">YT</a>
+        </div>
       </div>
-      <p class="footer__note">Homestyle Indian food, made fresh every day.</p>
-      <p class="footer__legal">© <span id="current-year"></span> Charroti Kitchen. All rights reserved.</p>
-      <a class="footer__admin-link" href="login.html">Admin</a>
+
+      <div class="ck-footer__col">
+        <span class="ck-footer__col-title">Explore</span>
+        <a href="#home">Home</a>
+        <a href="#todays-menu">Today's Menu</a>
+        <a href="#our-food">Our Food</a>
+        <a href="#about">About</a>
+      </div>
+
+      <div class="ck-footer__col">
+        <span class="ck-footer__col-title">Get In Touch</span>
+        <a data-contact-phone href="#"></a>
+        <a data-contact-email href="#"></a>
+        <span data-contact-location></span>
+        <span data-contact-hours></span>
+      </div>
+
+      <div class="ck-footer__bottom">
+        <p class="footer__legal">© <span id="current-year"></span> Charroti Kitchen. All rights reserved.</p>
+        <a class="footer__admin-link" href="login.html">Admin</a>
+      </div>
     </div>
   </footer>
 
