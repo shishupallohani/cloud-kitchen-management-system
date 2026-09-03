@@ -722,7 +722,17 @@
 
   margin: 5px auto 8px;
 
-  color: #ffffff;
+  background: linear-gradient(
+  90deg,
+  #f7b928,
+  #ffffff,
+  #c58cff,
+  #f7b928
+);
+
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
 
   font-size: clamp(34px, 4vw, 54px);
 
