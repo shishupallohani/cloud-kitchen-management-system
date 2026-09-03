@@ -244,51 +244,58 @@
 .ck-menu-grid .food-card__body h3 { order: 0; }
 .ck-menu-grid .food-card__body p { order: 1; }
 
-/* Today's Menu uses the same image URL saved from the admin panel, but
-   presents it as a full-card photograph instead of a small thumbnail. */
+/* Today's Menu "Kitchen Note" — pure-CSS torn kraft-paper note pinned at
+   the top-right, with the admin-panel special note rendered below the
+   "KITCHEN NOTE" title. No image asset needed. */
 #todays-menu .menu-note {
   position: relative;
-  width: min(100%, 620px);
-  margin: 4px 0 30px;
-  padding: 38px 26px 22px;
-  color: #3d2b2a;
+  width: min(100%, 460px);
+  margin: 30px 0 40px;
+  padding: 56px 30px 26px 40px;
+  color: #4a2a1e;
   font-family: var(--font-body);
-  font-size: clamp(1rem, 2.4vw, 1.15rem);
+  font-size: clamp(1rem, 2.4vw, 1.1rem);
   font-weight: 700;
   font-style: normal;
   line-height: 1.55;
   white-space: pre-wrap;
-  border: 1px solid rgba(112, 77, 47, 0.24);
-  border-radius: 4px 7px 5px 6px;
-  box-shadow: 5px 8px 0 rgba(87, 53, 48, 0.24), 0 16px 28px -18px rgba(5, 3, 20, 0.9);
   background:
-    linear-gradient(135deg, #e4cea4 0 49%, transparent 50%) top right / 34px 34px no-repeat,
-    linear-gradient(135deg, #fffaf0, #f3dfb6);
-  transform: rotate(-0.35deg);
+    radial-gradient(140% 120% at 12% 0%, rgba(255, 255, 255, 0.4), transparent 55%),
+    linear-gradient(150deg, #f2ddad, #e0bd82 55%, #cd9c5f);
+  box-shadow: 6px 10px 0 rgba(87, 53, 48, 0.18), 0 18px 30px -18px rgba(5, 3, 20, 0.85);
+  clip-path: polygon(
+    4% 0%, 100% 0%, 100% 100%, 4% 100%,
+    7% 93%, 1% 87%, 6% 80%, 0% 73%, 5% 66%,
+    1% 59%, 6% 52%, 0% 45%, 5% 38%, 1% 31%,
+    6% 24%, 0% 17%, 5% 10%, 1% 3%
+  );
+  transform: rotate(-0.6deg);
 }
 #todays-menu .menu-note::before {
   content: "KITCHEN NOTE";
+  display: block;
   position: absolute;
-  top: 14px;
-  left: 26px;
-  color: #9a3a3f;
+  top: 20px;
+  left: 40px;
+  padding-bottom: 6px;
+  color: #8b252c;
   font-family: var(--font-display);
-  font-size: 0.68rem;
+  font-size: 0.85rem;
   font-weight: 800;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
+  border-bottom: 2px solid #8b252c;
 }
 #todays-menu .menu-note::after {
   content: "";
   position: absolute;
-  top: -11px;
-  left: 50%;
-  width: 19px;
-  height: 19px;
+  top: 6px;
+  right: 34px;
+  width: 20px;
+  height: 20px;
   border: 2px solid #8b252c;
   border-radius: 50%;
   background: radial-gradient(circle at 35% 28%, #ff8484 0 16%, #cf3e46 20% 62%, #8b252c 100%);
   box-shadow: 0 4px 5px rgba(64, 21, 28, 0.42), inset 0 1px rgba(255, 255, 255, 0.52);
-  transform: translateX(-50%);
 }
 #todays-menu .menu-list {
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
