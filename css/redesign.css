@@ -184,23 +184,24 @@
 .ck-marquee__inner {
   display: flex;
   width: max-content;
-  animation: ck-marquee-scroll 32s linear infinite;
+  will-change: transform;
+  animation: ck-marquee-scroll 10s linear infinite;
 }
 .ck-marquee__group {
   display: flex;
   align-items: center;
   gap: 26px;
-  padding-right: 26px;
+  padding-right: 30px;
   white-space: nowrap;
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.05rem;
+  font-weight: 800;
+  font-size: 1.50rem;
   color: #241a08;
 }
-.ck-marquee__dot { font-size: 0.8rem; opacity: 0.7; }
+.ck-marquee__dot { font-size: 2rem; opacity: 0.7; }
 @keyframes ck-marquee-scroll {
   from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  to { transform: translateX(-25%); }
 }
 @media (prefers-reduced-motion: reduce) {
   .ck-marquee__inner { animation: none; }
