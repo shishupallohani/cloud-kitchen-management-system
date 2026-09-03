@@ -122,10 +122,11 @@ function initScrollReveal() {
 // Kitchen Favorites catalog + category filter
 // ---------------------------------------------------------------------
 function catalogCard(item) {
+  const fallbackImage = item.image.replace(/\.jpg$/i, ".svg");
   return `
     <li class="food-card" data-category="${item.category}">
       <div class="food-card__media">
-        <img src="${item.image}" alt="${item.name}" loading="lazy" />
+        <img src="${item.image}" alt="${item.name}" loading="lazy" onerror="this.onerror=null;this.src='${fallbackImage}'" />
       </div>
       <div class="food-card__body">
         <h3>${item.name}</h3>

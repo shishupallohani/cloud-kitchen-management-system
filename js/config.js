@@ -21,106 +21,105 @@ export const SITE = {
 };
 
 // Permanent food catalog — "Kitchen Favorites".
-// Local images live in assets/images/. Swap the .svg placeholders for
-// real .jpg/.webp photography whenever you have it; keep the filenames
-// the same and nothing else needs to change.
+// Local images live in assets/images/. Keep the .jpg filenames below when
+// replacing photos so the website updates without any code changes.
 export const STATIC_CATALOG = [
   {
     id: "dal-tadka",
     name: "Dal Tadka",
     description: "Slow-simmered lentils, finished with a hot ghee tempering.",
-    image: "assets/images/dal.svg",
+    image: "assets/images/dal.jpg",
     category: "Dal",
   },
   {
     id: "paneer-curry",
     name: "Paneer Curry",
     description: "Soft home-set paneer in a rich onion-tomato gravy.",
-    image: "assets/images/paneer.svg",
+    image: "assets/images/paneer.jpg",
     category: "Paneer",
   },
   {
     id: "mushroom-masala",
     name: "Mushroom Masala",
     description: "Button mushrooms tossed in a masala of ginger and garam.",
-    image: "assets/images/mushroom.svg",
+    image: "assets/images/mushroom.jpg",
     category: "Main Course",
   },
   {
     id: "aloo-gobi",
     name: "Aloo Gobi",
     description: "Potatoes and cauliflower, dry-roasted with turmeric and cumin.",
-    image: "assets/images/aloo-gobi.svg",
+    image: "assets/images/aloo-gobi.jpg",
     category: "Vegetables",
   },
   {
     id: "bhindi-fry",
     name: "Bhindi Fry",
     description: "Okra pan-fried until crisp at the edges, lightly spiced.",
-    image: "assets/images/bhindi.svg",
+    image: "assets/images/bhindi.jpg",
     category: "Vegetables",
   },
   {
     id: "chole",
     name: "Chole",
     description: "Chickpeas simmered overnight in a deep, tangy masala.",
-    image: "assets/images/chole.svg",
+    image: "assets/images/chole.jpg",
     category: "Main Course",
   },
   {
     id: "rajma",
     name: "Rajma",
     description: "Kidney beans in a slow-cooked tomato gravy, Punjabi style.",
-    image: "assets/images/rajma.svg",
+    image: "assets/images/rajma.jpg",
     category: "Main Course",
   },
   {
     id: "seasonal-vegetable",
     name: "Seasonal Vegetable Curry",
     description: "Whatever's freshest that week, cooked simply and well.",
-    image: "assets/images/seasonal-vegetable.svg",
+    image: "assets/images/seasonal-vegetable.jpg",
     category: "Vegetables",
   },
   {
     id: "jeera-rice",
     name: "Jeera Rice",
     description: "Basmati rice tempered with cumin and a whisper of ghee.",
-    image: "assets/images/jeera-rice.svg",
+    image: "assets/images/jeera-rice.jpg",
     category: "Rice",
   },
   {
     id: "veg-pulao",
     name: "Veg Pulao",
     description: "Fragrant rice layered with seasonal vegetables and whole spices.",
-    image: "assets/images/pulao.svg",
+    image: "assets/images/pulao.jpg",
     category: "Rice",
   },
   {
     id: "steamed-rice",
     name: "Steamed Rice",
     description: "Plain steamed basmati, cooked fresh for every order.",
-    image: "assets/images/steamed-rice.svg",
+    image: "assets/images/steamed-rice.jpg",
     category: "Rice",
   },
   {
     id: "chapati",
     name: "Chapati",
     description: "Hand-rolled, made on the tawa to order.",
-    image: "assets/images/chapati.svg",
+    image: "assets/images/chapati.jpg",
     category: "Indian Breads",
   },
   {
     id: "roti",
     name: "Roti",
     description: "Whole-wheat and soft, finished with a touch of ghee.",
-    image: "assets/images/roti.svg",
+    image: "assets/images/roti.jpg",
     category: "Indian Breads",
   },
   {
     id: "salad-raita",
     name: "Salad & Raita",
     description: "Crisp seasonal salad alongside a cooling home-set raita.",
-    image: "assets/images/salad.svg",
+    image: "assets/images/salad.jpg",
     category: "Sides",
   },
 ];
