@@ -12,12 +12,12 @@ export const SITE = {
   metaDescription:
     "Charroti Kitchen — homestyle Indian food, made fresh every day. See today's menu and order for delivery.",
   contact: {
-    phone: "+91 90000 00000",
-    whatsapp: "919000000000", // digits only, used for wa.me links
-    email: "hello@charrotikitchen.example",
-    location: "Sector 62, Noida, Uttar Pradesh",
+    phone: "+91 7903481464",
+    whatsapp: "917903481464",
+    email: "charroti.in@gmail.com",
+    location: "New Ashok Nagar, Delhi",
     hours: "12:00 PM – 9:30 PM, all days",
-  },
+},
 };
 
 // Permanent food catalog — "Kitchen Favorites".
