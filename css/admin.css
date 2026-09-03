@@ -9,6 +9,12 @@
   min-height: 100vh;
 }
 
+/* style.css's public-site .btn is width:100% (fine for landing-page CTAs)
+   but it was leaking into every admin button, forcing them full-width
+   and stacked. Admin buttons size to their own content instead. */
+.admin-body .btn { width: auto; }
+.admin-body .btn--block { width: 100%; }
+
 /* ---------------- Login ---------------- */
 .admin-body--centered {
   display: flex;
@@ -123,7 +129,16 @@
 .admin-panel.is-active { display: block; }
 .admin-panel h1 { font-size: 1.5rem; margin-bottom: 20px; }
 .admin-subhead { font-size: 1.1rem; margin: 32px 0 14px; }
-.admin-hint { color: var(--ink-on-light-dim); font-size: 0.9rem; max-width: 60ch; }
+.admin-hint { color: var(--ink-on-light-dim); font-size: 0.9rem; max-width: 60ch; margin-bottom: 20px; }
+
+/* Focus visibility for keyboard users */
+.admin-body .btn:focus-visible,
+.admin-body .icon-btn:focus-visible,
+.admin-body .field-input:focus-visible,
+.admin-body input:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
 
 /* ---------------- Overview cards ---------------- */
 .admin-cards { display: flex; gap: 16px; flex-wrap: wrap; }
@@ -152,27 +167,36 @@
 /* ---------------- Menu editor ---------------- */
 .menu-editor-controls {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 12px;
   background: #fff;
   border: 1px solid var(--border-light);
   border-radius: var(--radius-m);
-  padding: 14px 16px;
+  padding: 16px;
   margin-bottom: 16px;
 }
-.menu-editor-controls label { font-size: 0.85rem; font-weight: 600; }
+.control-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.control-row:not(:last-child) {
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-light);
+}
+.field-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: auto;
+}
+.field-inline label { font-size: 0.85rem; font-weight: 600; white-space: nowrap; }
 .menu-editor-controls input[type="date"] {
   padding: 8px 10px;
   border: 1px solid var(--border-light);
   border-radius: var(--radius-s);
   font-family: var(--font-body);
-}
-.menu-editor-controls__divider {
-  width: 1px;
-  align-self: stretch;
-  background: var(--border-light);
-  margin: 0 4px;
 }
 .admin-status { min-height: 20px; font-size: 0.85rem; color: var(--sage); font-weight: 600; }
 .admin-status.is-error { color: #a5372f; }
@@ -198,12 +222,13 @@
 }
 .menu-items-editor__head h2 { font-size: 1.1rem; margin: 0; }
 
-.menu-items-list, .festivals-list { list-style: none; margin: 0 0 20px; padding: 0; display: grid; gap: 12px; }
+.menu-items-list, .festivals-list { list-style: none; margin: 0 0 20px; padding: 0; display: grid; gap: 14px; }
 .menu-item-row, .festival-row {
   background: #fff;
   border: 1px solid var(--border-light);
   border-radius: var(--radius-m);
-  padding: 16px;
+  padding: 18px;
+  box-shadow: 0 1px 2px rgba(20, 16, 10, 0.04);
 }
 .menu-item-row__grid {
   display: grid;
@@ -236,6 +261,57 @@
   .menu-item-row__grid, .festival-row__grid { grid-template-columns: 1fr; }
   .menu-item-row__span2, .festival-row__span2 { grid-column: span 1; }
   .admin-topbar { flex-wrap: wrap; gap: 10px; }
+  .control-row { align-items: stretch; }
+  .field-inline { margin-right: 0; width: 100%; }
+  .field-inline input[type="date"] { flex: 1; }
+  .control-row .btn { flex: 1; }
+}
+
+/* ---------------- Confirm dialog ---------------- */
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(20, 16, 10, 0.45);
+  animation: confirm-fade-in 0.15s ease;
+}
+.confirm-overlay[hidden] { display: none; }
+.confirm-card {
+  width: 100%;
+  max-width: 380px;
+  background: #fff;
+  border-radius: var(--radius-l);
+  padding: 24px;
+  box-shadow: var(--shadow-soft);
+  animation: confirm-pop-in 0.18s ease;
+}
+.confirm-card p {
+  margin: 0 0 20px;
+  font-size: 0.98rem;
+  line-height: 1.5;
+  color: var(--ink-on-light);
+}
+.confirm-card__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.confirm-card__ok {
+  background: #a5372f;
+  color: #fff;
+}
+.confirm-card__ok:hover { background: #8a2c2c; }
+@keyframes confirm-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes confirm-pop-in {
+  from { opacity: 0; transform: translateY(6px) scale(0.98); }
+  to { opacity: 1; transform: none; }
 }
 
 /* ---------------- Toasts ---------------- */

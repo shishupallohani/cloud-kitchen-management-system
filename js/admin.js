@@ -71,6 +71,39 @@ function showToast(message, isError = false) {
   }, 3200);
 }
 
+// ---------------------------------------------------------------------
+// Confirm dialog — replaces the native browser confirm() with a
+// matching in-page card. Same behavior: resolves true only if the
+// person clicks "Delete".
+// ---------------------------------------------------------------------
+const confirmOverlay = document.getElementById("confirm-modal");
+const confirmMessageEl = document.getElementById("confirm-modal-message");
+const confirmOkBtn = document.getElementById("confirm-modal-ok");
+const confirmCancelBtn = document.getElementById("confirm-modal-cancel");
+
+function confirmDialog(message) {
+  confirmMessageEl.textContent = message;
+  confirmOverlay.hidden = false;
+  return new Promise((resolve) => {
+    function settle(result) {
+      confirmOverlay.hidden = true;
+      confirmOkBtn.removeEventListener("click", onOk);
+      confirmCancelBtn.removeEventListener("click", onCancel);
+      confirmOverlay.removeEventListener("click", onBackdrop);
+      document.removeEventListener("keydown", onKeydown);
+      resolve(result);
+    }
+    function onOk() { settle(true); }
+    function onCancel() { settle(false); }
+    function onBackdrop(e) { if (e.target === confirmOverlay) settle(false); }
+    function onKeydown(e) { if (e.key === "Escape") settle(false); }
+    confirmOkBtn.addEventListener("click", onOk);
+    confirmCancelBtn.addEventListener("click", onCancel);
+    confirmOverlay.addEventListener("click", onBackdrop);
+    document.addEventListener("keydown", onKeydown);
+  });
+}
+
 let booted = false;
 function bootDashboard() {
   if (booted) return;
@@ -233,7 +266,8 @@ function initMenuEditor() {
 
   document.getElementById("delete-menu-btn").addEventListener("click", async () => {
     if (!dateInput.value) return;
-    if (!confirm(`Delete the menu for ${formatDisplayDate(dateInput.value)}? This can't be undone.`)) return;
+    const ok = await confirmDialog(`Delete the menu for ${formatDisplayDate(dateInput.value)}? This can't be undone.`);
+    if (!ok) return;
     try {
       await deleteMenuForDate(dateInput.value);
       itemsList.innerHTML = "";
@@ -323,7 +357,8 @@ async function saveFestivalRow(node) {
 
 async function removeFestivalRow(node) {
   const name = node.querySelector('[data-field="name"]').value || "This festival";
-  if (!confirm(`Delete ${name}?`)) return;
+  const ok = await confirmDialog(`Delete ${name}? This can't be undone.`);
+  if (!ok) return;
   try {
     if (node.dataset.id) await deleteDoc(doc(db, "festivals", node.dataset.id));
     node.remove();

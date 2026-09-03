@@ -59,16 +59,21 @@
       <h1>Menu Management</h1>
 
       <div class="menu-editor-controls">
-        <label for="menu-date-input">Date</label>
-        <input type="date" id="menu-date-input" />
-        <button id="load-menu-btn" class="btn btn--ghost btn--small">Load</button>
-        <button id="delete-menu-btn" class="btn btn--ghost btn--small btn--danger">Delete Menu</button>
-
-        <span class="menu-editor-controls__divider"></span>
-
-        <label for="duplicate-target-input">Duplicate to</label>
-        <input type="date" id="duplicate-target-input" />
-        <button id="duplicate-menu-btn" class="btn btn--ghost btn--small">Duplicate Previous Menu</button>
+        <div class="control-row">
+          <div class="field-inline">
+            <label for="menu-date-input">Date</label>
+            <input type="date" id="menu-date-input" />
+          </div>
+          <button id="load-menu-btn" class="btn btn--ghost btn--small">Load</button>
+          <button id="delete-menu-btn" class="btn btn--ghost btn--small btn--danger">Delete Menu</button>
+        </div>
+        <div class="control-row">
+          <div class="field-inline">
+            <label for="duplicate-target-input">Duplicate to</label>
+            <input type="date" id="duplicate-target-input" />
+          </div>
+          <button id="duplicate-menu-btn" class="btn btn--ghost btn--small">Duplicate Previous Menu</button>
+        </div>
       </div>
 
       <p id="menu-editor-status" class="admin-status" role="status"></p>
@@ -170,6 +175,16 @@
   </template>
 
   <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <div id="confirm-modal" class="confirm-overlay" hidden>
+    <div class="confirm-card" role="alertdialog" aria-modal="true" aria-labelledby="confirm-modal-message">
+      <p id="confirm-modal-message"></p>
+      <div class="confirm-card__actions">
+        <button type="button" id="confirm-modal-cancel" class="btn btn--ghost btn--small">Cancel</button>
+        <button type="button" id="confirm-modal-ok" class="btn btn--primary btn--small confirm-card__ok">Delete</button>
+      </div>
+    </div>
+  </div>
 
   <script type="module" src="js/admin.js"></script>
 </body>
