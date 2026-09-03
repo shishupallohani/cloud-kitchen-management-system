@@ -142,6 +142,7 @@ function initCatalog() {
   if (!grid) return;
 
   grid.innerHTML = STATIC_CATALOG.map(catalogCard).join("");
+  grid.classList.add("is-revealed");
 
   if (filterBar) {
     filterBar.innerHTML = CATEGORIES.map(
