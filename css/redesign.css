@@ -192,12 +192,12 @@
 }
 .ck-hero__media-frame {
   position: relative;
-  width: min(100%, 560px);
+  width: min(90%, 480px);
   aspect-ratio: 1 / 1;
   margin-inline: auto;
   overflow: hidden;
   border: 1px solid rgba(246, 243, 234, 0.22);
-  border-radius: 38px;
+  border-radius: 30px;
   box-shadow: 0 30px 70px -24px rgba(5, 3, 20, 0.9), 0 0 52px rgba(182, 166, 234, 0.3);
 }
 .ck-hero__media-frame::before { content: none; }
@@ -242,13 +242,27 @@
   font-size: 1.50rem;
   color: #241a08;
 }
-.ck-marquee__dot { font-size: 2rem; opacity: 0.7; }
+/* =========================================================
+   HERO → MARQUEE SPACING + THINNER MARQUEE
+   ========================================================= */
+
+.ck-marquee {
+  padding: 10px 0;
+  margin-top: 70px;
+}
+.ck-marquee__dot { font-size: 1.5rem; opacity: 0.7; }
 @keyframes ck-marquee-scroll {
   from { transform: translateX(0); }
   to { transform: translateX(-25%); }
 }
 @media (prefers-reduced-motion: reduce) {
   .ck-marquee__inner { animation: none; }
+}
+
+@media (max-width: 639px) {
+  .ck-marquee {
+    margin-top: 70px;
+  }
 }
 
 /* ---------------- Section rhythm ---------------- */
