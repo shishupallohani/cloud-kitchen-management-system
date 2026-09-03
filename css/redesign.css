@@ -95,18 +95,25 @@
 .ck-anim {
   opacity: 0;
   transform: translateY(22px);
+  filter: blur(5px);
   animation: ck-fade-up 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 .ck-anim--1 { animation-delay: 0.05s; }
 .ck-anim--2 { animation-delay: 0.18s; }
 .ck-anim--3 { animation-delay: 0.34s; }
 .ck-anim--4 { animation-delay: 0.48s; }
-.ck-anim--5 { animation-delay: 0.28s; transform: translateY(16px) scale(0.97); }
+.ck-anim--5 {
+  animation: ck-hero-media-in 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.28s forwards;
+  transform: translateY(20px) scale(0.9) rotate(-3deg);
+}
 @keyframes ck-fade-up {
-  to { opacity: 1; transform: none; }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+@keyframes ck-hero-media-in {
+  to { opacity: 1; transform: translateY(0) scale(1) rotate(0); filter: blur(0); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .ck-anim { opacity: 1; transform: none; animation: none; }
+  .ck-anim { opacity: 1; transform: none; filter: none; animation: none; }
 }
 
 /* ---------------- Hero ---------------- */
@@ -125,20 +132,46 @@
   font-size: clamp(2.4rem, 10vw, 4.4rem);
   max-width: 13ch;
 }
-.ck-hero__media-frame {
+.ck-hero__media {
   position: relative;
   isolation: isolate;
 }
-.ck-hero__media-frame::before {
+.ck-hero__media::before {
   content: "";
   position: absolute;
-  inset: -12%;
+  inset: -15%;
   z-index: -1;
-  background: radial-gradient(circle, var(--gold) 0%, var(--ck-lavender) 55%, transparent 72%);
-  filter: blur(60px);
-  opacity: 0.45;
+  background: radial-gradient(circle, color-mix(in srgb, var(--gold) 62%, transparent) 0%, color-mix(in srgb, var(--ck-lavender) 64%, transparent) 42%, transparent 72%);
+  filter: blur(58px);
+  opacity: 0.58;
+  pointer-events: none;
 }
-.ck-hero__media-frame img { position: relative; }
+.ck-hero__media-frame {
+  position: relative;
+  width: min(100%, 560px);
+  aspect-ratio: 1 / 1;
+  margin-inline: auto;
+  overflow: hidden;
+  border: 1px solid rgba(246, 243, 234, 0.22);
+  border-radius: 38px;
+  box-shadow: 0 30px 70px -24px rgba(5, 3, 20, 0.9), 0 0 52px rgba(182, 166, 234, 0.3);
+}
+.ck-hero__media-frame::before { content: none; }
+.ck-hero__media-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transform-origin: 50% 50%;
+  animation: ck-hero-photo-in 1.15s cubic-bezier(0.16, 1, 0.3, 1) 0.28s both;
+}
+@keyframes ck-hero-photo-in {
+  from { transform: scale(1.12) rotate(2.5deg); }
+  to { transform: scale(1) rotate(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ck-hero__media-frame img { animation: none; }
+}
 
 /* ---------------- Marquee ---------------- */
 .ck-marquee {
