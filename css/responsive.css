@@ -100,3 +100,23 @@
 @media (min-width: 1180px) {
   .food-grid, .menu-list { grid-template-columns: repeat(4, 1fr); }
 }
+
+
+/* =========================================================
+   MOBILE HERO BUTTONS — SAME ROW
+   ========================================================= */
+
+@media (max-width: 639px) {
+  .hero__actions {
+    flex-direction: row;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .hero__actions .btn {
+    flex: 1;
+    width: auto;
+    min-width: 0;
+    white-space: nowrap;
+  }
+}

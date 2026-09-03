@@ -942,3 +942,19 @@ background-clip: text;
     font-size: 11px;
   }
 }
+
+
+/* =========================================================
+   MOBILE HERO ORDER
+   Text + buttons first, hero image after
+   ========================================================= */
+
+@media (max-width: 899px) {
+  .ck-hero__copy {
+    order: 1;
+  }
+
+  .ck-hero__media {
+    order: 2;
+  }
+}
