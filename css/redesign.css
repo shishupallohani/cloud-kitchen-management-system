@@ -80,6 +80,22 @@
 }
 .section--festival p { max-width: 60ch; }
 
+/* ---------------- Festival banner — themed photo override ----------------
+   festival.js swaps in this photo (full-width, responsive) whenever
+   assets/images/festival-banners/<theme-key>.jpg exists for the active
+   festival, instead of the plain icon+text strip. */
+.festival-banner--image {
+  padding: 0;
+  background: none;
+  animation: none;
+  display: block;
+}
+.festival-banner__image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 /* ---------------- Eyebrow label ---------------- */
 .ck-eyebrow {
   display: block;

@@ -141,27 +141,49 @@ export function applyFestivalTheme(festival) {
   const banner = document.getElementById("festival-banner");
   const bannerIcon = document.getElementById("festival-banner-icon");
   const bannerText = document.getElementById("festival-banner-text");
+  const bannerImage = document.getElementById("festival-banner-image");
   const hindiGreeting = document.getElementById("festival-hindi-greeting");
   if (!festival) {
     root.style.removeProperty("--festival-accent");
     root.style.removeProperty("--festival-accent-2");
     root.removeAttribute("data-festival-active");
-    if (banner) banner.hidden = true;
+    if (banner) { banner.hidden = true; banner.classList.remove("festival-banner--image"); }
+    if (bannerImage) bannerImage.hidden = true;
     return;
   }
 
-  const treatment = THEME_TREATMENTS[festival.theme] || THEME_TREATMENTS.default;
+  const theme = festival.theme || "default";
+  const treatment = THEME_TREATMENTS[theme] || THEME_TREATMENTS.default;
   root.style.setProperty("--festival-accent", treatment.accent);
   root.style.setProperty("--festival-accent-2", treatment.accent2);
-  root.setAttribute("data-festival-active", festival.theme || "default");
+  root.setAttribute("data-festival-active", theme);
+  if (hindiGreeting) hindiGreeting.textContent = treatment.hindi;
 
   if (banner) {
     banner.hidden = false;
-    if (bannerIcon) bannerIcon.textContent = treatment.icon;
-    if (bannerText) bannerText.textContent = festival.greeting || festival.name;
-  }
-  if (hindiGreeting) hindiGreeting.textContent = treatment.hindi;
+    banner.classList.remove("festival-banner--image");
+    if (bannerIcon) { bannerIcon.hidden = false; bannerIcon.textContent = treatment.icon; }
+    if (bannerText) { bannerText.hidden = false; bannerText.textContent = festival.greeting || festival.name; }
 
+    // Themed banner photo, opt-in per festival: drop a file at
+    // assets/images/festival-banners/<theme-key>.jpg (matching the
+    // admin panel's "Theme key" field) and it takes over the top
+    // banner automatically — no code change needed for future
+    // festivals. Missing file silently keeps the plain icon+text strip.
+    if (bannerImage) {
+      bannerImage.hidden = true;
+      const probe = new Image();
+      probe.onload = () => {
+        bannerImage.src = probe.src;
+        bannerImage.alt = festival.greeting || festival.name;
+        bannerImage.hidden = false;
+        banner.classList.add("festival-banner--image");
+        bannerIcon.hidden = true;
+        bannerText.hidden = true;
+      };
+      probe.src = `assets/images/festival-banners/${theme}.jpg`;
+    }
+  }
 }
 
 export async function initFestivalTheme() {
