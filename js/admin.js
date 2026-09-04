@@ -12,6 +12,7 @@ import {
   saveCurrentMenu,
 } from "./menu.js";
 import { getActiveFestival } from "./festival.js";
+
 import {
   collection,
   getDocs,
@@ -19,6 +20,8 @@ import {
   setDoc,
   deleteDoc,
   addDoc,
+  writeBatch,
+  serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
 // ---------------------------------------------------------------------
@@ -115,6 +118,7 @@ function bootDashboard() {
   initMenuEditor();
   initFestivals();
   initCustomers();
+  initReviewStatus();
 }
 
 // ---------------------------------------------------------------------
@@ -593,3 +597,351 @@ async function initCustomers() {
     );
   }
 }
+
+// ---------------------------------------------------------------------
+// Review Status
+// ---------------------------------------------------------------------
+const reviewStatusList = document.getElementById("review-status-list");
+
+async function initReviewStatus() {
+  reviewStatusList.innerHTML = "<p>Loading reviews...</p>";
+
+  try {
+    const snapshot = await getDocs(
+      collection(db, "reviewStatus")
+    );
+
+    if (snapshot.empty) {
+      reviewStatusList.innerHTML =
+        '<p class="review-status-empty">No pending reviews.</p>';
+      return;
+    }
+
+    reviewStatusList.innerHTML = "";
+
+    for (const reviewDoc of snapshot.docs) {
+
+      const review = reviewDoc.data();
+
+      const row = document.createElement("div");
+      row.className = "review-status-row";
+
+      row.innerHTML = `
+        <div class="review-status-cell">
+          ${review.name || "Customer Review"}
+        </div>
+
+        <div class="review-status-cell review-status-cell--rating">
+          ⭐ ${review.rating || "N/A"}/5
+        </div>
+
+        <div class="review-status-cell review-status-cell--review">
+          ${review.review || "N/A"}
+        </div>
+
+        <div class="review-status-cell review-status-cell--action">
+
+          <button
+            type="button"
+            class="btn btn--small"
+            data-action="approve-review">
+            Approve
+          </button>
+
+          <button
+            type="button"
+            class="btn btn--ghost btn--small btn--danger"
+            data-action="reject-review">
+            Reject
+          </button>
+
+        </div>
+      `;
+
+      // ---------------------------------------------------------------
+      // Approve
+      // ---------------------------------------------------------------
+      row
+        .querySelector('[data-action="approve-review"]')
+        .addEventListener("click", () => {
+          openCustomerSelection(
+            reviewDoc.id,
+            review.rating,
+            review.review
+          );
+        });
+
+      // ---------------------------------------------------------------
+      // Reject
+      // ---------------------------------------------------------------
+      row
+        .querySelector('[data-action="reject-review"]')
+        .addEventListener("click", async () => {
+
+          const ok = await confirmDialog(
+            "Reject this review? This cannot be undone."
+          );
+
+          if (!ok) return;
+
+          try {
+
+            await deleteDoc(
+              doc(db, "reviewStatus", reviewDoc.id)
+            );
+
+            row.remove();
+
+            showToast("Review rejected.");
+
+            if (!reviewStatusList.children.length) {
+              reviewStatusList.innerHTML =
+                '<p class="review-status-empty">No pending reviews.</p>';
+            }
+
+          } catch (err) {
+
+            console.error(err);
+
+            showToast(
+              "Couldn't reject the review.",
+              true
+            );
+
+          }
+
+        });
+
+      reviewStatusList.appendChild(row);
+    }
+
+  } catch (err) {
+
+    console.error(err);
+
+    reviewStatusList.innerHTML =
+      '<p class="review-status-empty">Couldn\'t load reviews.</p>';
+
+    showToast(
+      "Couldn't load reviews.",
+      true
+    );
+  }
+}
+
+
+// ---------------------------------------------------------------------
+// Approve Review - Customer Selection
+// ---------------------------------------------------------------------
+
+const approveReviewModal =
+  document.getElementById("approve-review-modal");
+
+const approveReviewClose =
+  document.getElementById("approve-review-close");
+
+const approveReviewCancel =
+  document.getElementById("approve-review-cancel");
+
+const approveReviewConfirm =
+  document.getElementById("approve-review-confirm");
+
+const approveReviewRating =
+  document.getElementById("approve-review-rating");
+
+const approveReviewText =
+  document.getElementById("approve-review-text");
+
+const approveReviewCustomer =
+  document.getElementById("approve-review-customer");
+
+let selectedReviewId = null;
+let selectedReviewRating = null;
+let selectedReviewText = null;
+
+
+// Open modal
+async function openCustomerSelection(
+  reviewId,
+  rating,
+  review
+) {
+  selectedReviewId = reviewId;
+  selectedReviewRating = rating;
+  selectedReviewText = review;
+
+  approveReviewRating.textContent =
+    `⭐ ${rating}/5`;
+
+  approveReviewText.textContent =
+    review || "N/A";
+
+  approveReviewCustomer.innerHTML =
+    "<option value=\"\">Loading customers...</option>";
+
+  approveReviewModal.hidden = false;
+
+  try {
+
+    const snapshot = await getDocs(
+      collection(db, "customers")
+    );
+
+    approveReviewCustomer.innerHTML =
+      '<option value="">Select a customer</option>';
+
+    if (snapshot.empty) {
+
+      approveReviewCustomer.innerHTML =
+        '<option value="">No customers found</option>';
+
+      return;
+    }
+
+    snapshot.forEach((customerDoc) => {
+
+      const customer = customerDoc.data();
+
+      const option = document.createElement("option");
+
+      option.value = customerDoc.id;
+
+      option.textContent =
+        `${customer.name || "N/A"} — ${customer.mobile || customerDoc.id}`;
+
+      approveReviewCustomer.appendChild(option);
+
+    });
+
+  } catch (err) {
+
+    console.error(err);
+
+    approveReviewCustomer.innerHTML =
+      '<option value="">Couldn\'t load customers</option>';
+
+    showToast(
+      "Couldn't load customers.",
+      true
+    );
+  }
+}
+
+
+// Close modal
+function closeApproveReviewModal() {
+  approveReviewModal.hidden = true;
+
+  selectedReviewId = null;
+  selectedReviewRating = null;
+  selectedReviewText = null;
+}
+
+approveReviewClose.addEventListener(
+  "click",
+  closeApproveReviewModal
+);
+
+approveReviewCancel.addEventListener(
+  "click",
+  closeApproveReviewModal
+);
+
+approveReviewModal.addEventListener(
+  "click",
+  (event) => {
+    if (event.target === approveReviewModal) {
+      closeApproveReviewModal();
+    }
+  }
+);
+
+// ---------------------------------------------------------------------
+// Confirm Approve
+// ---------------------------------------------------------------------
+
+approveReviewConfirm.addEventListener(
+  "click",
+  async () => {
+
+    const customerId =
+      approveReviewCustomer.value;
+
+    if (!customerId) {
+      showToast(
+        "Please select a customer.",
+        true
+      );
+      return;
+    }
+
+    if (!selectedReviewId) {
+      showToast(
+        "Review information is missing.",
+        true
+      );
+      return;
+    }
+
+    approveReviewConfirm.disabled = true;
+    approveReviewConfirm.textContent = "Approving...";
+
+    try {
+
+      const batch = writeBatch(db);
+
+      // Customer document
+      const customerRef = doc(
+        db,
+        "customers",
+        customerId
+      );
+
+      // Review Status document
+      const reviewRef = doc(
+        db,
+        "reviewStatus",
+        selectedReviewId
+      );
+
+      // Save rating + review into customer
+      batch.update(customerRef, {
+        rating: selectedReviewRating,
+        review: selectedReviewText,
+        reviewedAt: serverTimestamp()
+      });
+
+      // Remove pending review
+      batch.delete(reviewRef);
+
+      // Execute both operations together
+      await batch.commit();
+
+      closeApproveReviewModal();
+
+      showToast(
+        "Review approved successfully."
+      );
+
+      // Refresh both sections
+      initCustomers();
+      initReviewStatus();
+
+    } catch (err) {
+
+      console.error(err);
+
+      showToast(
+        "Couldn't approve the review.",
+        true
+      );
+
+    } finally {
+
+      approveReviewConfirm.disabled = false;
+      approveReviewConfirm.textContent = "Approve";
+
+    }
+
+  }
+);

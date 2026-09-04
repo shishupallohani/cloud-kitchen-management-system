@@ -50,9 +50,8 @@
         <a href="#our-food">Our Food</a>
         <a href="#about">About</a>
         <a href="#contact">Contact</a>
-       <li class="nav__item">
-       <a href="#registration" class="nav__link">Registration</a>
-       </li>
+        <a href="#registration" class="nav__link">Registration</a>
+        <a href="#" class="nav__link" data-open-review>Review</a>
       </nav>
      <a href="https://wa.me/917903481464?text=Hello%20Charroti%20Kitchen%2C%20I%20want%20to%20order%20today%27s%20meal." 
         target="_blank" 
@@ -358,6 +357,7 @@
 
   <script type="module" src="js/app.js"></script>
   <script type="module" src="js/registration.js"></script>
+  <script type="module" src="js/review.js"></script>
 
 
   <!-- ================= REGISTRATION MODAL ================= -->
@@ -465,6 +465,135 @@
 
   </div>
 
+</div>
+
+<!-- ================= CUSTOMER REVIEW MODAL ================= -->
+<div
+  id="review-modal"
+  class="review-modal"
+  hidden
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="review-title"
+>
+  <div class="review-modal__card">
+
+    <button
+      type="button"
+      class="review-modal__close"
+      data-close-review
+      aria-label="Close review form"
+    >
+      &times;
+    </button>
+
+    <div class="review-modal__header">
+      <div class="review-modal__icon" aria-hidden="true">⭐</div>
+
+      <h2 id="review-title" class="review-modal__title">
+        Share Your Experience
+      </h2>
+
+      <p class="review-modal__subtitle">
+        Tell us how you liked your Charroti experience.
+      </p>
+    </div>
+
+    <!-- Rating -->
+    <div class="review-form__group">
+
+      <label class="review-form__label">
+        How was your experience?
+      </label>
+
+      <div
+        class="review-stars"
+        id="review-stars"
+        role="radiogroup"
+        aria-label="Rating"
+      >
+        <button type="button" data-rating="1" aria-label="1 star">★</button>
+        <button type="button" data-rating="2" aria-label="2 stars">★</button>
+        <button type="button" data-rating="3" aria-label="3 stars">★</button>
+        <button type="button" data-rating="4" aria-label="4 stars">★</button>
+        <button type="button" data-rating="5" aria-label="5 stars">★</button>
+      </div>
+
+      <input
+        type="hidden"
+        id="review-rating"
+        name="rating"
+        value=""
+      />
+
+    </div>
+
+    <!-- Quick Reviews -->
+    <div class="review-form__group">
+
+      <label class="review-form__label">
+        Quick Review
+      </label>
+
+      <div class="review-quick-options">
+
+        <button type="button" data-quick-review="😋 Food was delicious!">
+          😋 Food was delicious!
+        </button>
+
+        <button type="button" data-quick-review="❤️ Loved the food!">
+          ❤️ Loved the food!
+        </button>
+
+        <button type="button" data-quick-review="👌 Great taste & quality!">
+          👌 Great taste & quality!
+        </button>
+
+        <button type="button" data-quick-review="🔥 Amazing experience!">
+          🔥 Amazing experience!
+        </button>
+
+        <button type="button" data-quick-review="👍 Good food & service!">
+          👍 Good food & service!
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- Manual Review -->
+    <div class="review-form__group">
+
+      <label
+        class="review-form__label"
+        for="review-text"
+      >
+        Write your review
+      </label>
+
+      <textarea
+        id="review-text"
+        name="review"
+        rows="4"
+        maxlength="500"
+        placeholder="Tell us about your experience..."
+      ></textarea>
+
+      <small class="review-form__hint">
+        You can edit a quick review or write your own.
+      </small>
+
+    </div>
+
+    <button
+      type="button"
+      id="review-submit"
+      class="review-form__submit"
+    >
+      Submit Review
+    </button>
+
+  </div>
 </div>
 </body>
 </html>

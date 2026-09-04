@@ -549,3 +549,132 @@
   }
 
 }
+
+/* ============================================================
+   APPROVE REVIEW MODAL
+   ============================================================ */
+
+.approve-review-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(6px);
+}
+
+.approve-review-modal[hidden] {
+  display: none;
+}
+
+.approve-review-modal__card {
+  position: relative;
+  width: min(500px, 100%);
+  padding: 30px;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35);
+}
+
+.approve-review-modal__close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: #f3f1ed;
+  color: #333;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.approve-review-modal__card h2 {
+  margin: 0 0 22px;
+  color: #25211d;
+}
+
+.approve-review-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding: 16px;
+  border-radius: 12px;
+  background: #f7f4ee;
+}
+
+.approve-review-preview div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.approve-review-preview strong {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #777;
+}
+
+#approve-review-rating {
+  font-weight: 700;
+  color: #25211d;
+}
+
+#approve-review-text {
+  margin: 0;
+  color: #403b35;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.approve-review-field {
+  margin-bottom: 24px;
+}
+
+.approve-review-field label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 700;
+  color: #25211d;
+}
+
+#approve-review-customer {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  background: #fff;
+  color: #25211d;
+  font-size: 0.95rem;
+}
+
+.approve-review-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+@media (max-width: 600px) {
+  .approve-review-modal {
+    padding: 14px;
+  }
+
+  .approve-review-modal__card {
+    padding: 24px 18px;
+  }
+
+  .approve-review-actions {
+    flex-direction: column-reverse;
+  }
+
+  .approve-review-actions .btn {
+    width: 100%;
+  }
+}

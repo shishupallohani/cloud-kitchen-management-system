@@ -35,6 +35,7 @@
       <button class="admin-tab" data-tab="menu">Menu Management</button>
       <button class="admin-tab" data-tab="festivals">Festivals</button>
       <button class="admin-tab" data-tab="customers">Customers</button>
+      <button class="admin-tab" data-tab="review-status">Review Status</button>
     </nav>
 
     <!-- ============ OVERVIEW ============ -->
@@ -164,6 +165,38 @@
   </div>
 
 </section>
+
+<!-- ============ REVIEW STATUS ============ -->
+<section class="admin-panel" id="panel-review-status">
+
+  <div class="admin-section-header">
+    <div>
+      <h1>Review Status</h1>
+      <p>Pending customer reviews waiting for approval</p>
+    </div>
+  </div>
+
+  <div class="review-status-table-wrapper">
+
+    <div class="review-status-table">
+
+      <div class="review-status-row review-status-row--header">
+        <div>Customer</div>
+        <div>Mobile</div>
+        <div>Rating</div>
+        <div>Review</div>
+        <div>Action</div>
+      </div>
+
+      <div id="review-status-list">
+        <p>Loading reviews...</p>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
   </div>
 
   <template id="menu-item-row-template">
@@ -246,6 +279,75 @@
       </div>
     </div>
   </div>
+
+  <!-- ================= APPROVE REVIEW MODAL ================= -->
+<div
+  id="approve-review-modal"
+  class="approve-review-modal"
+  hidden
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="approve-review-title"
+>
+  <div class="approve-review-modal__card">
+
+    <button
+      type="button"
+      class="approve-review-modal__close"
+      id="approve-review-close"
+      aria-label="Close"
+    >
+      &times;
+    </button>
+
+    <h2 id="approve-review-title">
+      Approve Review
+    </h2>
+
+    <div class="approve-review-preview">
+      <div>
+        <strong>Rating</strong>
+        <span id="approve-review-rating"></span>
+      </div>
+
+      <div>
+        <strong>Review</strong>
+        <p id="approve-review-text"></p>
+      </div>
+    </div>
+
+    <div class="approve-review-field">
+      <label for="approve-review-customer">
+        Select Customer
+      </label>
+
+      <select id="approve-review-customer">
+        <option value="">Loading customers...</option>
+      </select>
+    </div>
+
+    <div class="approve-review-actions">
+
+      <button
+        type="button"
+        class="btn btn--ghost"
+        id="approve-review-cancel"
+      >
+        Cancel
+      </button>
+
+      <button
+        type="button"
+        class="btn"
+        id="approve-review-confirm"
+      >
+        Approve
+      </button>
+
+    </div>
+
+  </div>
+</div>
 
   <script type="module" src="js/admin.js"></script>
 </body>
