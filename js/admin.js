@@ -114,6 +114,7 @@ function bootDashboard() {
   initLiveMenuEditor();
   initMenuEditor();
   initFestivals();
+  initCustomers();
 }
 
 // ---------------------------------------------------------------------
@@ -482,4 +483,84 @@ async function initFestivals() {
     addFestivalRow(null);
     showToast("New festival row added — fill it in and click Save.");
   });
+}
+
+// ---------------------------------------------------------------------
+// Customers
+// ---------------------------------------------------------------------
+const customersList = document.getElementById("customers-list");
+
+async function initCustomers() {
+  customersList.innerHTML = "<p>Loading customers...</p>";
+
+  try {
+    const snapshot = await getDocs(collection(db, "customers"));
+
+    if (snapshot.empty) {
+      customersList.innerHTML = "<p>No registered customers found.</p>";
+      return;
+    }
+
+    customersList.innerHTML = "";
+
+    snapshot.forEach((customerDoc) => {
+      const customer = customerDoc.data();
+
+      const row = document.createElement("div");
+      row.className = "customer-row";
+
+      row.innerHTML = `
+        <div>
+          <strong>${customer.name || "N/A"}</strong>
+          <p>Mobile: ${customer.mobile || customerDoc.id}</p>
+          <p>Address: ${customer.address || "N/A"}</p>
+        </div>
+
+        <button
+          type="button"
+          class="btn btn--danger btn--small"
+          data-action="delete-customer">
+          Delete
+        </button>
+      `;
+
+      row
+        .querySelector('[data-action="delete-customer"]')
+        .addEventListener("click", async () => {
+          const mobile = customer.mobile || customerDoc.id;
+
+          const ok = await confirmDialog(
+            `Delete customer ${mobile}? This can't be undone.`
+          );
+
+          if (!ok) return;
+
+          try {
+            await deleteDoc(doc(db, "customers", customerDoc.id));
+
+            row.remove();
+
+            showToast(`Customer ${mobile} deleted permanently.`);
+
+            if (!customersList.children.length) {
+              customersList.innerHTML =
+                "<p>No registered customers found.</p>";
+            }
+
+          } catch (err) {
+            console.error(err);
+            showToast("Couldn't delete customer.", true);
+          }
+        });
+
+      customersList.appendChild(row);
+    });
+
+  } catch (err) {
+    console.error(err);
+    customersList.innerHTML =
+      "<p>Couldn't load customers. Please try again.</p>";
+
+    showToast("Couldn't load customers.", true);
+  }
 }
