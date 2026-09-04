@@ -684,32 +684,136 @@
     <!-- Overall Rating -->
     <div class="mobile-customer-reviews__summary">
 
-      <div class="mobile-customer-reviews__average">
-        <strong id="mobile-reviews-average">0.0</strong>
+  <!-- LEFT: Overall Rating -->
+  <div class="mobile-customer-reviews__overall">
 
-        <div
-          id="mobile-reviews-average-stars"
-          class="mobile-customer-reviews__stars"
-        >
-          ★★★★★
-        </div>
+    <strong id="mobile-reviews-average">0.0</strong>
 
-        <span id="mobile-reviews-count">
-          0 reviews
-        </span>
-      </div>
-
+    <div
+      id="mobile-reviews-average-stars"
+      class="mobile-customer-reviews__stars"
+      aria-label="Average rating"
+    >
+      ★★★★★
     </div>
 
-    <!-- Reviews -->
+    <span id="mobile-reviews-count">
+      Based on 0 reviews
+    </span>
+
+  </div>
+
+
+  <!-- RIGHT: Rating Distribution -->
+  <div
+    id="mobile-reviews-breakdown"
+    class="mobile-customer-reviews__breakdown"
+  >
+
+    <div class="mobile-rating-row">
+      <span class="mobile-rating-label">5 ★</span>
+
+      <div class="mobile-rating-bar">
+        <span
+          class="mobile-rating-fill"
+          data-rating-bar="5"
+        ></span>
+      </div>
+
+      <span
+        class="mobile-rating-count"
+        data-rating-count="5"
+      >
+        0
+      </span>
+    </div>
+
+
+    <div class="mobile-rating-row">
+      <span class="mobile-rating-label">4 ★</span>
+
+      <div class="mobile-rating-bar">
+        <span
+          class="mobile-rating-fill"
+          data-rating-bar="4"
+        ></span>
+      </div>
+
+      <span
+        class="mobile-rating-count"
+        data-rating-count="4"
+      >
+        0
+      </span>
+    </div>
+
+
+    <div class="mobile-rating-row">
+      <span class="mobile-rating-label">3 ★</span>
+
+      <div class="mobile-rating-bar">
+        <span
+          class="mobile-rating-fill"
+          data-rating-bar="3"
+        ></span>
+      </div>
+
+      <span
+        class="mobile-rating-count"
+        data-rating-count="3"
+      >
+        0
+      </span>
+    </div>
+
+
+    <div class="mobile-rating-row">
+      <span class="mobile-rating-label">2 ★</span>
+
+      <div class="mobile-rating-bar">
+        <span
+          class="mobile-rating-fill"
+          data-rating-bar="2"
+        ></span>
+      </div>
+
+      <span
+        class="mobile-rating-count"
+        data-rating-count="2"
+      >
+        0
+      </span>
+    </div>
+
+
+    <div class="mobile-rating-row">
+      <span class="mobile-rating-label">1 ★</span>
+
+      <div class="mobile-rating-bar">
+        <span
+          class="mobile-rating-fill"
+          data-rating-bar="1"
+        ></span>
+      </div>
+
+      <span
+        class="mobile-rating-count"
+        data-rating-count="1"
+      >
+        0
+      </span>
+    </div>
+  </div>
+</div>
+    <!-- =====================================================
+         ALL CUSTOMER REVIEWS
+         ===================================================== -->
+
     <div
       id="mobile-customer-reviews-list"
       class="mobile-customer-reviews__list"
     >
       <!-- All approved reviews will be loaded here -->
     </div>
-
-  </div>
-</div>
 </body>
 </html>
