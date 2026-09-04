@@ -153,9 +153,7 @@ reviewSubmitBtn.addEventListener("click", async () => {
       submittedAt: serverTimestamp()
     });
 
-    alert(
-      "Thank you! Your review has been submitted for approval."
-    );
+   openReviewSuccess();
 
     // Reset form
     reviewRatingInput.value = "";
@@ -186,4 +184,16 @@ reviewSubmitBtn.addEventListener("click", async () => {
 
   }
 
+});
+
+const reviewSuccess = document.getElementById("review-success");
+const reviewSuccessClose =
+  document.getElementById("review-success-close");
+
+function openReviewSuccess() {
+  reviewSuccess.hidden = false;
+}
+
+reviewSuccessClose.addEventListener("click", () => {
+  reviewSuccess.hidden = true;
 });
