@@ -1,3 +1,7 @@
+import { db } from "./firebase.js";
+import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+
 document.addEventListener("DOMContentLoaded", () => {
 
   const registrationModal =
@@ -40,38 +44,26 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
-  /*
-   * Registration navbar link
-   */
-
+  // Registration navbar link
   const registrationLink =
     document.querySelector('a[href="#registration"]');
 
   if (registrationLink) {
     registrationLink.addEventListener("click", (event) => {
-
       event.preventDefault();
-
       openRegistrationModal();
-
     });
   }
 
 
-  /*
-   * Close button
-   */
-
+  // Close button
   registrationClose.addEventListener(
     "click",
     closeRegistrationModal
   );
 
 
-  /*
-   * Click outside modal
-   */
-
+  // Click outside modal
   registrationModal
     .querySelector(".registration-modal__overlay")
     .addEventListener(
@@ -80,26 +72,18 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
 
-  /*
-   * Success popup close
-   */
-
+  // Success popup close
   registrationSuccessClose.addEventListener(
     "click",
     closeSuccessPopup
   );
 
 
-  /*
-   * Registration submit
-   *
-   * Firebase connection will be added
-   * in the next step.
-   */
-
-  registrationForm.addEventListener("submit", (event) => {
+  // Submit registration
+  registrationForm.addEventListener("submit", async (event) => {
 
     event.preventDefault();
+
 
     const name =
       document.getElementById("registration-name").value.trim();
@@ -116,18 +100,45 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    console.log("Registration data:", {
-      name,
-      mobile,
-      address
-    });
+    if (!/^[0-9]{10}$/.test(mobile)) {
+      alert("Please enter a valid 10-digit mobile number.");
+      return;
+    }
 
 
-    closeRegistrationModal();
+    try {
 
-    registrationForm.reset();
+      const customerRef =
+        doc(db, "customers", mobile);
 
-    openSuccessPopup();
+
+      await setDoc(customerRef, {
+
+        name: name,
+        mobile: mobile,
+        address: address,
+        createdAt: serverTimestamp()
+
+      });
+
+
+      console.log("Customer registered successfully");
+
+
+      closeRegistrationModal();
+
+      registrationForm.reset();
+
+      openSuccessPopup();
+
+
+    } catch (error) {
+
+      console.error("Registration failed:", error);
+
+      alert("Registration failed. Please try again.");
+
+    }
 
   });
 
