@@ -1,0 +1,24 @@
+{
+  "name": "charroti",
+  "short_name": "Charroti",
+  "description": "Fresh homestyle Indian food from Charroti Kitchen.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#17142f",
+  "theme_color": "#17142f",
+  "orientation": "portrait-primary",
+  "icons": [
+  {
+    "src": "assets/icons/favicon-192.png",
+    "sizes": "192x192",
+    "type": "image/png",
+    "purpose": "any"
+  },
+  {
+    "src": "assets/icons/favicon-512.png",
+    "sizes": "512x512",
+    "type": "image/png",
+    "purpose": "any"
+  }
+]
+}

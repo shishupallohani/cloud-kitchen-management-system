@@ -244,3 +244,79 @@ window.addEventListener("scroll", () => {
   navLinks.classList.remove("is-open");
 
 });
+
+// ============================================================
+// REGISTER SERVICE WORKER
+// ============================================================
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js")
+      .then(() => {
+        console.log("Charroti service worker registered.");
+      })
+      .catch((error) => {
+        console.error("Service worker registration failed:", error);
+      });
+  });
+}
+
+// ============================================================
+// PWA INSTALL
+// ============================================================
+
+let deferredInstallPrompt = null;
+
+const installAppBtn = document.getElementById("install-app-btn");
+
+window.addEventListener("beforeinstallprompt", (event) => {
+
+  // Browser ka default mini prompt prevent karo
+  event.preventDefault();
+
+  deferredInstallPrompt = event;
+
+  // Install button show karo
+  if (installAppBtn) {
+    installAppBtn.hidden = false;
+  }
+
+});
+
+
+installAppBtn?.addEventListener("click", async () => {
+
+  if (!deferredInstallPrompt) {
+    return;
+  }
+
+  // Native install prompt
+  deferredInstallPrompt.prompt();
+
+  // User ka response
+  const { outcome } =
+    await deferredInstallPrompt.userChoice;
+
+  console.log(
+    `Charroti install result: ${outcome}`
+  );
+
+  // Prompt ek baar use hota hai
+  deferredInstallPrompt = null;
+
+  // Button hide
+  installAppBtn.hidden = true;
+
+});
+
+
+// App successfully installed
+window.addEventListener("appinstalled", () => {
+
+  console.log("Charroti installed successfully.");
+
+  if (installAppBtn) {
+    installAppBtn.hidden = true;
+  }
+
+});
