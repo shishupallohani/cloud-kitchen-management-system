@@ -183,12 +183,28 @@
 .ck-hero__media::before {
   content: "";
   position: absolute;
-  inset: -15%;
+  inset: -20%;
   z-index: -1;
-  background: radial-gradient(circle, color-mix(in srgb, var(--gold) 62%, transparent) 0%, color-mix(in srgb, var(--ck-lavender) 64%, transparent) 42%, transparent 72%);
-  filter: blur(58px);
-  opacity: 0.58;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--gold) 55%, transparent) 0%,
+    color-mix(in srgb, var(--ck-lavender) 60%, transparent) 45%,
+    transparent 75%
+  );
+  filter: blur(70px);
+  opacity: 0.55;
   pointer-events: none;
+  animation: ck-hero-glow-drift 22s ease-in-out infinite;
+}
+@keyframes ck-hero-glow-drift {
+  0%   { transform: translate(0, 0) scale(1);       filter: blur(70px) hue-rotate(0deg); }
+  25%  { transform: translate(2%, -3%) scale(1.05);  filter: blur(74px) hue-rotate(90deg); }
+  50%  { transform: translate(-2%, 2%) scale(1.1);   filter: blur(70px) hue-rotate(180deg); }
+  75%  { transform: translate(3%, 3%) scale(1.05);   filter: blur(74px) hue-rotate(270deg); }
+  100% { transform: translate(0, 0) scale(1);       filter: blur(70px) hue-rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ck-hero__media::before { animation: none; }
 }
 .ck-hero__media-frame {
   position: relative;
