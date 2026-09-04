@@ -8,6 +8,8 @@ import {
   deleteMenuForDate,
   duplicateMenu,
   formatDisplayDate,
+  fetchCurrentMenu,
+  saveCurrentMenu,
 } from "./menu.js";
 import { getActiveFestival } from "./festival.js";
 import {
@@ -109,8 +111,109 @@ function bootDashboard() {
   if (booted) return;
   booted = true;
   initOverview();
+  initLiveMenuEditor();
   initMenuEditor();
   initFestivals();
+}
+
+// ---------------------------------------------------------------------
+// Live Thali — persistent, date-independent editor.
+// Completely separate from the date-based Menu Management editor
+// below: different DOM elements, different save target
+// (fetchCurrentMenu / saveCurrentMenu instead of *ForDate).
+// ---------------------------------------------------------------------
+const liveItemsList = document.getElementById("live-menu-items-list");
+const liveSpecialNoteInput = document.getElementById("live-special-note-input");
+const liveStatusEl = document.getElementById("live-editor-status");
+
+function setLiveStatus(message, isError = false) {
+  liveStatusEl.textContent = message;
+  liveStatusEl.classList.toggle("is-error", isError);
+  if (message) {
+    clearTimeout(setLiveStatus._t);
+    setLiveStatus._t = setTimeout(() => (liveStatusEl.textContent = ""), 4000);
+  }
+}
+
+function addLiveItemRow(item = {}) {
+  const node = itemRowTemplate.content.firstElementChild.cloneNode(true);
+  node.querySelector('[data-field="name"]').value = item.name || "";
+  node.querySelector('[data-field="category"]').value = item.category || "";
+  node.querySelector('[data-field="description"]').value = item.description || "";
+  node.querySelector('[data-field="imageUrl"]').value = item.imageUrl || "";
+  node.querySelector('[data-field="price"]').value = item.price ?? "";
+  node.querySelector('[data-field="available"]').checked = item.available !== false;
+
+  node.querySelector('[data-action="remove"]').addEventListener("click", () => {
+    const name = node.querySelector('[data-field="name"]').value || "Item";
+    node.remove();
+    showToast(`${name} removed. Click Save Live Thali to make it permanent.`);
+  });
+  node.querySelector('[data-action="move-up"]').addEventListener("click", () => {
+    const prev = node.previousElementSibling;
+    if (prev) {
+      liveItemsList.insertBefore(node, prev);
+      showToast("Moved up.");
+    }
+  });
+  node.querySelector('[data-action="move-down"]').addEventListener("click", () => {
+    const next = node.nextElementSibling;
+    if (next) {
+      liveItemsList.insertBefore(next, node);
+      showToast("Moved down.");
+    }
+  });
+
+  liveItemsList.appendChild(node);
+}
+
+function readLiveItemsFromEditor() {
+  return Array.from(liveItemsList.children).map((row) => {
+    const val = (field) => row.querySelector(`[data-field="${field}"]`).value;
+    const priceVal = val("price");
+    return {
+      name: val("name").trim(),
+      category: val("category").trim(),
+      description: val("description").trim(),
+      imageUrl: val("imageUrl").trim(),
+      price: priceVal ? Number(priceVal) : null,
+      available: row.querySelector('[data-field="available"]').checked,
+    };
+  }).filter((item) => item.name);
+}
+
+async function initLiveMenuEditor() {
+  liveItemsList.innerHTML = "";
+  liveSpecialNoteInput.value = "";
+  const menu = await fetchCurrentMenu();
+  if (menu) {
+    liveSpecialNoteInput.value = menu.specialNote || "";
+    (menu.items || [])
+      .slice()
+      .sort((a, b) => (a.order || 0) - (b.order || 0))
+      .forEach(addLiveItemRow);
+    setLiveStatus(`Loaded live thali (${menu.items?.length || 0} items).`);
+  } else {
+    setLiveStatus("No live thali set yet — add items and save.");
+  }
+
+  document.getElementById("live-add-item-btn").addEventListener("click", () => {
+    addLiveItemRow();
+    showToast("New item row added — fill it in and click Save Live Thali.");
+  });
+
+  document.getElementById("live-save-menu-btn").addEventListener("click", async () => {
+    const items = readLiveItemsFromEditor();
+    try {
+      await saveCurrentMenu({ items, specialNote: liveSpecialNoteInput.value.trim() });
+      setLiveStatus(`Saved live thali (${items.length} item(s)).`);
+      showToast(`Live thali saved (${items.length} item(s)). Previous one is now replaced.`);
+    } catch (err) {
+      console.error(err);
+      setLiveStatus("Couldn't save the live thali. Please try again.", true);
+      showToast("Couldn't save the live thali. Please try again.", true);
+    }
+  });
 }
 
 // ---------------------------------------------------------------------

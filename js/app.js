@@ -8,7 +8,7 @@
  */
 
 import { SITE, STATIC_CATALOG, CATEGORIES } from "./config.js";
-import { toDateKey, fetchMenuForDate, renderTodaysMenu } from "./menu.js";
+import { toDateKey, fetchCurrentMenu, renderTodaysMenu } from "./menu.js";
 import { initFestivalTheme } from "./festival.js";
 
 // ---------------------------------------------------------------------
@@ -173,9 +173,9 @@ function initCatalog() {
 async function initTodaysMenu() {
   const container = document.getElementById("todays-menu-list");
   if (!container) return;
-  const dateKey = toDateKey();
+  const dateKey = toDateKey(); // used only for the date/day label
   try {
-    const menu = await fetchMenuForDate(dateKey);
+    const menu = await fetchCurrentMenu();
     renderTodaysMenu(container, menu, dateKey);
   } catch (err) {
     console.error("Failed to load today's menu:", err);

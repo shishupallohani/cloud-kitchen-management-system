@@ -42,6 +42,35 @@ export function formatDisplayDate(dateKey) {
   });
 }
 
+// ---------------------------------------------------------------------
+// "Current thali" — a single, date-independent record.
+// Lives at dailyMenus/current. Whatever was last saved here stays
+// visible forever, regardless of what today's date is. It only
+// changes when the admin explicitly saves a new one (full overwrite).
+// ---------------------------------------------------------------------
+const CURRENT_MENU_ID = "current";
+
+/** Fetch the persistent "current thali". Returns null if never set. */
+export async function fetchCurrentMenu() {
+  const ref = doc(db, "dailyMenus", CURRENT_MENU_ID);
+  const snap = await getDoc(ref);
+  if (!snap.exists()) return null;
+  return { date: CURRENT_MENU_ID, ...snap.data() };
+}
+
+/**
+ * Save the persistent "current thali". This is a full replace —
+ * whatever was there before is gone, only the new one shows.
+ */
+export async function saveCurrentMenu({ items, specialNote }) {
+  const ref = doc(db, "dailyMenus", CURRENT_MENU_ID);
+  await setDoc(ref, {
+    items: items.map((item, i) => ({ order: i + 1, ...item })),
+    specialNote: specialNote || "",
+    updatedAt: new Date().toISOString(),
+  });
+}
+
 /** Fetch a single day's menu. Returns null if it doesn't exist. */
 export async function fetchMenuForDate(dateKey) {
   const ref = doc(db, "dailyMenus", dateKey);
@@ -124,7 +153,7 @@ export function renderTodaysMenu(container, menu, dateKey) {
   const dateEl = document.getElementById("menu-date-label");
   if (dateEl) dateEl.textContent = dateLabel;
 
-  if (!menu || !menu.items || menu.items.length === 0) {
+  if (!menu) {
     container.innerHTML = `
       <div class="menu-empty">
         <p>Today's menu is being prepared.</p>
@@ -133,8 +162,20 @@ export function renderTodaysMenu(container, menu, dateKey) {
     return;
   }
 
-  const items = [...menu.items].sort((a, b) => (a.order || 0) - (b.order || 0));
+  const items = [...(menu.items || [])].sort((a, b) => (a.order || 0) - (b.order || 0));
+  const noteHtml = menu.specialNote ? `<p class="menu-note">${menu.specialNote}</p>` : "";
+
+  if (items.length === 0) {
+    container.innerHTML = `
+      ${noteHtml}
+      <div class="menu-empty">
+        <p>Today's menu is being prepared.</p>
+        <p class="menu-empty__sub">Please check back shortly — or call us and we'll tell you what's cooking.</p>
+      </div>`;
+    return;
+  }
+
   container.innerHTML = `
-    ${menu.specialNote ? `<p class="menu-note">${menu.specialNote}</p>` : ""}
+    ${noteHtml}
     <ul class="menu-list">${items.map(menuItemCard).join("")}</ul>`;
 }

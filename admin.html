@@ -31,6 +31,7 @@
   <div id="admin-app" class="admin-shell" hidden>
     <nav class="admin-tabs" aria-label="Admin sections">
       <button class="admin-tab is-active" data-tab="overview">Dashboard</button>
+      <button class="admin-tab" data-tab="live">Live Thali</button>
       <button class="admin-tab" data-tab="menu">Menu Management</button>
       <button class="admin-tab" data-tab="festivals">Festivals</button>
     </nav>
@@ -52,6 +53,30 @@
 
       <h2 class="admin-subhead">Upcoming Menus (next 7 days)</h2>
       <ul id="upcoming-list" class="upcoming-list"></ul>
+    </section>
+
+    <!-- ============ LIVE THALI (persistent, date-independent) ============ -->
+    <section class="admin-panel" id="panel-live">
+      <h1>Live Thali</h1>
+      <p class="admin-hint">
+        Ye jo bhi save karoge, wahi website par tab tak dikhega jab tak tum dubara save na karo.
+        Date/day apne aap badalta rahega, content nahi.
+      </p>
+
+      <p id="live-editor-status" class="admin-status" role="status"></p>
+
+      <label for="live-special-note-input" class="field-label">Special note (optional)</label>
+      <input type="text" id="live-special-note-input" placeholder="e.g. Freshly prepared today" class="field-input" />
+
+      <div class="menu-items-editor">
+        <div class="menu-items-editor__head">
+          <h2>Items</h2>
+          <button id="live-add-item-btn" class="btn btn--primary btn--small">Add Item</button>
+        </div>
+        <ul id="live-menu-items-list" class="menu-items-list"></ul>
+      </div>
+
+      <button id="live-save-menu-btn" class="btn btn--primary">Save Live Thali</button>
     </section>
 
     <!-- ============ MENU MANAGEMENT ============ -->
