@@ -27,6 +27,16 @@ document.querySelectorAll("[data-open-review]").forEach((button) => {
   button.addEventListener("click", (event) => {
     event.preventDefault();
 
+      // Default rating = 1 star
+  reviewRatingInput.value = "1";
+
+  reviewStars.forEach((star) => {
+    star.classList.toggle(
+      "is-selected",
+      Number(star.dataset.rating) === 1
+    );
+  });
+
     reviewModal.hidden = false;
     document.body.style.overflow = "hidden";
   });
