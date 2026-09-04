@@ -1385,7 +1385,7 @@ background-clip: text;
     z-index: 9999;
 
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: center;
 
     background:
@@ -1411,10 +1411,11 @@ background-clip: text;
      --------------------------------------------------------- */
 
   .mobile-customer-reviews__sheet {
-    width: 100%;
-    height: 52vh;
+   width: calc(100% - 12px);
+    height: 85vh;
 
     position: relative;
+    transform: translateY(-2vh);
 
     display: flex;
     flex-direction: column;
@@ -1424,35 +1425,37 @@ background-clip: text;
     overflow: hidden;
 
     background:
-      linear-gradient(
-        135deg,
-        rgba(255, 255, 255, 0.20),
-        rgba(255, 255, 255, 0.08) 35%,
-        rgba(180, 200, 255, 0.07) 65%,
-        rgba(255, 255, 255, 0.12)
-      );
+  linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.15),
+    rgba(255, 255, 255, 0.045) 35%,
+    rgba(180, 200, 255, 0.035) 65%,
+    rgba(255, 255, 255, 0.09)
+  );
 
-    border: 1px solid rgba(255, 255, 255, 0.42);
+    border: 1px solid rgba(255, 255, 255, 0.34);
     border-bottom: none;
 
-    border-radius: 32px 32px 0 0;
+    border-radius: 34px;
+    
 
-    box-shadow:
-      0 -18px 55px rgba(0, 0, 0, 0.35),
-      0 -2px 15px rgba(255, 255, 255, 0.12),
-      inset 0 1px 0 rgba(255, 255, 255, 0.65),
-      inset 1px 0 0 rgba(255, 255, 255, 0.18),
-      inset -1px 0 0 rgba(255, 255, 255, 0.12);
+   box-shadow:
+  0 -18px 55px rgba(0, 0, 0, 0.35),
+  0 -2px 18px rgba(255, 255, 255, 0.12),
+  inset 0 1px 0 rgba(255, 255, 255, 0.72),
+  inset 1px 0 0 rgba(255, 255, 255, 0.22),
+  inset -1px 0 0 rgba(255, 255, 255, 0.16),
+  inset 0 -1px 0 rgba(255, 255, 255, 0.12);
 
-    backdrop-filter:
-      blur(35px)
-      saturate(175%)
-      contrast(105%);
+   backdrop-filter:
+  blur(42px)
+  saturate(190%)
+  contrast(110%);
 
-    -webkit-backdrop-filter:
-      blur(35px)
-      saturate(175%)
-      contrast(105%);
+-webkit-backdrop-filter:
+  blur(42px)
+  saturate(190%)
+  contrast(110%);
 
     color: #fff;
   }
@@ -1670,7 +1673,7 @@ background-clip: text;
 
     flex-shrink: 0;
 
-    padding: 16px 16px;
+    padding: 24px 16px;
 
     margin-bottom: 12px;
 
