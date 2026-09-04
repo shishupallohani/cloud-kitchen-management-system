@@ -1287,3 +1287,84 @@ background-clip: text;
   }
 
 }
+
+/* =========================================================
+   CUSTOMER REVIEWS — DESKTOP ONLY
+   ========================================================= */
+
+.ck-reviews {
+  position: relative;
+  padding-top: 110px;
+  padding-bottom: 110px;
+}
+
+.ck-reviews__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+  margin-top: 42px;
+}
+
+.ck-review-card {
+  position: relative;
+  min-height: 240px;
+  padding: 32px;
+  border: 1px solid var(--border-dark);
+  border-radius: 24px;
+  background: var(--bg-raised);
+  box-shadow: var(--shadow-soft);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.ck-review-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(240, 168, 60, 0.45);
+  box-shadow: var(--shadow-lift);
+}
+
+.ck-review-card__rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 22px;
+
+  color: var(--gold);
+  font-size: 1.15rem;
+  letter-spacing: 2px;
+}
+
+.ck-review-card__text {
+  margin: 0;
+  color: var(--ink);
+  font-size: 1rem;
+  line-height: 1.75;
+  font-weight: 500;
+}
+
+.ck-review-card__customer {
+  margin-top: 28px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border-dark);
+
+  color: var(--gold-soft);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+/* =========================================================
+   CUSTOMER REVIEWS — HIDE ON MOBILE
+   ========================================================= */
+
+@media (max-width: 767px) {
+  .ck-reviews {
+    display: none !important;
+  }
+}

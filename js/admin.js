@@ -904,12 +904,28 @@ approveReviewConfirm.addEventListener(
         selectedReviewId
       );
 
+      // Public Review document
+      const publicReviewRef = doc(
+        db,
+        "publicReviews",
+         selectedReviewId
+);
       // Save rating + review into customer
       batch.update(customerRef, {
         rating: selectedReviewRating,
         review: selectedReviewText,
         reviewedAt: serverTimestamp()
       });
+
+      // Save approved review for public website
+batch.set(publicReviewRef, {
+  name: approveReviewCustomer.options[
+    approveReviewCustomer.selectedIndex
+  ].textContent.split(" — ")[0],
+  rating: selectedReviewRating,
+  review: selectedReviewText,
+  approvedAt: serverTimestamp()
+});
 
       // Remove pending review
       batch.delete(reviewRef);
