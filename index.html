@@ -50,6 +50,9 @@
         <a href="#our-food">Our Food</a>
         <a href="#about">About</a>
         <a href="#contact">Contact</a>
+       <li class="nav__item">
+       <a href="#registration" class="nav__link">Registration</a>
+       </li>
       </nav>
      <a href="https://wa.me/917903481464?text=Hello%20Charroti%20Kitchen%2C%20I%20want%20to%20order%20today%27s%20meal." 
         target="_blank" 
@@ -241,7 +244,7 @@
     </section>
 
     <!-- ================= FESTIVAL EXPERIENCE ================= -->
-    <section class="section section--festival ck-section" data-reveal>
+    <section id="contact" class="section section--festival ck-section" data-reveal>
 
   <div class="festival-card">
 
@@ -354,5 +357,114 @@
   </footer>
 
   <script type="module" src="js/app.js"></script>
+  <script src="js/registration.js"></script>
+
+
+  <!-- ================= REGISTRATION MODAL ================= -->
+
+<div id="registration-modal" class="registration-modal" aria-hidden="true">
+
+  <div class="registration-modal__overlay"></div>
+
+  <div class="registration-modal__box">
+
+    <button
+      type="button"
+      class="registration-modal__close"
+      id="registration-close"
+      aria-label="Close registration form">
+      &times;
+    </button>
+
+    <div class="registration-form">
+
+      <h2>Registration Form</h2>
+
+      <p class="registration-form__subtitle">
+        Register with us to enjoy our services.
+      </p>
+
+      <form id="registration-form">
+
+        <div class="registration-field">
+          <label for="registration-name">Name</label>
+
+          <input
+            type="text"
+            id="registration-name"
+            name="name"
+            placeholder="Enter your name"
+            required
+          />
+        </div>
+
+        <div class="registration-field">
+          <label for="registration-mobile">Mobile Number</label>
+
+          <input
+            type="tel"
+            id="registration-mobile"
+            name="mobile"
+            placeholder="Enter mobile number"
+            inputmode="numeric"
+            maxlength="10"
+            required
+          />
+        </div>
+
+        <div class="registration-field">
+          <label for="registration-address">Address</label>
+
+          <textarea
+            id="registration-address"
+            name="address"
+            placeholder="Enter your address"
+            rows="3"
+            required
+          ></textarea>
+        </div>
+
+        <button
+          type="submit"
+          class="registration-submit"
+          id="registration-submit">
+          Submit
+        </button>
+
+      </form>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- Registration Success Popup -->
+
+<div
+  id="registration-success"
+  class="registration-success"
+  aria-hidden="true">
+
+  <div class="registration-success__box">
+
+    <div class="registration-success__icon">
+      ✓
+    </div>
+
+    <h3>Registration Successfully Submitted</h3>
+
+    <p>Thank you for registering with us.</p>
+
+    <button
+      type="button"
+      id="registration-success-close">
+      OK
+    </button>
+
+  </div>
+
+</div>
 </body>
 </html>
