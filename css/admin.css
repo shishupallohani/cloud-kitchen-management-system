@@ -349,3 +349,203 @@
 @media (max-width: 480px) {
   .toast-container { left: 16px; right: 16px; max-width: none; }
 }
+
+/* ============================================================
+   CUSTOMERS
+   ============================================================ */
+
+.customers-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 24px;
+}
+
+.customers-table {
+  width: 100%;
+  min-width: 900px;
+}
+
+.customer-row {
+  display: grid;
+  grid-template-columns: 1.3fr 1.1fr 2fr 0.8fr 2fr 0.8fr;
+  gap: 18px;
+  align-items: center;
+
+  padding: 18px 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  background: #fff;
+}
+
+.customer-row--header {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: #f7f4ee;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 10px 10px 0 0;
+}
+
+.customer-cell {
+  min-width: 0;
+  color: #403b35;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.customer-cell--name strong {
+  font-weight: 700;
+  color: #25211d;
+}
+
+.customer-cell--address,
+.customer-cell--review {
+  overflow-wrap: anywhere;
+}
+
+.customer-cell--rating {
+  white-space: nowrap;
+}
+
+.customer-cell--action {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.customers-empty {
+  padding: 30px 20px;
+  text-align: center;
+  color: #777;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-top: none;
+}
+
+
+/* ============================================================
+   CUSTOMERS - MOBILE FIX
+   ============================================================ */
+
+@media (max-width: 768px) {
+
+  .customers-table-wrapper {
+    overflow-x: visible;
+    margin-top: 20px;
+  }
+
+  .customers-table {
+    min-width: 0;
+  }
+
+  /* Hide table header completely on mobile */
+  .customer-row--header {
+    display: none !important;
+  }
+
+  /* Customer card */
+  .customer-row {
+    display: block;
+
+    margin-bottom: 16px;
+    padding: 18px;
+
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 14px;
+    background: #fff;
+
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+  }
+
+  .customer-cell {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    gap: 15px;
+    padding: 9px 0;
+
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+
+  /* Customer name */
+  .customer-cell--name {
+    display: block;
+
+    padding: 0 0 12px;
+    margin-bottom: 5px;
+
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .customer-cell--name strong {
+    font-size: 1.05rem;
+  }
+
+  /* Address & review */
+  .customer-cell--address,
+  .customer-cell--review {
+    display: block;
+  }
+
+  /* Add labels using CSS */
+  .customer-cell:not(.customer-cell--name):not(.customer-cell--address):not(.customer-cell--review):not(.customer-cell--action)::before {
+    font-weight: 700;
+    margin-right: 10px;
+  }
+
+  .customer-cell--address::before {
+    content: "Address";
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 700;
+  }
+
+  .customer-cell--rating::before {
+    content: "Rating";
+    font-weight: 700;
+  }
+
+  .customer-cell--review::before {
+    content: "Review";
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 700;
+  }
+
+  /* Delete button */
+  .customer-cell--action {
+    display: block;
+
+    padding-top: 14px;
+    margin-top: 6px;
+
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .customer-cell--action .btn {
+    width: 100%;
+  }
+
+}
+
+
+/* ============================================================
+   VERY SMALL MOBILE
+   ============================================================ */
+
+@media (max-width: 480px) {
+
+  .customer-row {
+    padding: 16px;
+  }
+
+  .customer-cell {
+    font-size: 0.9rem;
+  }
+
+  .customer-cell--name strong {
+    font-size: 1rem;
+  }
+
+}

@@ -130,17 +130,37 @@
       <ul id="festivals-list" class="festivals-list"></ul>
     </section>
 
-    <section class="admin-panel" id="panel-customers">
+ <!-- ============ CUSTOMERS ============ -->
+<section class="admin-panel" id="panel-customers">
 
   <div class="admin-section-header">
     <div>
-      <h2>Customers</h2>
-      <p>Registered customers</p>
+      <h1>Customers</h1>
+      <p>Registered customers and their reviews</p>
     </div>
   </div>
 
-  <div id="customers-list" class="customers-list">
-    <p>Loading customers...</p>
+  <div class="customers-table-wrapper">
+
+    <div class="customers-table">
+
+      <!-- Table Header -->
+      <div class="customer-row customer-row--header">
+        <div>Customer</div>
+        <div>Mobile</div>
+        <div>Address</div>
+        <div>Rating</div>
+        <div>Review</div>
+        <div>Action</div>
+      </div>
+
+      <!-- Customers will be loaded here by admin.js -->
+      <div id="customers-list">
+        <p>Loading customers...</p>
+      </div>
+
+    </div>
+
   </div>
 
 </section>

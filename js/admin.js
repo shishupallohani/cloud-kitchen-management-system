@@ -497,7 +497,8 @@ async function initCustomers() {
     const snapshot = await getDocs(collection(db, "customers"));
 
     if (snapshot.empty) {
-      customersList.innerHTML = "<p>No registered customers found.</p>";
+      customersList.innerHTML =
+        '<p class="customers-empty">No registered customers found.</p>';
       return;
     }
 
@@ -510,23 +511,40 @@ async function initCustomers() {
       row.className = "customer-row";
 
       row.innerHTML = `
-        <div>
+        <div class="customer-cell customer-cell--name">
           <strong>${customer.name || "N/A"}</strong>
-          <p>Mobile: ${customer.mobile || customerDoc.id}</p>
-          <p>Address: ${customer.address || "N/A"}</p>
         </div>
 
-        <button
-          type="button"
-          class="btn btn--danger btn--small"
-          data-action="delete-customer">
-          Delete
-        </button>
+        <div class="customer-cell">
+          ${customer.mobile || customerDoc.id}
+        </div>
+
+        <div class="customer-cell customer-cell--address">
+          ${customer.address || "N/A"}
+        </div>
+
+        <div class="customer-cell customer-cell--rating">
+          ${customer.rating ? `⭐ ${customer.rating}/5` : "—"}
+        </div>
+
+        <div class="customer-cell customer-cell--review">
+          ${customer.review || "—"}
+        </div>
+
+        <div class="customer-cell customer-cell--action">
+          <button
+            type="button"
+            class="btn btn--ghost btn--small btn--danger"
+            data-action="delete-customer">
+            Delete
+          </button>
+        </div>
       `;
 
       row
         .querySelector('[data-action="delete-customer"]')
         .addEventListener("click", async () => {
+
           const mobile = customer.mobile || customerDoc.id;
 
           const ok = await confirmDialog(
@@ -536,20 +554,27 @@ async function initCustomers() {
           if (!ok) return;
 
           try {
-            await deleteDoc(doc(db, "customers", customerDoc.id));
+            await deleteDoc(
+              doc(db, "customers", customerDoc.id)
+            );
 
             row.remove();
 
-            showToast(`Customer ${mobile} deleted permanently.`);
+            showToast(
+              `Customer ${mobile} deleted permanently.`
+            );
 
             if (!customersList.children.length) {
               customersList.innerHTML =
-                "<p>No registered customers found.</p>";
+                '<p class="customers-empty">No registered customers found.</p>';
             }
 
           } catch (err) {
             console.error(err);
-            showToast("Couldn't delete customer.", true);
+            showToast(
+              "Couldn't delete customer.",
+              true
+            );
           }
         });
 
@@ -558,9 +583,13 @@ async function initCustomers() {
 
   } catch (err) {
     console.error(err);
-    customersList.innerHTML =
-      "<p>Couldn't load customers. Please try again.</p>";
 
-    showToast("Couldn't load customers.", true);
+    customersList.innerHTML =
+      '<p class="customers-empty">Couldn\'t load customers. Please try again.</p>';
+
+    showToast(
+      "Couldn't load customers.",
+      true
+    );
   }
 }
