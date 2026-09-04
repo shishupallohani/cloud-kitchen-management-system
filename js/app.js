@@ -201,3 +201,30 @@ document.addEventListener("DOMContentLoaded", () => {
   const yearEl = document.getElementById("current-year");
   if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 });
+
+// ============================================================
+// CLOSE MOBILE MENU WHEN USER TAPS OUTSIDE
+// ============================================================
+
+const navLinks = document.querySelector(".nav__links");
+const navToggle = document.querySelector(".nav__toggle");
+
+document.addEventListener("click", (event) => {
+
+  // Menu open nahi hai to kuch nahi karna
+  if (!navLinks?.classList.contains("is-open")) {
+    return;
+  }
+
+  // Agar click hamburger button ya menu ke andar hua
+  if (
+    navLinks.contains(event.target) ||
+    navToggle?.contains(event.target)
+  ) {
+    return;
+  }
+
+  // Menu ke bahar click hua → close
+  navLinks.classList.remove("is-open");
+
+});
