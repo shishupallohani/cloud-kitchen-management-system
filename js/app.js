@@ -228,3 +228,19 @@ document.addEventListener("click", (event) => {
   navLinks.classList.remove("is-open");
 
 });
+
+// ============================================================
+// CLOSE MOBILE MENU WHEN PAGE IS SCROLLED
+// ============================================================
+
+window.addEventListener("scroll", () => {
+
+  // Menu open hai tabhi close karo
+  if (!navLinks?.classList.contains("is-open")) {
+    return;
+  }
+
+  // Menu close
+  navLinks.classList.remove("is-open");
+
+});

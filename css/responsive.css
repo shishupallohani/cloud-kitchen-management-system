@@ -38,9 +38,12 @@
   .nav__toggle { display: flex; }
   .nav__links {
     position: fixed;
-    inset: 64px 16px auto 16px;
-    background: rgba(27, 33, 36, 0.96);
-    backdrop-filter: blur(16px);
+    top: 64px;
+    right: 16px;
+    left: auto;
+    width: 240px;
+    background: rgba(29, 32, 34, 0.96);
+    backdrop-filter: blur(50px);
     border: 1px solid var(--border-dark);
     border-radius: var(--radius-m);
     flex-direction: column;
