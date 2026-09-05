@@ -672,6 +672,7 @@ main, header, footer { position: relative; z-index: 1; }
 
 /* ============================================================
    CUSTOMER REVIEW MODAL
+   Theme-aware — follows the active site theme
    ============================================================ */
 
 .review-modal {
@@ -696,9 +697,10 @@ main, header, footer { position: relative; z-index: 1; }
   max-height: 90vh;
   overflow-y: auto;
   padding: 34px;
-  border: 1px solid rgba(240, 168, 60, 0.28);
+  border: 1px solid var(--border-dark-strong);
   border-radius: 24px;
-  background: #1f1a44;
+  background: var(--bg-raised);
+  color: var(--ink);
   box-shadow: 0 25px 70px rgba(0, 0, 0, 0.45);
 }
 
@@ -711,7 +713,7 @@ main, header, footer { position: relative; z-index: 1; }
   border: none;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.08);
-  color: #f6f3ea;
+  color: var(--ink);
   font-size: 26px;
   cursor: pointer;
 }
@@ -728,13 +730,13 @@ main, header, footer { position: relative; z-index: 1; }
 
 .review-modal__title {
   margin: 0 0 8px;
-  color: #f6f3ea;
+  color: var(--ink);
   font-size: 1.65rem;
 }
 
 .review-modal__subtitle {
   margin: 0;
-  color: #b6aed6;
+  color: var(--ink-dim);
   font-size: 0.92rem;
 }
 
@@ -745,7 +747,7 @@ main, header, footer { position: relative; z-index: 1; }
 .review-form__label {
   display: block;
   margin-bottom: 10px;
-  color: #f6f3ea;
+  color: var(--ink);
   font-size: 0.9rem;
   font-weight: 600;
 }
@@ -761,7 +763,7 @@ main, header, footer { position: relative; z-index: 1; }
 .review-stars button {
   border: none;
   background: transparent;
-  color: rgba(246, 243, 234, 0.25);
+  color: rgba(255, 255, 255, 0.25);
   font-size: 38px;
   line-height: 1;
   cursor: pointer;
@@ -774,7 +776,7 @@ main, header, footer { position: relative; z-index: 1; }
 
 .review-stars button.is-selected,
 .review-stars button.is-hovered {
-  color: #f0a83c;
+  color: var(--gold);
 }
 
 /* Quick reviews */
@@ -787,10 +789,10 @@ main, header, footer { position: relative; z-index: 1; }
 
 .review-quick-options button {
   padding: 9px 13px;
-  border: 1px solid rgba(246, 243, 234, 0.14);
+  border: 1px solid var(--border-dark);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.05);
-  color: #d8d1ee;
+  color: var(--ink-dim);
   font-size: 0.82rem;
   cursor: pointer;
   transition: 0.2s ease;
@@ -798,9 +800,9 @@ main, header, footer { position: relative; z-index: 1; }
 
 .review-quick-options button:hover,
 .review-quick-options button.is-selected {
-  border-color: #f0a83c;
-  background: rgba(240, 168, 60, 0.12);
-  color: #f7c36a;
+  border-color: var(--gold);
+  background: color-mix(in srgb, var(--gold) 12%, transparent);
+  color: var(--gold-soft);
 }
 
 /* Textarea */
@@ -811,27 +813,30 @@ main, header, footer { position: relative; z-index: 1; }
   resize: vertical;
   box-sizing: border-box;
   padding: 13px 14px;
-  border: 1px solid rgba(246, 243, 234, 0.14);
+  border: 1px solid var(--border-dark);
   border-radius: 12px;
   outline: none;
   background: rgba(255, 255, 255, 0.05);
-  color: #f6f3ea;
+  color: var(--ink);
   font-family: inherit;
   font-size: 0.9rem;
 }
 
 #review-text::placeholder {
-  color: #8f88aa;
+  color: var(--ink-dim);
+  opacity: 0.7;
 }
 
 #review-text:focus {
-  border-color: #f0a83c;
+  border-color: var(--gold);
 }
+
+/* Hint */
 
 .review-form__hint {
   display: block;
   margin-top: 6px;
-  color: #8f88aa;
+  color: var(--ink-dim);
   font-size: 0.75rem;
 }
 
@@ -842,8 +847,8 @@ main, header, footer { position: relative; z-index: 1; }
   padding: 13px 20px;
   border: none;
   border-radius: 12px;
-  background: #f0a83c;
-  color: #171235;
+  background: var(--gold);
+  color: var(--ink-on-light);
   font-size: 0.95rem;
   font-weight: 700;
   cursor: pointer;
@@ -851,9 +856,10 @@ main, header, footer { position: relative; z-index: 1; }
 }
 
 .review-form__submit:hover {
-  background: #f7c36a;
+  background: var(--gold-soft);
   transform: translateY(-1px);
 }
+
 
 /* Mobile */
 
