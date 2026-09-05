@@ -27,6 +27,7 @@ import {
   doc,
   getDoc,
   setDoc,
+  onSnapshot,
 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
 export const THEME_PRESETS = {
@@ -326,7 +327,27 @@ export async function saveActiveSiteTheme(themeKey) {
  */
 export async function initSiteTheme() {
   applyCachedThemeInstantly();
+
   const themeKey = await getActiveSiteTheme();
   applySiteTheme(themeKey);
+
+  // Listen for admin theme changes in real time.
+  // No page reload is required.
+  onSnapshot(
+    THEME_DOC,
+    (snapshot) => {
+      if (!snapshot.exists()) return;
+
+      const latestTheme = snapshot.data().activeTheme;
+
+      if (latestTheme && THEME_PRESETS[latestTheme]) {
+        applySiteTheme(latestTheme);
+      }
+    },
+    (error) => {
+      console.warn("Real-time theme listener failed:", error);
+    }
+  );
+
   return themeKey;
 }
