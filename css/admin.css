@@ -732,3 +732,17 @@
   color: var(--ink-on-light, #221d16);
   text-align: center;
 }
+
+/* Festival Management */
+
+.festival-toggle-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  cursor: pointer;
+}
+
+.festival-toggle-label input {
+  width: 1.1rem;
+  height: 1.1rem;
+}

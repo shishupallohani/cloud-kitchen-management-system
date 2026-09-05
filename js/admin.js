@@ -22,6 +22,7 @@ import {
 import {
   collection,
   getDocs,
+  getDoc,
   doc,
   setDoc,
   deleteDoc,
@@ -122,10 +123,10 @@ function bootDashboard() {
   initOverview();
   initLiveMenuEditor();
   initMenuEditor();
-  initFestivals();
   initCustomers();
   initReviewStatus();
   initSiteThemeControl();
+  initFestivalManagement();
 }
 
 // ---------------------------------------------------------------------
@@ -1017,3 +1018,124 @@ batch.set(publicReviewRef, {
 
   }
 );
+
+// ---------------------------------------------------------------------
+// Festival Management — simple settings
+// ---------------------------------------------------------------------
+
+const FESTIVAL_SETTINGS_REF = doc(
+  db,
+  "festivalSettings",
+  "settings"
+);
+
+async function initFestivalManagement() {
+  const enabledInput = document.getElementById(
+    "festival-enabled-input"
+  );
+
+  const greetingInput = document.getElementById(
+    "festival-greeting-input"
+  );
+
+  const bannerUrlInput = document.getElementById(
+    "festival-banner-url-input"
+  );
+
+  const status = document.getElementById(
+    "festival-management-status"
+  );
+
+  const saveButton = document.getElementById(
+    "save-festival-management-btn"
+  );
+
+  if (
+    !enabledInput ||
+    !greetingInput ||
+    !bannerUrlInput ||
+    !status ||
+    !saveButton
+  ) {
+    return;
+  }
+
+  // Load existing settings
+  try {
+    const snapshot = await getDoc(FESTIVAL_SETTINGS_REF);
+
+    if (snapshot.exists()) {
+      const data = snapshot.data();
+
+      enabledInput.checked = data.enabled === true;
+      greetingInput.value = data.greeting || "";
+      bannerUrlInput.value = data.bannerUrl || "";
+    }
+  } catch (error) {
+    console.error("Failed to load festival settings:", error);
+
+    status.textContent =
+      "Couldn't load festival settings.";
+
+    status.classList.add("is-error");
+  }
+
+  // Save settings
+  saveButton.addEventListener("click", async () => {
+    const greeting = greetingInput.value.trim();
+    const bannerUrl = bannerUrlInput.value.trim();
+
+    // Basic URL validation
+    if (
+      bannerUrl &&
+      !/^https?:\/\//i.test(bannerUrl)
+    ) {
+      status.textContent =
+        "Please enter a valid image URL starting with http:// or https://.";
+
+      status.classList.add("is-error");
+
+      return;
+    }
+
+    saveButton.disabled = true;
+
+    status.classList.remove("is-error");
+    status.textContent = "Saving…";
+
+    try {
+      await setDoc(FESTIVAL_SETTINGS_REF, {
+        enabled: enabledInput.checked,
+        greeting,
+        bannerUrl,
+        updatedAt: serverTimestamp(),
+      });
+
+      status.textContent =
+        "Festival settings saved.";
+
+      showToast(
+        "Festival settings saved."
+      );
+
+    } catch (error) {
+      console.error(
+        "Failed to save festival settings:",
+        error
+      );
+
+      status.textContent =
+        "Couldn't save festival settings. Please try again.";
+
+      status.classList.add("is-error");
+
+      showToast(
+        "Couldn't save festival settings.",
+        true
+      );
+
+    } finally {
+      saveButton.disabled = false;
+    }
+  });
+}

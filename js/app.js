@@ -11,6 +11,7 @@ import { SITE, STATIC_CATALOG, CATEGORIES } from "./config.js";
 import { toDateKey, fetchCurrentMenu, renderTodaysMenu } from "./menu.js";
 import { initFestivalTheme } from "./festival.js";
 import { initSiteTheme } from "./site-theme.js";
+import {initFestivalBanner,initFestivalGreeting} from "./festival-settings.js";
 
 // ---------------------------------------------------------------------
 // Brand + contact — fill from config so there's one place to edit
@@ -199,6 +200,8 @@ document.addEventListener("DOMContentLoaded", () => {
   initCatalog();
   initTodaysMenu();
   initFestivalTheme();
+  initFestivalBanner();
+  initFestivalGreeting();
 
   const yearEl = document.getElementById("current-year");
   if (yearEl) yearEl.textContent = String(new Date().getFullYear());

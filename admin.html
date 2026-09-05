@@ -37,6 +37,7 @@
       <button class="admin-tab" data-tab="theme">Website Theme</button>
       <button class="admin-tab" data-tab="customers">Customers</button>
       <button class="admin-tab" data-tab="review-status">Review Status</button>
+      <button class="admin-tab" data-tab="festival-management">Festival Management</button>
     </nav>
 
     <!-- ============ OVERVIEW ============ -->
@@ -140,6 +141,62 @@
       <div id="theme-swatches" class="theme-swatches"></div>
       <p id="theme-status" class="admin-status" role="status"></p>
     </section>
+
+
+    <!-- ============ FESTIVAL MANAGEMENT ============ -->
+<section class="admin-panel" id="panel-festival-management">
+  <div class="admin-section-header">
+    <div>
+      <h1>Festival Management</h1>
+      <p>Manage the optional festival banner and greeting shown on the website.</p>
+    </div>
+  </div>
+
+  <div class="menu-editor-form">
+
+    <label class="field-label festival-toggle-label" for="festival-enabled-input">
+      <input type="checkbox" id="festival-enabled-input" />
+      Enable Festival
+    </label>
+
+    <label class="field-label" for="festival-greeting-input">
+      Festival Greeting
+    </label>
+
+    <input
+      type="text"
+      id="festival-greeting-input"
+      class="field-input"
+      placeholder="e.g. शुभ दीपावली ✨"
+    />
+
+    <label class="field-label" for="festival-banner-url-input">
+       Banner URL
+    </label>
+
+    <input
+      type="url"
+      id="festival-banner-url-input"
+      class="field-input"
+      placeholder="https://i.ibb.co/..."
+    />
+
+    <p
+      id="festival-management-status"
+      class="admin-status"
+      role="status"
+    ></p>
+
+    <button
+      id="save-festival-management-btn"
+      class="btn btn--primary"
+      type="button"
+    >
+      Save Festival
+    </button>
+
+  </div>
+</section>
 
  <!-- ============ CUSTOMERS ============ -->
 <section class="admin-panel" id="panel-customers">

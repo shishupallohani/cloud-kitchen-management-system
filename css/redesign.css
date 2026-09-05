@@ -2044,3 +2044,69 @@ background-clip: text;
   }
 
 }
+/* =========================================================
+   FESTIVAL BANNER
+   Fully Dynamic - Any Image Size / Aspect Ratio
+   ========================================================= */
+
+.festival-banner {
+  display: block;
+  position: relative;
+  line-height: 0;
+  font-size: 0;
+
+  width: 100%;
+  max-width: none;
+
+  margin: 0;
+  padding: 0;
+
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.festival-banner[hidden] {
+  display: none !important;
+}
+
+.festival-banner__image {
+  display: block;
+
+  width: 100%;
+  max-width: none;
+  height: auto;
+
+  margin: 0;
+  padding: 0;
+  border: 0;
+
+  box-sizing: border-box;
+
+  object-fit: contain;
+  object-position: center center;
+
+  vertical-align: top;
+}
+/* =========================================================
+   HIDE SCROLLBAR BUT KEEP PAGE SCROLLABLE
+   ========================================================= */
+
+html {
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+body {
+  scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
