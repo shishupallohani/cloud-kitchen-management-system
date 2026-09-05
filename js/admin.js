@@ -11,7 +11,6 @@ import {
   fetchCurrentMenu,
   saveCurrentMenu,
 } from "./menu.js";
-import { getActiveFestival } from "./festival.js";
 import {
   THEME_PRESETS,
   getActiveSiteTheme,
@@ -283,11 +282,12 @@ async function initLiveMenuEditor() {
 // ---------------------------------------------------------------------
 async function initOverview() {
   const todayKey = toDateKey();
-  document.getElementById("overview-today-date").textContent = formatDisplayDate(todayKey);
 
-  const [todayMenu, festival, range] = await Promise.all([
+  document.getElementById("overview-today-date").textContent =
+    formatDisplayDate(todayKey);
+
+  const [todayMenu, range] = await Promise.all([
     fetchMenuForDate(todayKey),
-    getActiveFestival(),
     fetchMenusForRange(todayKey, 7),
   ]);
 
@@ -295,14 +295,12 @@ async function initOverview() {
     ? `${(todayMenu.items || []).length} item(s) on today's menu`
     : "No menu configured for today yet";
 
-  document.getElementById("overview-festival").textContent = festival
-    ? `${festival.name} — ${festival.greeting || ""}`
-    : "None";
-
   const list = document.getElementById("upcoming-list");
+
   list.innerHTML = range
     .map(({ date, menu }) => {
       const count = menu ? (menu.items || []).length : 0;
+
       return `
         <li class="upcoming-list__row">
           <span>${formatDisplayDate(date)}</span>
@@ -313,7 +311,6 @@ async function initOverview() {
     })
     .join("");
 }
-
 // ---------------------------------------------------------------------
 // Menu Management
 // ---------------------------------------------------------------------
@@ -464,85 +461,6 @@ function initMenuEditor() {
       setStatus(msg, true);
       showToast(msg, true);
     }
-  });
-}
-
-// ---------------------------------------------------------------------
-// Festivals
-// ---------------------------------------------------------------------
-const festivalsList = document.getElementById("festivals-list");
-const festivalRowTemplate = document.getElementById("festival-row-template");
-
-function addFestivalRow(id, data = {}) {
-  const node = festivalRowTemplate.content.firstElementChild.cloneNode(true);
-  node.dataset.id = id || "";
-  node.querySelector('[data-field="name"]').value = data.name || "";
-  node.querySelector('[data-field="theme"]').value = data.theme || "";
-  node.querySelector('[data-field="startDate"]').value = data.startDate || "";
-  node.querySelector('[data-field="endDate"]').value = data.endDate || "";
-  node.querySelector('[data-field="greeting"]').value = data.greeting || "";
-  node.querySelector('[data-field="enabled"]').checked = data.enabled !== false;
-
-  node.querySelector('[data-action="save"]').addEventListener("click", () => saveFestivalRow(node));
-  node.querySelector('[data-action="remove"]').addEventListener("click", () => removeFestivalRow(node));
-
-  festivalsList.appendChild(node);
-  return node;
-}
-
-async function saveFestivalRow(node) {
-  const val = (field) => node.querySelector(`[data-field="${field}"]`).value;
-  const payload = {
-    name: val("name").trim(),
-    theme: val("theme").trim(),
-    startDate: val("startDate"),
-    endDate: val("endDate"),
-    greeting: val("greeting").trim(),
-    enabled: node.querySelector('[data-field="enabled"]').checked,
-  };
-  if (!payload.name || !payload.startDate || !payload.endDate) {
-    return showToast("Festival needs a name, start date, and end date.", true);
-  }
-  try {
-    if (node.dataset.id) {
-      await setDoc(doc(db, "festivals", node.dataset.id), payload);
-    } else {
-      const ref = await addDoc(collection(db, "festivals"), payload);
-      node.dataset.id = ref.id;
-    }
-    setStatus(`Saved "${payload.name}".`);
-    showToast(`"${payload.name}" saved.`);
-    initOverview();
-  } catch (err) {
-    console.error(err);
-    setStatus("Couldn't save that festival.", true);
-    showToast("Couldn't save that festival.", true);
-  }
-}
-
-async function removeFestivalRow(node) {
-  const name = node.querySelector('[data-field="name"]').value || "This festival";
-  const ok = await confirmDialog(`Delete ${name}? This can't be undone.`);
-  if (!ok) return;
-  try {
-    if (node.dataset.id) await deleteDoc(doc(db, "festivals", node.dataset.id));
-    node.remove();
-    showToast(`${name} deleted.`);
-  } catch (err) {
-    console.error(err);
-    setStatus("Couldn't delete that festival.", true);
-    showToast("Couldn't delete that festival.", true);
-  }
-}
-
-async function initFestivals() {
-  festivalsList.innerHTML = "";
-  const snap = await getDocs(collection(db, "festivals"));
-  snap.docs.forEach((d) => addFestivalRow(d.id, d.data()));
-
-  document.getElementById("add-festival-btn").addEventListener("click", () => {
-    addFestivalRow(null);
-    showToast("New festival row added — fill it in and click Save.");
   });
 }
 

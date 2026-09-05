@@ -7,13 +7,11 @@ rules_version = '2';
  * Only signed-in, authorized admin accounts can WRITE anything.
  *
  * IMPORTANT: list the UID(s) of your admin account(s) in isAdmin() below.
- * Find a user's UID in Firebase Console → Authentication → Users, after
- * you've created the admin account (see README.md, step "Add the admin
- * user"). Do not leave this list empty, and do not use `allow write: if
- * true` anywhere in this file.
  * -----------------------------------------------------------------------
  */
+
 service cloud.firestore {
+
   match /databases/{database}/documents {
 
     function isAdmin() {
@@ -27,11 +25,6 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
-    match /festivals/{festivalId} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
     match /siteConfig/{docId} {
       allow read: if true;
       allow write: if isAdmin();
@@ -40,7 +33,12 @@ service cloud.firestore {
     match /customers/{mobile} {
       allow create: if true;
       allow read, update, delete: if isAdmin();
-  }
+    }
+
+    match /festivalSettings/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
 
     match /{document=**} {
       allow read, write: if false;

@@ -222,8 +222,8 @@
 }
 .menu-items-editor__head h2 { font-size: 1.1rem; margin: 0; }
 
-.menu-items-list, .festivals-list { list-style: none; margin: 0 0 20px; padding: 0; display: grid; gap: 14px; }
-.menu-item-row, .festival-row {
+.menu-items-list { list-style: none; margin: 0 0 20px; padding: 0; display: grid; gap: 14px; }
+.menu-item-row {
   background: #fff;
   border: 1px solid var(--border-light);
   border-radius: var(--radius-m);
@@ -236,13 +236,7 @@
   gap: 12px;
   margin-bottom: 10px;
 }
-.festival-row__grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  margin-bottom: 10px;
-}
-.menu-item-row__span2, .festival-row__span2 { grid-column: span 2; }
+.menu-item-row__span2 { grid-column: span 2; }
 .menu-item-row__checkbox { display: flex; align-items: flex-end; padding-bottom: 8px; font-size: 0.88rem; }
 .menu-item-row__actions { display: flex; gap: 8px; justify-content: flex-end; }
 .icon-btn {
@@ -258,8 +252,8 @@
 .icon-btn--danger:hover { border-color: #a5372f; color: #a5372f; }
 
 @media (max-width: 720px) {
-  .menu-item-row__grid, .festival-row__grid { grid-template-columns: 1fr; }
-  .menu-item-row__span2, .festival-row__span2 { grid-column: span 1; }
+  .menu-item-row__grid { grid-template-columns: 1fr; }
+  .menu-item-row__span2 { grid-column: span 1; }
   .admin-topbar { flex-wrap: wrap; gap: 10px; }
   .control-row { align-items: stretch; }
   .field-inline { margin-right: 0; width: 100%; }

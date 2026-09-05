@@ -810,32 +810,6 @@
       "updatedAt": "2026-09-01T18:14:09.235097Z"
     }
   },
-  "festivals": {
-    "diwali-2026": {
-      "name": "Diwali",
-      "theme": "diwali",
-      "startDate": "2026-11-08",
-      "endDate": "2026-11-12",
-      "greeting": "Happy Diwali",
-      "enabled": true
-    },
-    "navratri-2026": {
-      "name": "Navratri",
-      "theme": "navratri",
-      "startDate": "2026-10-11",
-      "endDate": "2026-10-19",
-      "greeting": "Shubh Navratri",
-      "enabled": true
-    },
-    "janmashtami-2026": {
-      "name": "Krishna Janmashtami",
-      "theme": "janmashtami",
-      "startDate": "2026-09-04",
-      "endDate": "2026-09-05",
-      "greeting": "Happy Janmashtami",
-      "enabled": true
-    }
-  },
   "siteConfig": {
     "general": {
       "brandName": "Charroti",

@@ -33,7 +33,6 @@
       <button class="admin-tab is-active" data-tab="overview">Dashboard</button>
       <button class="admin-tab" data-tab="live">Live Thali</button>
       <button class="admin-tab" data-tab="menu">Menu Management</button>
-      <button class="admin-tab" data-tab="festivals">Festivals</button>
       <button class="admin-tab" data-tab="theme">Website Theme</button>
       <button class="admin-tab" data-tab="customers">Customers</button>
       <button class="admin-tab" data-tab="review-status">Review Status</button>
@@ -48,10 +47,6 @@
           <span class="admin-card__label">Today</span>
           <strong id="overview-today-date">—</strong>
           <span id="overview-today-count" class="admin-card__sub">—</span>
-        </div>
-        <div class="admin-card">
-          <span class="admin-card__label">Active Festival</span>
-          <strong id="overview-festival">None</strong>
         </div>
       </div>
 
@@ -119,18 +114,6 @@
       </div>
 
       <button id="save-menu-btn" class="btn btn--primary">Save Menu</button>
-    </section>
-
-    <!-- ============ FESTIVALS ============ -->
-    <section class="admin-panel" id="panel-festivals">
-      <h1>Festivals</h1>
-      <p class="admin-hint">Enable, disable, or adjust the dates and greeting for each festival. Changes apply to the public site immediately — no deploy required.</p>
-
-      <div class="menu-items-editor__head">
-        <h2>Configured Festivals</h2>
-        <button id="add-festival-btn" class="btn btn--primary btn--small">Add Festival</button>
-      </div>
-      <ul id="festivals-list" class="festivals-list"></ul>
     </section>
 
     <!-- ============ WEBSITE THEME (sitewide colour controller) ============ -->
@@ -297,40 +280,6 @@
         <button type="button" class="icon-btn" data-action="move-up" title="Move up">↑</button>
         <button type="button" class="icon-btn" data-action="move-down" title="Move down">↓</button>
         <button type="button" class="icon-btn icon-btn--danger" data-action="remove" title="Remove item">✕</button>
-      </div>
-    </li>
-  </template>
-
-  <template id="festival-row-template">
-    <li class="festival-row">
-      <div class="festival-row__grid">
-        <div>
-          <label class="field-label">Name</label>
-          <input type="text" class="field-input" data-field="name" />
-        </div>
-        <div>
-          <label class="field-label">Theme key</label>
-          <input type="text" class="field-input" data-field="theme" placeholder="e.g. diwali" />
-        </div>
-        <div>
-          <label class="field-label">Start date</label>
-          <input type="date" class="field-input" data-field="startDate" />
-        </div>
-        <div>
-          <label class="field-label">End date</label>
-          <input type="date" class="field-input" data-field="endDate" />
-        </div>
-        <div class="festival-row__span2">
-          <label class="field-label">Greeting</label>
-          <input type="text" class="field-input" data-field="greeting" placeholder="e.g. Happy Diwali" />
-        </div>
-        <div class="menu-item-row__checkbox">
-          <label><input type="checkbox" data-field="enabled" checked /> Enabled</label>
-        </div>
-      </div>
-      <div class="menu-item-row__actions">
-        <button type="button" class="btn btn--ghost btn--small" data-action="save">Save</button>
-        <button type="button" class="icon-btn icon-btn--danger" data-action="remove" title="Delete festival">✕</button>
       </div>
     </li>
   </template>

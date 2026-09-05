@@ -20,6 +20,7 @@ const path = require("path");
 const admin = require("firebase-admin");
 
 const keyPath = path.join(__dirname, "service-account.json");
+
 if (!fs.existsSync(keyPath)) {
   console.error(
     "Missing scripts/service-account.json.\n" +
@@ -32,27 +33,38 @@ if (!fs.existsSync(keyPath)) {
 admin.initializeApp({
   credential: admin.credential.cert(require(keyPath)),
 });
-const db = require("firebase-admin/firestore").getFirestore(admin.app(), "default");
+
+const db = require("firebase-admin/firestore").getFirestore(
+  admin.app(),
+  "default"
+);
 
 async function seed() {
-  const data = JSON.parse(fs.readFileSync(path.join(__dirname, "seed-data.json"), "utf8"));
+  const data = JSON.parse(
+    fs.readFileSync(
+      path.join(__dirname, "seed-data.json"),
+      "utf8"
+    )
+  );
 
   const batches = [];
 
   for (const [dateKey, menu] of Object.entries(data.dailyMenus)) {
-    batches.push(db.collection("dailyMenus").doc(dateKey).set(menu));
+    batches.push(
+      db.collection("dailyMenus").doc(dateKey).set(menu)
+    );
   }
-  for (const [festivalId, festival] of Object.entries(data.festivals)) {
-    batches.push(db.collection("festivals").doc(festivalId).set(festival));
-  }
+
   for (const [docId, config] of Object.entries(data.siteConfig)) {
-    batches.push(db.collection("siteConfig").doc(docId).set(config));
+    batches.push(
+      db.collection("siteConfig").doc(docId).set(config)
+    );
   }
 
   await Promise.all(batches);
+
   console.log(
-    `Seeded ${Object.keys(data.dailyMenus).length} daily menus, ` +
-      `${Object.keys(data.festivals).length} festivals, and site config.`
+    `Seeded ${Object.keys(data.dailyMenus).length} daily menus and site config.`
   );
 }
 
