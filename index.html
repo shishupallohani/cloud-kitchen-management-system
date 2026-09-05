@@ -1,6 +1,24 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <!-- Applies the last-saved colour theme INSTANTLY, before any CSS
+       paints, so the page never flashes the default colours first.
+       This is what fixes the "sometimes white" section bug — kept
+       in sync with js/site-theme.js's LOCAL_VARS_KEY ("ck-site-theme-vars"). -->
+  <script>
+    (function () {
+      try {
+        var vars = JSON.parse(localStorage.getItem("ck-site-theme-vars"));
+        if (!vars) return;
+        var root = document.documentElement.style;
+        for (var cssVar in vars) {
+          root.setProperty(cssVar, vars[cssVar]);
+        }
+      } catch (e) {
+        /* no cached theme yet, or storage blocked — safe to ignore */
+      }
+    })();
+  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Charroti Kitchen — Homestyle Indian Food, Fresh Every Day</title>

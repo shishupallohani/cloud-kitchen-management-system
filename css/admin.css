@@ -678,3 +678,57 @@
     width: 100%;
   }
 }
+/* ---------------------------------------------------------------------
+   Website Theme — sitewide colour swatches
+--------------------------------------------------------------------- */
+.theme-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.theme-swatch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 140px;
+  padding: 14px 10px;
+  border-radius: var(--radius-m, 16px);
+  border: 2px solid var(--border-light);
+  background: var(--bg-light-raised, #fff);
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+  font-family: inherit;
+}
+
+.theme-swatch:hover { transform: translateY(-2px); }
+
+.theme-swatch.is-active {
+  border-color: var(--swatch-b);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.04);
+}
+
+.theme-swatch__colors {
+  display: block;
+  width: 100%;
+  height: 34px;
+  border-radius: 10px;
+  background: linear-gradient(
+    90deg,
+    var(--swatch-a) 0%,
+    var(--swatch-a) 34%,
+    var(--swatch-b) 34%,
+    var(--swatch-b) 67%,
+    var(--swatch-c) 67%,
+    var(--swatch-c) 100%
+  );
+}
+
+.theme-swatch__label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink-on-light, #221d16);
+  text-align: center;
+}

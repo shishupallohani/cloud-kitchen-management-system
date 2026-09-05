@@ -10,6 +10,7 @@
 import { SITE, STATIC_CATALOG, CATEGORIES } from "./config.js";
 import { toDateKey, fetchCurrentMenu, renderTodaysMenu } from "./menu.js";
 import { initFestivalTheme } from "./festival.js";
+import { initSiteTheme } from "./site-theme.js";
 
 // ---------------------------------------------------------------------
 // Brand + contact — fill from config so there's one place to edit
@@ -191,6 +192,7 @@ async function initTodaysMenu() {
 // Boot
 // ---------------------------------------------------------------------
 document.addEventListener("DOMContentLoaded", () => {
+  initSiteTheme(); // apply admin-selected colour theme as early as possible
   applySiteCopy();
   initNav();
   initScrollReveal();

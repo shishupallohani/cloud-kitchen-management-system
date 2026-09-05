@@ -12,6 +12,12 @@ import {
   saveCurrentMenu,
 } from "./menu.js";
 import { getActiveFestival } from "./festival.js";
+import {
+  THEME_PRESETS,
+  getActiveSiteTheme,
+  saveActiveSiteTheme,
+  applySiteTheme,
+} from "./site-theme.js";
 
 import {
   collection,
@@ -119,6 +125,56 @@ function bootDashboard() {
   initFestivals();
   initCustomers();
   initReviewStatus();
+  initSiteThemeControl();
+}
+
+// ---------------------------------------------------------------------
+// Website Theme — sitewide colour controller
+// ---------------------------------------------------------------------
+async function initSiteThemeControl() {
+  const swatchContainer = document.getElementById("theme-swatches");
+  const statusEl = document.getElementById("theme-status");
+  if (!swatchContainer) return;
+
+  const activeKey = await getActiveSiteTheme();
+
+  function render(selectedKey) {
+    swatchContainer.innerHTML = Object.entries(THEME_PRESETS)
+      .map(([key, preset]) => {
+        const isActive = key === selectedKey;
+        return `
+          <button
+            type="button"
+            class="theme-swatch${isActive ? " is-active" : ""}"
+            data-theme-key="${key}"
+            style="--swatch-a: ${preset.bg}; --swatch-b: ${preset.gold}; --swatch-c: ${preset.bgLight};"
+            aria-pressed="${isActive}"
+          >
+            <span class="theme-swatch__colors"></span>
+            <span class="theme-swatch__label">${preset.label}</span>
+          </button>`;
+      })
+      .join("");
+  }
+
+  render(activeKey);
+
+  swatchContainer.addEventListener("click", async (e) => {
+    const btn = e.target.closest(".theme-swatch");
+    if (!btn) return;
+    const key = btn.dataset.themeKey;
+
+    statusEl.textContent = "Saving...";
+    try {
+      await saveActiveSiteTheme(key);
+      applySiteTheme(key); // live preview inside the admin panel too
+      render(key);
+      statusEl.textContent = `Theme set to "${THEME_PRESETS[key].label}". Public site updates immediately.`;
+    } catch (err) {
+      console.error("Failed to save site theme:", err);
+      statusEl.textContent = "Couldn't save the theme. Please try again.";
+    }
+  });
 }
 
 // ---------------------------------------------------------------------

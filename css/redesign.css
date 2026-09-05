@@ -47,10 +47,34 @@
   --shadow-lift: 0 18px 40px -18px rgba(5, 3, 20, 0.7);
 }
 
-/* About section no longer flips to a light card style now that the
-   whole page shares one dark ground — soften its raised card tone. */
-.section--about .about__stats li { background: rgba(255, 255, 255, 0.045); border-color: var(--border-dark); }
+/* About: sits as a translucent dark section (like Today's Menu /
+   Contact — color-mix over the page's own decorative background,
+   which is what gives every other section that soft "faded" depth
+   instead of a flat opaque block), with a glassy dark card inside —
+   same rgba(255,255,255,..)-on-dark treatment as every other card on
+   the site (food-card, menu-item), instead of a light card that
+   stood out as a "white" patch against the rest of the page. */
+.section--about { background: color-mix(in srgb, var(--bg) 60%, transparent); }
+.section--about .section__inner--split {
+  background: rgba(255, 255, 255, 0.035);
+  color: var(--ink);
+  border-radius: var(--radius-l);
+  padding: 48px 40px;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--border-dark);
+}
+.section--about h2 { color: var(--ink); }
+.section--about p { color: var(--ink-dim); }
+
+/* Stat cards use the same glassy dark-on-dark treatment as the rest
+   of the site's cards, so they match instead of looking "white". */
+.section--about .about__stats li {
+  background: rgba(255, 255, 255, 0.045);
+  border-color: var(--border-dark);
+  box-shadow: none;
+}
 .section--about .about__stats strong { color: var(--gold-soft); }
+.section--about .about__stats span { color: var(--ink-dim); }
 
 /* Festival experience — style.css gave this its own boxed treatment
    (border-top/bottom, loud gold glow, pulsing divider, oversized Hindi
@@ -112,9 +136,12 @@
 .ck-accent-lavender { color: var(--ck-lavender); font-style: italic; }
 
 /* ---------------- Nav ---------------- */
-.ck-nav.nav { background: rgba(23, 18, 53, 0.6); }
+/* Tied to the theme's --bg (via color-mix for the see-through effect)
+   so the nav bar always matches whichever colour theme is active,
+   instead of staying a fixed purple regardless of theme. */
+.ck-nav.nav { background: color-mix(in srgb, var(--bg) 60%, transparent); }
 .ck-nav.nav--scrolled,
-.ck-nav.nav.nav--scrolled { background: rgba(23, 18, 53, 0.92); }
+.ck-nav.nav.nav--scrolled { background: color-mix(in srgb, var(--bg) 92%, transparent); }
 .ck-nav .nav__inner { gap: 14px; }
 .ck-nav__cta {
   display: none;
@@ -444,7 +471,7 @@
 #todays-menu .menu-item__tag {
   border-color: rgba(246, 243, 234, 0.32);
   color: rgba(246, 243, 234, 0.86);
-  background: rgba(23, 18, 53, 0.35);
+  background: color-mix(in srgb, var(--bg) 35%, transparent);
 }
 
 /* ---------------- Mood section ---------------- */
@@ -628,7 +655,7 @@
       rgba(63, 58, 155, 0.25),
       transparent 32%
     ),
-    #120d32;
+    var(--bg);
 }
 
 
@@ -664,7 +691,7 @@
       rgba(120, 80, 200, 0.12),
       transparent 35%
     ),
-    rgba(27, 19, 65, 0.92);
+    color-mix(in srgb, var(--bg) 92%, transparent);
 
   border: 1px solid rgba(247, 185, 40, 0.25);
 
