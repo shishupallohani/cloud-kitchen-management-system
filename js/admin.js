@@ -137,6 +137,9 @@ async function initSiteThemeControl() {
   if (!swatchContainer) return;
 
   const activeKey = await getActiveSiteTheme();
+  // Apply currently saved theme to the admin panel immediately
+    applySiteTheme(activeKey);
+
 
   function render(selectedKey) {
     swatchContainer.innerHTML = Object.entries(THEME_PRESETS)
