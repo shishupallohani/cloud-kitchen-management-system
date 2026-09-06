@@ -1,99 +1,352 @@
 /* =========================================================================
+
    auth.css — login, register, forgot-password screens
+
+   ========================================================================= */
+
+
+/* =========================================================================
+   AUTH SHELL
    ========================================================================= */
 
 .auth-shell {
+
   min-height: 100vh;
+
   display: flex;
+
   align-items: center;
+
   justify-content: center;
-  padding: var(--space-5) var(--space-4);
-  background: linear-gradient(180deg, var(--color-primary-light) 0%, var(--color-bg) 260px);
+
+  padding:
+    var(--space-5)
+    var(--space-4);
+
+  background:
+    linear-gradient(
+      180deg,
+      var(--color-primary-light) 0%,
+      var(--color-bg) 260px
+    );
+
 }
+
+
+/* =========================================================================
+   AUTH CARD
+   ========================================================================= */
 
 .auth-card {
+
   width: 100%;
+
   max-width: 440px;
+
   padding: var(--space-6);
+
 }
+
+
+/* =========================================================================
+   BRAND
+   ========================================================================= */
 
 .auth-brand {
+
   text-align: center;
+
   margin-bottom: var(--space-5);
+
 }
+
 
 .auth-brand__logo {
+
   font-size: 2rem;
+
   margin-bottom: var(--space-1);
+
 }
+
 
 .auth-brand__name {
+
   font-weight: 800;
+
   font-size: 1.3rem;
-  color: var(--color-primary-dark);
+
+  color:
+    var(--color-primary-dark);
+
 }
+
 
 .auth-brand__tagline {
-  color: var(--color-text-muted);
+
+  color:
+    var(--color-text-muted);
+
   font-size: 0.85rem;
+
   margin-top: 2px;
+
 }
+
+
+/* =========================================================================
+   PREMIUM WELCOME SECTION
+   ========================================================================= */
+
+.auth-welcome {
+
+  margin-bottom: var(--space-5);
+
+}
+
+
+/* -------------------------------------------------------------------------
+   Main Welcome Heading
+   ------------------------------------------------------------------------- */
 
 .auth-card h2 {
-  font-size: 1.25rem;
-  margin-bottom: var(--space-1);
+
+  position: relative;
+
+  margin:
+    0
+    0
+    8px;
+
+  font-size: 1.8rem;
+
+  line-height: 1.15;
+
+  font-weight: 900;
+
+  letter-spacing: -0.025em;
+
+  color:
+    var(--color-text);
+
+  /*
+   * Layered shadows create a proper raised / dimensional effect.
+   */
+
+  text-shadow:
+
+    0 1px 0
+    rgba(255, 255, 255, 0.95),
+
+    0 2px 0
+    rgba(0, 0, 0, 0.10),
+
+    0 4px 0
+    rgba(0, 0, 0, 0.06),
+
+    0 7px 10px
+    rgba(0, 0, 0, 0.12),
+
+    0 10px 18px
+    rgba(0, 0, 0, 0.08);
+
 }
 
-.auth-card > p.auth-subtitle {
-  color: var(--color-text-muted);
-  font-size: 0.88rem;
-  margin-bottom: var(--space-5);
+
+/* -------------------------------------------------------------------------
+   Highlighted "Food Lover!"
+   ------------------------------------------------------------------------- */
+
+.auth-card h2 span {
+
+  color:
+    var(--color-primary-dark);
+
+  font-weight: 900;
+
+  text-shadow:
+
+    0 1px 0
+    rgba(255, 255, 255, 0.95),
+
+    0 2px 0
+    rgba(0, 0, 0, 0.10),
+
+    0 4px 0
+    rgba(0, 0, 0, 0.06),
+
+    0 7px 10px
+    rgba(0, 0, 0, 0.14),
+
+    0 10px 18px
+    rgba(0, 0, 0, 0.08);
+
 }
+
+
+/* =========================================================================
+   SUBTITLE
+   ========================================================================= */
+
+.auth-card .auth-subtitle {
+
+  color:
+    var(--color-text-muted);
+
+  font-size: 0.95rem;
+
+  line-height: 1.55;
+
+  font-weight: 500;
+
+  letter-spacing: 0.01em;
+
+  margin:
+    0
+    0
+    var(--space-5);
+
+  text-shadow:
+
+    0 1px 0
+    rgba(255, 255, 255, 0.85),
+
+    0 2px 5px
+    rgba(0, 0, 0, 0.08);
+
+}
+
+
+/* =========================================================================
+   AUTH LINKS
+   ========================================================================= */
 
 .auth-links-row {
+
   display: flex;
+
   justify-content: space-between;
+
   align-items: center;
+
   margin-top: var(--space-2);
+
   margin-bottom: var(--space-5);
+
   font-size: 0.85rem;
+
 }
+
 
 .auth-links-row a {
-  color: var(--color-primary-dark);
+
+  color:
+    var(--color-primary-dark);
+
   font-weight: 600;
+
 }
+
+
+/* =========================================================================
+   AUTH FOOTER
+   ========================================================================= */
 
 .auth-footer-text {
+
   text-align: center;
+
   margin-top: var(--space-5);
+
   font-size: 0.88rem;
-  color: var(--color-text-muted);
+
+  color:
+    var(--color-text-muted);
+
 }
+
 
 .auth-footer-text a {
-  color: var(--color-primary-dark);
+
+  color:
+    var(--color-primary-dark);
+
   font-weight: 700;
+
 }
+
+
+/* =========================================================================
+   FORM MESSAGE
+   ========================================================================= */
 
 .auth-form-message {
+
   display: none;
-  padding: 10px 14px;
-  border-radius: var(--radius-sm);
+
+  padding:
+    10px
+    14px;
+
+  border-radius:
+    var(--radius-sm);
+
   font-size: 0.85rem;
-  margin-bottom: var(--space-4);
+
+  margin-bottom:
+    var(--space-4);
+
 }
+
 
 .auth-form-message--visible {
+
   display: block;
+
 }
+
 
 .auth-form-message--error {
-  background: var(--color-error-bg);
-  color: var(--color-error);
+
+  background:
+    var(--color-error-bg);
+
+  color:
+    var(--color-error);
+
 }
 
+
 .auth-form-message--success {
-  background: var(--color-success-bg);
-  color: var(--color-success);
+
+  background:
+    var(--color-success-bg);
+
+  color:
+    var(--color-success);
+
+}
+
+
+/* =========================================================================
+   SMALL SCREEN ADJUSTMENT
+   ========================================================================= */
+
+@media (max-width: 480px) {
+
+  .auth-card h2 {
+
+    font-size: 1.6rem;
+
+    line-height: 1.2;
+
+  }
+
+
+  .auth-card .auth-subtitle {
+
+    font-size: 0.9rem;
+
+  }
+
 }
