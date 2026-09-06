@@ -13,6 +13,10 @@
  * All pages:
  *   Header shows the logo on the left and Logout on the right.
  *
+ * Logout:
+ *   Shows a small custom confirmation popup before signing out.
+ *   Popup follows the active website/order theme.
+ *
  * Dashboard mobile:
  *   Keeps the dashboard itself untouched.
  * -----------------------------------------------------------------------
@@ -152,6 +156,524 @@ function logoutMarkup(id) {
 
 
 /* -----------------------------------------------------------------------
+   Logout confirmation popup styles
+   ----------------------------------------------------------------------- */
+
+function ensureLogoutModalStyles() {
+
+  if (document.getElementById("logout-confirm-styles")) {
+    return;
+  }
+
+
+  const style = document.createElement("style");
+
+  style.id = "logout-confirm-styles";
+
+  style.textContent = `
+
+    .logout-confirm-overlay {
+
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 9999;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      padding: 20px;
+
+      background: rgba(0, 0, 0, 0.42);
+
+      backdrop-filter: blur(3px);
+
+      -webkit-backdrop-filter: blur(3px);
+
+      animation: logoutOverlayIn 0.16s ease-out;
+    }
+
+
+    .logout-confirm {
+
+      width: min(100%, 330px);
+
+      padding: 24px 22px 20px;
+
+      background: var(--color-surface);
+
+      color: var(--color-text);
+
+      border: 1px solid var(--color-border);
+
+      border-radius: 18px;
+
+      box-shadow:
+        0 18px 45px rgba(0, 0, 0, 0.20);
+
+      text-align: center;
+
+      animation: logoutPopupIn 0.18s ease-out;
+    }
+
+
+    .logout-confirm__icon {
+
+      width: 46px;
+
+      height: 46px;
+
+      margin: 0 auto 13px;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      border-radius: 14px;
+
+      background: var(--color-primary-light);
+
+      color: var(--color-primary-dark);
+
+      box-shadow:
+        inset 0 0 0 1px var(--color-border);
+    }
+
+
+    .logout-confirm__icon svg {
+
+      width: 23px;
+
+      height: 23px;
+
+      fill: none;
+
+      stroke: currentColor;
+
+      stroke-width: 1.8;
+
+      stroke-linecap: round;
+
+      stroke-linejoin: round;
+    }
+
+
+    .logout-confirm__title {
+
+      margin: 0 0 7px;
+
+      font-size: 1.08rem;
+
+      line-height: 1.3;
+
+      font-weight: 800;
+
+      color: var(--color-text);
+    }
+
+
+    .logout-confirm__message {
+
+      margin: 0;
+
+      font-size: 0.84rem;
+
+      line-height: 1.5;
+
+      color: var(--color-text-muted);
+    }
+
+
+    .logout-confirm__actions {
+
+      display: flex;
+
+      gap: 9px;
+
+      margin-top: 19px;
+    }
+
+
+    .logout-confirm__button {
+
+      flex: 1;
+
+      min-height: 40px;
+
+      padding: 8px 13px;
+
+      border-radius: 10px;
+
+      border: 1px solid var(--color-border);
+
+      background: var(--color-surface);
+
+      color: var(--color-text);
+
+      font-family: inherit;
+
+      font-size: 0.82rem;
+
+      font-weight: 700;
+
+      cursor: pointer;
+
+      transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease,
+        background 0.15s ease,
+        border-color 0.15s ease;
+    }
+
+
+    .logout-confirm__button:hover {
+
+      transform: translateY(-1px);
+
+      box-shadow: var(--shadow-sm);
+
+      border-color: var(--color-primary);
+    }
+
+
+    .logout-confirm__button--logout {
+
+      background: var(--color-primary);
+
+      border-color: var(--color-primary);
+
+      color: #fff;
+
+      box-shadow: var(--shadow-sm);
+    }
+
+
+    .logout-confirm__button--logout:hover {
+
+      background: var(--color-primary-dark);
+
+      border-color: var(--color-primary-dark);
+
+      color: #fff;
+
+      box-shadow: var(--shadow-md);
+    }
+
+
+    @keyframes logoutOverlayIn {
+
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+
+    @keyframes logoutPopupIn {
+
+      from {
+
+        opacity: 0;
+
+        transform: scale(0.94) translateY(6px);
+      }
+
+      to {
+
+        opacity: 1;
+
+        transform: scale(1) translateY(0);
+      }
+    }
+
+
+    @media (max-width: 480px) {
+
+      .logout-confirm {
+
+        width: min(100%, 310px);
+
+        padding: 21px 18px 18px;
+
+        border-radius: 16px;
+      }
+
+      .logout-confirm__actions {
+
+        margin-top: 17px;
+      }
+    }
+
+  `;
+
+
+  document.head.appendChild(style);
+}
+
+
+/* -----------------------------------------------------------------------
+   Close logout popup
+   ----------------------------------------------------------------------- */
+
+function closeLogoutModal() {
+
+  const overlay =
+    document.getElementById(
+      "logout-confirm-overlay"
+    );
+
+  if (overlay) {
+    overlay.remove();
+  }
+
+  document.body.style.overflow = "";
+}
+
+
+/* -----------------------------------------------------------------------
+   Show logout confirmation popup
+   ----------------------------------------------------------------------- */
+
+function showLogoutConfirmation() {
+
+  /*
+   * Prevent duplicate popup.
+   */
+
+  if (
+    document.getElementById(
+      "logout-confirm-overlay"
+    )
+  ) {
+    return;
+  }
+
+
+  ensureLogoutModalStyles();
+
+
+  const overlay =
+    document.createElement("div");
+
+  overlay.id =
+    "logout-confirm-overlay";
+
+  overlay.className =
+    "logout-confirm-overlay";
+
+  overlay.setAttribute(
+    "role",
+    "dialog"
+  );
+
+  overlay.setAttribute(
+    "aria-modal",
+    "true"
+  );
+
+  overlay.setAttribute(
+    "aria-labelledby",
+    "logout-confirm-title"
+  );
+
+
+  overlay.innerHTML = `
+
+    <div
+      class="logout-confirm"
+      role="document"
+    >
+
+      <div
+        class="logout-confirm__icon"
+        aria-hidden="true"
+      >
+        ${LOGOUT_ICON}
+      </div>
+
+
+      <h3
+        class="logout-confirm__title"
+        id="logout-confirm-title"
+      >
+        Logout?
+      </h3>
+
+
+      <p class="logout-confirm__message">
+        Are you sure you want to logout?
+      </p>
+
+
+      <div class="logout-confirm__actions">
+
+        <button
+          type="button"
+          class="logout-confirm__button"
+          id="logout-cancel-btn"
+        >
+          Cancel
+        </button>
+
+
+        <button
+          type="button"
+          class="logout-confirm__button logout-confirm__button--logout"
+          id="logout-confirm-btn"
+        >
+          Logout
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  document.body.appendChild(
+    overlay
+  );
+
+
+  /*
+   * Prevent background page scrolling
+   * while the popup is open.
+   */
+
+  document.body.style.overflow =
+    "hidden";
+
+
+  document
+    .getElementById(
+      "logout-cancel-btn"
+    )
+    ?.addEventListener(
+      "click",
+      () => {
+
+        closeLogoutModal();
+
+      }
+    );
+
+
+  document
+    .getElementById(
+      "logout-confirm-btn"
+    )
+    ?.addEventListener(
+      "click",
+      async () => {
+
+        const button =
+          document.getElementById(
+            "logout-confirm-btn"
+          );
+
+        if (button) {
+
+          button.disabled = true;
+
+          button.textContent =
+            "Logging out...";
+        }
+
+
+        const result =
+          await logout();
+
+
+        if (result.success) {
+
+          window.location.href =
+            "login.html";
+
+          return;
+        }
+
+
+        closeLogoutModal();
+
+        showError(
+          result.message
+        );
+      }
+    );
+
+
+  /*
+   * Clicking outside the small popup
+   * closes the confirmation.
+   */
+
+  overlay.addEventListener(
+    "click",
+    (event) => {
+
+      if (
+        event.target === overlay
+      ) {
+
+        closeLogoutModal();
+
+      }
+    }
+  );
+
+
+  /*
+   * ESC key closes the popup.
+   */
+
+  const handleEscape =
+    (event) => {
+
+      if (
+        event.key === "Escape"
+      ) {
+
+        closeLogoutModal();
+
+        document.removeEventListener(
+          "keydown",
+          handleEscape
+        );
+      }
+    };
+
+
+  document.addEventListener(
+    "keydown",
+    handleEscape
+  );
+
+
+  /*
+   * Automatically focus Cancel
+   * so accidental Enter does not
+   * immediately logout.
+   */
+
+  document
+    .getElementById(
+      "logout-cancel-btn"
+    )
+    ?.focus();
+}
+
+
+/* -----------------------------------------------------------------------
    Logout handler
    ----------------------------------------------------------------------- */
 
@@ -161,24 +683,12 @@ function bindLogout(id) {
     .getElementById(id)
     ?.addEventListener(
       "click",
-      async (event) => {
+      (event) => {
 
         event.preventDefault();
 
-        const result =
-          await logout();
+        showLogoutConfirmation();
 
-        if (result.success) {
-
-          window.location.href =
-            "login.html";
-
-        } else {
-
-          showError(
-            result.message
-          );
-        }
       }
     );
 }
