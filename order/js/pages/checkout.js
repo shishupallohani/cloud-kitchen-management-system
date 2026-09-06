@@ -34,19 +34,33 @@ import {
 } from "../ui.js";
 
 
+/* ========================================================================
+   AUTHENTICATION
+
+   Checkout is account-required.
+
+   If a guest opens checkout directly, requireAuth() will send them
+   through the login flow. The updated auth-guard keeps the intended
+   checkout page as the redirect target.
+   ======================================================================== */
+
 const user = await requireAuth();
 
 renderNav("cart");
 
 
-const loadingEl = document.getElementById("checkout-loading");
-const layoutEl = document.getElementById("checkout-layout");
+const loadingEl =
+  document.getElementById("checkout-loading");
+
+const layoutEl =
+  document.getElementById("checkout-layout");
 
 
 let profile = null;
 let cartItems = [];
 
-let selectedPaymentMethod = PAYMENT_METHOD.COD;
+let selectedPaymentMethod =
+  PAYMENT_METHOD.COD;
 
 
 /* ========================================================================
@@ -57,10 +71,11 @@ async function init() {
 
   try {
 
-    const [profileResult, items] = await Promise.all([
-      getUserProfile(user.uid),
-      getCart(user.uid)
-    ]);
+    const [profileResult, items] =
+      await Promise.all([
+        getUserProfile(user.uid),
+        getCart(user.uid)
+      ]);
 
 
     profile =
@@ -118,7 +133,10 @@ async function init() {
 
   } catch (error) {
 
-    console.error("CHECKOUT INIT ERROR:", error);
+    console.error(
+      "CHECKOUT INIT ERROR:",
+      error
+    );
 
 
     loadingEl.innerHTML = `
@@ -145,7 +163,9 @@ async function init() {
 function renderDeliveryView() {
 
   const viewEl =
-    document.getElementById("delivery-info-view");
+    document.getElementById(
+      "delivery-info-view"
+    );
 
 
   viewEl.innerHTML = `
@@ -181,35 +201,58 @@ function renderDeliveryView() {
 
 document
   .getElementById("edit-delivery-btn")
-  .addEventListener("click", () => {
+  .addEventListener(
+    "click",
+    () => {
 
-    const formEl =
-      document.getElementById("delivery-info-form");
+      const formEl =
+        document.getElementById(
+          "delivery-info-form"
+        );
 
-    const viewEl =
-      document.getElementById("delivery-info-view");
-
-
-    document.getElementById("checkout-name").value =
-      profile.name || "";
-
-    document.getElementById("checkout-mobile").value =
-      profile.mobile || "";
-
-    document.getElementById("checkout-address").value =
-      profile.address || "";
-
-    document.getElementById("checkout-landmark").value =
-      profile.landmark || "";
-
-    document.getElementById("checkout-city").value =
-      profile.city || "";
+      const viewEl =
+        document.getElementById(
+          "delivery-info-view"
+        );
 
 
-    viewEl.style.display = "none";
+      document.getElementById(
+        "checkout-name"
+      ).value =
+        profile.name || "";
 
-    formEl.style.display = "block";
-  });
+
+      document.getElementById(
+        "checkout-mobile"
+      ).value =
+        profile.mobile || "";
+
+
+      document.getElementById(
+        "checkout-address"
+      ).value =
+        profile.address || "";
+
+
+      document.getElementById(
+        "checkout-landmark"
+      ).value =
+        profile.landmark || "";
+
+
+      document.getElementById(
+        "checkout-city"
+      ).value =
+        profile.city || "";
+
+
+      viewEl.style.display =
+        "none";
+
+      formEl.style.display =
+        "block";
+    }
+  );
 
 
 /* ========================================================================
@@ -218,80 +261,102 @@ document
 
 document
   .getElementById("save-delivery-btn")
-  .addEventListener("click", async (event) => {
+  .addEventListener(
+    "click",
+    async (event) => {
 
-    const btn = event.currentTarget;
-
-
-    const updated = {
-
-      name:
-        document.getElementById("checkout-name").value.trim(),
-
-      mobile:
-        document.getElementById("checkout-mobile").value.trim(),
-
-      address:
-        document.getElementById("checkout-address").value.trim(),
-
-      landmark:
-        document.getElementById("checkout-landmark").value.trim(),
-
-      city:
-        document.getElementById("checkout-city").value.trim()
-    };
+      const btn =
+        event.currentTarget;
 
 
-    const restore =
-      setButtonLoading(btn, "Saving...");
+      const updated = {
 
+        name:
+          document
+            .getElementById("checkout-name")
+            .value
+            .trim(),
 
-    try {
+        mobile:
+          document
+            .getElementById("checkout-mobile")
+            .value
+            .trim(),
 
-      await saveProfile(
-        user.uid,
-        updated
-      );
+        address:
+          document
+            .getElementById("checkout-address")
+            .value
+            .trim(),
 
+        landmark:
+          document
+            .getElementById("checkout-landmark")
+            .value
+            .trim(),
 
-      profile = {
-        ...profile,
-        ...updated
+        city:
+          document
+            .getElementById("checkout-city")
+            .value
+            .trim()
       };
 
 
-      renderDeliveryView();
+      const restore =
+        setButtonLoading(
+          btn,
+          "Saving..."
+        );
 
 
-      document.getElementById(
-        "delivery-info-form"
-      ).style.display = "none";
+      try {
+
+        await saveProfile(
+          user.uid,
+          updated
+        );
 
 
-      document.getElementById(
-        "delivery-info-view"
-      ).style.display = "block";
+        profile = {
+          ...profile,
+          ...updated
+        };
 
 
-      showSuccess(
-        "Delivery details updated."
-      );
+        renderDeliveryView();
 
 
-    } catch (error) {
-
-      showError(
-        error.message ||
-        "Couldn't save delivery details."
-      );
+        document.getElementById(
+          "delivery-info-form"
+        ).style.display = "none";
 
 
-    } finally {
+        document.getElementById(
+          "delivery-info-view"
+        ).style.display = "block";
 
-      restore();
+
+        showSuccess(
+          "Delivery details updated."
+        );
+
+
+      } catch (error) {
+
+        showError(
+          error.message ||
+          "Couldn't save delivery details."
+        );
+
+
+      } finally {
+
+        restore();
+      }
+
     }
-
-  });
+  );
 
 
 /* ========================================================================
@@ -301,62 +366,65 @@ document
 function renderPaymentOptions() {
 
   const container =
-    document.getElementById("payment-options");
+    document.getElementById(
+      "payment-options"
+    );
 
 
   const methods =
     getAvailablePaymentMethods();
 
 
-  container.innerHTML = methods
-    .map(
-      (method, index) => `
+  container.innerHTML =
+    methods
+      .map(
+        (method, index) => `
 
-        <label
-          class="payment-option${
-            index === 0
-              ? " payment-option--selected"
-              : ""
-          }"
-          data-method="${method.key}"
-        >
-
-          <input
-            type="radio"
-            name="payment-method"
-            value="${method.key}"
-            ${
+          <label
+            class="payment-option${
               index === 0
-                ? "checked"
+                ? " payment-option--selected"
                 : ""
-            }
-          />
+            }"
+            data-method="${method.key}"
+          >
 
-          <div>
-
-            <div class="payment-option__label">
-              ${escapeHtml(method.label)}
-            </div>
-
-            <div class="payment-option__desc">
-
+            <input
+              type="radio"
+              name="payment-method"
+              value="${method.key}"
               ${
-                method.key === PAYMENT_METHOD.COD
-
-                  ? "Pay in cash when your order arrives."
-
-                  : "Pay instantly using your preferred UPI app or scan the QR code."
+                index === 0
+                  ? "checked"
+                  : ""
               }
+            />
+
+            <div>
+
+              <div class="payment-option__label">
+                ${escapeHtml(method.label)}
+              </div>
+
+              <div class="payment-option__desc">
+
+                ${
+                  method.key === PAYMENT_METHOD.COD
+
+                    ? "Pay in cash when your order arrives."
+
+                    : "Pay instantly using your preferred UPI app or scan the QR code."
+                }
+
+              </div>
 
             </div>
 
-          </div>
+          </label>
 
-        </label>
-
-      `
-    )
-    .join("");
+        `
+      )
+      .join("");
 
 
   container
@@ -407,7 +475,9 @@ function renderPaymentOptions() {
 function toggleUpiPanel() {
 
   const panel =
-    document.getElementById("upi-panel");
+    document.getElementById(
+      "upi-panel"
+    );
 
 
   if (
@@ -488,7 +558,9 @@ function openUpiApp(appName) {
 
 
   const subtotal =
-    calculateSubtotal(cartItems);
+    calculateSubtotal(
+      cartItems
+    );
 
 
   const deliveryCharge =
@@ -635,20 +707,24 @@ function openUpiApp(appName) {
 
 
   fallbackTimer =
-    setTimeout(() => {
+    setTimeout(
+      () => {
 
-      if (
-        document.visibilityState !==
-        "hidden"
-      ) {
+        if (
+          document.visibilityState !==
+          "hidden"
+        ) {
 
-        window.location.href =
-          genericUpiUri;
-      }
+          window.location.href =
+            genericUpiUri;
+        }
 
-      clearFallback();
 
-    }, 1500);
+        clearFallback();
+
+      },
+      1500
+    );
 
 
   window.location.href =
@@ -696,7 +772,9 @@ function renderOrderReview() {
 
 
   const subtotal =
-    calculateSubtotal(cartItems);
+    calculateSubtotal(
+      cartItems
+    );
 
 
   const delivery =
@@ -712,7 +790,9 @@ function renderOrderReview() {
   document.getElementById(
     "checkout-subtotal"
   ).textContent =
-    formatCurrency(subtotal);
+    formatCurrency(
+      subtotal
+    );
 
 
   document.getElementById(
@@ -720,13 +800,17 @@ function renderOrderReview() {
   ).textContent =
     delivery === 0
       ? "FREE"
-      : formatCurrency(delivery);
+      : formatCurrency(
+          delivery
+        );
 
 
   document.getElementById(
     "checkout-total"
   ).textContent =
-    formatCurrency(total);
+    formatCurrency(
+      total
+    );
 }
 
 
@@ -829,7 +913,8 @@ document
         const order =
           await createOrder({
 
-            userId: user.uid,
+            userId:
+              user.uid,
 
             customer: {
 

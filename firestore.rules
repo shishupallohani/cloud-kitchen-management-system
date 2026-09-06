@@ -2,12 +2,14 @@ rules_version = '2';
 
 /**
  * Firestore Security Rules — cloud-kitchen
- * -----------------------------------------------------------------------
- * Public visitors can only READ the data the public website needs.
- * Only signed-in, authorized admin accounts can WRITE anything.
+ * ----------------------------------------------------------------------
+ * Public visitors can READ public menu/config data.
+ * Only the authorized admin can WRITE admin-managed data.
  *
- * IMPORTANT: list the UID(s) of your admin account(s) in isAdmin() below.
- * -----------------------------------------------------------------------
+ * Users can access only their own profile, favorites and cart.
+ * Users can create/read their own orders.
+ * Only admin can update order status.
+ * ----------------------------------------------------------------------
  */
 
 service cloud.firestore {
@@ -15,40 +17,144 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     function isAdmin() {
-      return request.auth != null && request.auth.uid in [
-        "8R0axsx0iedUp83VojQW6QUU8nI3"
-      ];
+      return request.auth != null
+        && request.auth.uid in [
+          "8R0axsx0iedUp83VojQW6QUU8nI3"
+        ];
     }
+
+    // ---------------------------------------------------------
+    // DAILY MENU
+    // ---------------------------------------------------------
 
     match /dailyMenus/{date} {
       allow read: if true;
       allow write: if isAdmin();
     }
 
+    // ---------------------------------------------------------
+    // SITE CONFIG
+    // ---------------------------------------------------------
+
     match /siteConfig/{docId} {
       allow read: if true;
       allow write: if isAdmin();
     }
 
-    match /customers/{mobile} {
-      allow create: if true;
-      allow read, update, delete: if isAdmin();
-    }
+    // ---------------------------------------------------------
+    // FESTIVAL SETTINGS
+    // ---------------------------------------------------------
 
     match /festivalSettings/{docId} {
       allow read: if true;
       allow write: if isAdmin();
     }
 
-    match /users/{uid} {
-      allow create: if request.auth != null
-                && request.auth.uid == uid;
+    // ---------------------------------------------------------
+    // CUSTOMERS
+    // ---------------------------------------------------------
 
-      allow read, update: if request.auth != null
-                       && request.auth.uid == uid;
+    match /customers/{mobile} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // ---------------------------------------------------------
+    // USER PROFILE
+    // ---------------------------------------------------------
+
+    match /users/{uid} {
+
+      allow read: if request.auth != null
+        && request.auth.uid == uid;
+
+      allow create: if request.auth != null
+        && request.auth.uid == uid
+        && request.resource.data.email is string
+        && request.resource.data.name is string;
+
+      allow update: if request.auth != null
+        && request.auth.uid == uid
+        && request.resource.data.email == resource.data.email;
+
+      allow delete: if false;
+
+      // -------------------------------------------------------
+      // FAVORITES
+      // -------------------------------------------------------
+
+      match /favorites/{dishId} {
+        allow read, write: if request.auth != null
+          && request.auth.uid == uid;
+      }
+
+      // -------------------------------------------------------
+      // CART
+      // -------------------------------------------------------
+
+      match /cart/{dishId} {
+        allow read, write: if request.auth != null
+          && request.auth.uid == uid;
+      }
+    }
+
+    // ---------------------------------------------------------
+    // ORDERS
+    // ---------------------------------------------------------
+
+    match /orders/{orderId} {
+
+      // User can read only their own orders.
+      // Admin can read all orders.
+      allow read: if isAdmin()
+        || (
+          request.auth != null
+          && resource.data.userId == request.auth.uid
+        );
+
+      // User can create only their own valid order.
+      allow create: if request.auth != null
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.orderId == orderId
+        && request.resource.data.orderStatus == "Pending"
+        && request.resource.data.paymentStatus
+          in ["Pending", "Awaiting Confirmation"]
+        && request.resource.data.paymentMethod
+          in ["COD", "UPI"]
+        && request.resource.data.items is list
+        && request.resource.data.items.size() > 0
+        && request.resource.data.subtotal is number
+        && request.resource.data.subtotal >= 0
+        && request.resource.data.deliveryCharge is number
+        && request.resource.data.deliveryCharge >= 0
+        && request.resource.data.totalAmount is number
+        && request.resource.data.totalAmount > 0
+        && request.resource.data.customerName is string
+        && request.resource.data.email is string
+        && request.resource.data.mobile is string
+        && request.resource.data.address is string
+        && request.resource.data.city is string
+        && (
+          (
+            request.resource.data.paymentMethod == "COD"
+            && request.resource.data.paymentStatus == "Pending"
+          )
+          ||
+          (
+            request.resource.data.paymentMethod == "UPI"
+            && request.resource.data.paymentStatus == "Awaiting Confirmation"
+          )
+        );
+
+      // Only admin can change order status/payment status.
+      allow update: if isAdmin();
 
       allow delete: if false;
     }
+
+    // ---------------------------------------------------------
+    // DENY EVERYTHING ELSE
+    // ---------------------------------------------------------
 
     match /{document=**} {
       allow read, write: if false;

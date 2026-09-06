@@ -910,7 +910,7 @@ export function renderNav(activeKey, options = {}) {
 
           ${
             isGuest
-              ? loginMarkup()
+              ? ""
               : logoutMarkup(
                   "nav-logout-link"
                 )
