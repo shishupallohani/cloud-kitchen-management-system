@@ -1,8 +1,16 @@
-import { requireAuth } from "../auth-guard.js";
+import { onAuthChange } from "../auth.js";
 import { renderNav } from "../nav.js";
 import { getMenu, getCategories } from "../menu-service.js";
 import { getFavorites, toggleFavorite } from "../favorites-service.js";
-import { getCart, addToCart, updateQuantity, calculateItemCount } from "../cart-service.js";
+import {
+  getCart,
+  addToCart,
+  updateQuantity,
+  calculateItemCount,
+  getGuestCart,
+  addToGuestCart,
+  updateGuestQuantity,
+} from "../cart-service.js";
 import {
   formatCurrency,
   escapeHtml,
@@ -13,72 +21,221 @@ import {
   updateCartBadge,
 } from "../ui.js";
 
-const user = await requireAuth();
-renderNav("menu");
-
 const tabsEl = document.getElementById("category-tabs");
 const contentEl = document.getElementById("menu-content");
+
+let user = null;
 
 let allDishes = [];
 let favoriteIds = new Set();
 let cartQuantities = new Map(); // dishId -> quantity
 let activeCategory = "All";
 
+
+/* ================================================================
+   AUTH STATE
+   ================================================================ */
+
+onAuthChange(async (authUser) => {
+  user = authUser || null;
+
+  /*
+   * Guest:
+   *   Menu + Cart + Login
+   *
+   * Logged-in:
+   *   Existing full navigation
+   */
+  renderNav("menu", {
+    guest: !user,
+  });
+
+  await loadData();
+});
+
+
+/* ================================================================
+   LOAD DATA
+   ================================================================ */
+
 async function loadData() {
   renderLoading(contentEl, "Loading menu...");
+
   try {
-    const [dishes, categories, favorites, cartItems] = await Promise.all([
+    const [dishes, categories] = await Promise.all([
       getMenu(),
       getCategories(),
-      getFavorites(user.uid),
-      getCart(user.uid),
     ]);
 
     allDishes = dishes;
-    favoriteIds = new Set(favorites.map((f) => f.dishId));
-    cartQuantities = new Map(cartItems.map((i) => [i.dishId, i.quantity]));
+
+    /*
+     * ============================================================
+     * LOGGED-IN USER
+     * ============================================================
+     *
+     * Favorites + cart continue to use Firebase exactly
+     * like before.
+     */
+
+    if (user) {
+      const [favorites, cartItems] = await Promise.all([
+        getFavorites(user.uid),
+        getCart(user.uid),
+      ]);
+
+      favoriteIds = new Set(
+        favorites.map((f) => f.dishId)
+      );
+
+      cartQuantities = new Map(
+        cartItems.map((i) => [
+          i.dishId,
+          i.quantity,
+        ])
+      );
+
+      updateCartBadge(
+        calculateItemCount(cartItems)
+      );
+
+    } else {
+
+      /*
+       * ==========================================================
+       * GUEST USER
+       * ==========================================================
+       *
+       * Favorites are account-based, so guests don't have
+       * persistent favorites.
+       *
+       * Cart is stored locally on this device.
+       */
+
+      favoriteIds = new Set();
+
+      const guestCart =
+        getGuestCart();
+
+      cartQuantities = new Map(
+        guestCart.map((item) => [
+          item.dishId,
+          item.quantity,
+        ])
+      );
+
+      updateCartBadge(
+        calculateItemCount(guestCart)
+      );
+    }
 
     renderTabs(categories);
     renderDishes();
-    updateCartBadge(calculateItemCount(cartItems));
+
   } catch (error) {
-    renderErrorState(contentEl, "We couldn't load the menu right now.", loadData);
+    console.error(
+      "MENU LOAD ERROR:",
+      error
+    );
+
+    renderErrorState(
+      contentEl,
+      "We couldn't load the menu right now.",
+      loadData
+    );
   }
 }
 
+
+/* ================================================================
+   CATEGORY TABS
+   ================================================================ */
+
 function renderTabs(categories) {
-  const tabs = ["All", ...categories];
+  const tabs = [
+    "All",
+    ...categories,
+  ];
+
   tabsEl.innerHTML = tabs
     .map(
       (cat) =>
-        `<button type="button" class="category-tab${cat === activeCategory ? " category-tab--active" : ""}" data-category="${escapeHtml(cat)}">${escapeHtml(cat)}</button>`
+        `<button type="button" class="category-tab${
+          cat === activeCategory
+            ? " category-tab--active"
+            : ""
+        }" data-category="${escapeHtml(cat)}">${escapeHtml(cat)}</button>`
     )
     .join("");
 
-  tabsEl.querySelectorAll(".category-tab").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      activeCategory = btn.dataset.category;
-      tabsEl.querySelectorAll(".category-tab").forEach((b) => b.classList.remove("category-tab--active"));
-      btn.classList.add("category-tab--active");
-      renderDishes();
+  tabsEl
+    .querySelectorAll(".category-tab")
+    .forEach((btn) => {
+
+      btn.addEventListener("click", () => {
+
+        activeCategory =
+          btn.dataset.category;
+
+        tabsEl
+          .querySelectorAll(".category-tab")
+          .forEach((b) =>
+            b.classList.remove(
+              "category-tab--active"
+            )
+          );
+
+        btn.classList.add(
+          "category-tab--active"
+        );
+
+        renderDishes();
+      });
+
     });
-  });
 }
 
+
+/* ================================================================
+   DISH CARD
+   ================================================================ */
+
 function dishCardHtml(dish) {
-  const isFav = favoriteIds.has(dish.dishId);
-  const qty = cartQuantities.get(dish.dishId) || 0;
-  const available = dish.available !== false;
+
+  const isFav =
+    favoriteIds.has(
+      dish.dishId
+    );
+
+  const qty =
+    cartQuantities.get(
+      dish.dishId
+    ) || 0;
+
+  const available =
+    dish.available !== false;
+
+
+  /*
+   * IMPORTANT:
+   * This is the ORIGINAL UI structure.
+   * No design/classes have been changed.
+   */
 
   const footerControl = !available
+
     ? `<span style="color: var(--color-text-muted); font-size: 0.82rem;">Unavailable</span>`
+
     : qty > 0
+
     ? `<div class="qty-stepper" data-dish-id="${escapeHtml(dish.dishId)}">
          <button type="button" class="qty-decrease" aria-label="Decrease quantity">−</button>
          <span>${qty}</span>
          <button type="button" class="qty-increase" aria-label="Increase quantity">+</button>
        </div>`
+
     : `<button type="button" class="btn btn--primary btn--sm add-to-cart-btn" data-dish-id="${escapeHtml(dish.dishId)}">Add</button>`;
+
 
   return `
     <div class="card dish-card" data-dish-id="${escapeHtml(dish.dishId)}">
@@ -100,85 +257,416 @@ function dishCardHtml(dish) {
     </div>`;
 }
 
+
+/* ================================================================
+   RENDER DISHES
+   ================================================================ */
+
 function renderDishes() {
-  const dishes = activeCategory === "All" ? allDishes : allDishes.filter((d) => d.category === activeCategory);
+
+  const dishes =
+    activeCategory === "All"
+      ? allDishes
+      : allDishes.filter(
+          (d) =>
+            d.category ===
+            activeCategory
+        );
+
 
   if (dishes.length === 0) {
-    contentEl.innerHTML = `<div class="state-panel state-panel--empty"><div class="state-panel__icon">🍽️</div><p>No dishes in this category yet.</p></div>`;
+
+    contentEl.innerHTML =
+      `<div class="state-panel state-panel--empty"><div class="state-panel__icon">🍽️</div><p>No dishes in this category yet.</p></div>`;
+
     return;
   }
 
-  contentEl.innerHTML = `<div class="dish-grid">${dishes.map(dishCardHtml).join("")}</div>`;
+
+  contentEl.innerHTML =
+    `<div class="dish-grid">${dishes
+      .map(dishCardHtml)
+      .join("")}</div>`;
+
+
   attachDishHandlers();
 }
 
+
+/* ================================================================
+   ATTACH DISH HANDLERS
+   ================================================================ */
+
 function attachDishHandlers() {
-  contentEl.querySelectorAll(".dish-card__fav-btn").forEach((btn) => {
-    btn.addEventListener("click", () => onToggleFavorite(btn.dataset.dishId, btn));
-  });
-  contentEl.querySelectorAll(".add-to-cart-btn").forEach((btn) => {
-    btn.addEventListener("click", () => onAddToCart(btn.dataset.dishId));
-  });
-  contentEl.querySelectorAll(".qty-stepper").forEach((stepper) => {
-    const dishId = stepper.dataset.dishId;
-    stepper.querySelector(".qty-increase").addEventListener("click", () => onChangeQuantity(dishId, 1));
-    stepper.querySelector(".qty-decrease").addEventListener("click", () => onChangeQuantity(dishId, -1));
-  });
+
+  contentEl
+    .querySelectorAll(
+      ".dish-card__fav-btn"
+    )
+    .forEach((btn) => {
+
+      btn.addEventListener(
+        "click",
+        () =>
+          onToggleFavorite(
+            btn.dataset.dishId,
+            btn
+          )
+      );
+
+    });
+
+
+  contentEl
+    .querySelectorAll(
+      ".add-to-cart-btn"
+    )
+    .forEach((btn) => {
+
+      btn.addEventListener(
+        "click",
+        () =>
+          onAddToCart(
+            btn.dataset.dishId
+          )
+      );
+
+    });
+
+
+  contentEl
+    .querySelectorAll(
+      ".qty-stepper"
+    )
+    .forEach((stepper) => {
+
+      const dishId =
+        stepper.dataset.dishId;
+
+
+      stepper
+        .querySelector(
+          ".qty-increase"
+        )
+        .addEventListener(
+          "click",
+          () =>
+            onChangeQuantity(
+              dishId,
+              1
+            )
+        );
+
+
+      stepper
+        .querySelector(
+          ".qty-decrease"
+        )
+        .addEventListener(
+          "click",
+          () =>
+            onChangeQuantity(
+              dishId,
+              -1
+            )
+        );
+
+    });
 }
 
-async function onToggleFavorite(dishId, btn) {
+
+/* ================================================================
+   FAVORITE
+   ================================================================ */
+
+async function onToggleFavorite(
+  dishId,
+  btn
+) {
+
+  /*
+   * Guest can browse menu freely.
+   *
+   * Favorites require an account because
+   * they are persisted against the user's
+   * Firebase account.
+   */
+
+  if (!user) {
+
+    window.location.href =
+      "login.html?redirect=menu.html";
+
+    return;
+  }
+
+
   btn.disabled = true;
-  const dish = allDishes.find((d) => d.dishId === dishId);
+
+
+  const dish =
+    allDishes.find(
+      (d) =>
+        d.dishId === dishId
+    );
+
+
   try {
-    const nowFavorited = await toggleFavorite(user.uid, dish);
+
+    const nowFavorited =
+      await toggleFavorite(
+        user.uid,
+        dish
+      );
+
+
     if (nowFavorited) {
-      favoriteIds.add(dishId);
-      showSuccess(`${dish.name} added to favorites.`);
+
+      favoriteIds.add(
+        dishId
+      );
+
+      showSuccess(
+        `${dish.name} added to favorites.`
+      );
+
     } else {
-      favoriteIds.delete(dishId);
-      showSuccess(`${dish.name} removed from favorites.`);
+
+      favoriteIds.delete(
+        dishId
+      );
+
+      showSuccess(
+        `${dish.name} removed from favorites.`
+      );
+
     }
+
+
     renderDishes();
+
   } catch (error) {
-    showError("Couldn't update favorites. Please try again.");
+
+    console.error(
+      "FAVORITE ERROR:",
+      error
+    );
+
+    showError(
+      "Couldn't update favorites. Please try again."
+    );
+
     btn.disabled = false;
   }
 }
 
-async function onAddToCart(dishId) {
-  const dish = allDishes.find((d) => d.dishId === dishId);
+
+/* ================================================================
+   ADD TO CART
+   ================================================================ */
+
+async function onAddToCart(
+  dishId
+) {
+
+  const dish =
+    allDishes.find(
+      (d) =>
+        d.dishId === dishId
+    );
+
+
+  if (!dish) {
+    return;
+  }
+
+
   try {
-    await addToCart(user.uid, dish, 1);
-    cartQuantities.set(dishId, (cartQuantities.get(dishId) || 0) + 1);
-    updateCartBadge(sumQuantities());
+
+    /*
+     * ============================================================
+     * LOGGED-IN USER
+     * ============================================================
+     */
+
+    if (user) {
+
+      await addToCart(
+        user.uid,
+        dish,
+        1
+      );
+
+
+    /*
+     * ============================================================
+     * GUEST USER
+     * ============================================================
+     */
+
+    } else {
+
+      addToGuestCart(
+        {
+          dishId: dish.dishId,
+          name: dish.name,
+          price: dish.price,
+          image: dish.image,
+        },
+        1
+      );
+
+    }
+
+
+    /*
+     * Update local UI immediately.
+     */
+
+    cartQuantities.set(
+      dishId,
+      (cartQuantities.get(
+        dishId
+      ) || 0) + 1
+    );
+
+
+    updateCartBadge(
+      sumQuantities()
+    );
+
+
     renderDishes();
-    showSuccess(`${dish.name} added to cart.`);
+
+
+    showSuccess(
+      `${dish.name} added to cart.`
+    );
+
+
   } catch (error) {
-    showError("Couldn't add item to cart. Please try again.");
+
+    console.error(
+      "ADD TO CART ERROR:",
+      error
+    );
+
+    showError(
+      "Couldn't add item to cart. Please try again."
+    );
   }
 }
 
-async function onChangeQuantity(dishId, delta) {
-  const current = cartQuantities.get(dishId) || 0;
-  const next = current + delta;
+
+/* ================================================================
+   CHANGE QUANTITY
+   ================================================================ */
+
+async function onChangeQuantity(
+  dishId,
+  delta
+) {
+
+  const current =
+    cartQuantities.get(
+      dishId
+    ) || 0;
+
+
+  const next =
+    current + delta;
+
+
   try {
-    await updateQuantity(user.uid, dishId, next);
-    if (next <= 0) {
-      cartQuantities.delete(dishId);
+
+    /*
+     * ============================================================
+     * LOGGED-IN USER
+     * ============================================================
+     */
+
+    if (user) {
+
+      await updateQuantity(
+        user.uid,
+        dishId,
+        next
+      );
+
+
+    /*
+     * ============================================================
+     * GUEST USER
+     * ============================================================
+     */
+
     } else {
-      cartQuantities.set(dishId, next);
+
+      updateGuestQuantity(
+        dishId,
+        next
+      );
+
     }
-    updateCartBadge(sumQuantities());
+
+
+    /*
+     * Update local UI state.
+     */
+
+    if (next <= 0) {
+
+      cartQuantities.delete(
+        dishId
+      );
+
+    } else {
+
+      cartQuantities.set(
+        dishId,
+        next
+      );
+
+    }
+
+
+    updateCartBadge(
+      sumQuantities()
+    );
+
+
     renderDishes();
+
+
   } catch (error) {
-    showError("Couldn't update cart. Please try again.");
+
+    console.error(
+      "UPDATE CART ERROR:",
+      error
+    );
+
+    showError(
+      "Couldn't update cart. Please try again."
+    );
   }
 }
+
+
+/* ================================================================
+   SUM QUANTITIES
+   ================================================================ */
 
 function sumQuantities() {
+
   let total = 0;
-  cartQuantities.forEach((qty) => (total += qty));
+
+
+  cartQuantities.forEach(
+    (qty) => {
+      total += qty;
+    }
+  );
+
+
   return total;
 }
-
-loadData();

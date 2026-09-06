@@ -3,29 +3,45 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Charroti Kitchen — Ordering</title>
+  <title>Explore Menu — Charroti Kitchen</title>
+
   <link rel="stylesheet" href="css/order-base.css" />
-  <link rel="stylesheet" href="css/auth.css" />
+  <link rel="stylesheet" href="css/menu.css" />
   <link rel="stylesheet" href="css/responsive.css" />
 </head>
+
 <body>
-  <div class="auth-shell">
-    <div class="state-panel state-panel--loading">
-      <span class="spinner" aria-hidden="true"></span>
-      <p>Loading Charroti Kitchen...</p>
-    </div>
+
+  <div class="app-shell">
+
+    <div id="app-topnav"></div>
+
+    <main class="page-container">
+
+      <div class="page-header">
+        <h1>Explore Menu</h1>
+        <p>Freshly prepared, ready to order.</p>
+      </div>
+
+      <div
+        class="category-tabs"
+        id="category-tabs"
+      ></div>
+
+      <div id="menu-content"></div>
+
+    </main>
+
+    <p class="footer-note">
+      Charroti Kitchen Ordering
+    </p>
+
   </div>
 
-  <script type="module">
-    import { onAuthChange } from "./js/auth.js";
+  <script
+    type="module"
+    src="js/pages/menu.js"
+  ></script>
 
-    // This page is the single entry point customers land on after
-    // clicking "ORDER NOW" on the main marketing website. It never
-    // renders its own UI — it just decides where to send the customer
-    // based on whether they already have a session.
-    onAuthChange((user) => {
-      window.location.replace(user ? "dashboard.html" : "login.html");
-    });
-  </script>
 </body>
 </html>

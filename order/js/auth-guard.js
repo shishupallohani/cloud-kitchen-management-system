@@ -23,12 +23,47 @@ const ADMIN_UIDS = [
   "8R0axsx0iedUp83VojQW6QUU8nI3",
 ];
 
+
 /**
  * Returns true when the Firebase user belongs to the admin account.
  */
 function isAdminUser(user) {
-  return Boolean(user?.uid && ADMIN_UIDS.includes(user.uid));
+  return Boolean(
+    user?.uid &&
+    ADMIN_UIDS.includes(user.uid)
+  );
 }
+
+
+/**
+ * Returns a safe redirect page from ?redirect=...
+ *
+ * Only simple .html pages belonging to this ordering app
+ * are accepted.
+ */
+function getSafeRedirect(
+  fallback = DASHBOARD_PAGE
+) {
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+  const redirect =
+    params.get("redirect");
+
+  if (
+    redirect &&
+    /^[a-zA-Z0-9_-]+\.html$/.test(
+      redirect
+    )
+  ) {
+    return redirect;
+  }
+
+  return fallback;
+}
+
 
 /**
  * Ensures a customer is logged in before showing a protected page.
@@ -44,36 +79,62 @@ function isAdminUser(user) {
  */
 export function requireAuth() {
   return new Promise((resolve) => {
-    const unsubscribe = onAuthChange((user) => {
-      unsubscribe();
 
-      if (!user) {
-        const currentPage =
-          window.location.pathname.split("/").pop() || "dashboard.html";
+    const unsubscribe =
+      onAuthChange((user) => {
 
-        const returnTo = encodeURIComponent(currentPage);
+        unsubscribe();
 
-        window.location.replace(
-          `${LOGIN_PAGE}?redirect=${returnTo}`
-        );
 
-        return;
-      }
+        if (!user) {
 
-      if (isAdminUser(user)) {
-        window.location.replace("../../admin.html");
-        return;
-      }
+          const currentPage =
+            window.location.pathname
+              .split("/")
+              .pop() ||
+            DASHBOARD_PAGE;
 
-      resolve(user);
-    });
+          const returnTo =
+            encodeURIComponent(
+              currentPage
+            );
+
+          window.location.replace(
+            `${LOGIN_PAGE}?redirect=${returnTo}`
+          );
+
+          return;
+        }
+
+
+        if (isAdminUser(user)) {
+
+          window.location.replace(
+            "../../admin.html"
+          );
+
+          return;
+        }
+
+
+        resolve(user);
+
+      });
+
   });
 }
+
 
 /**
  * Used by login/register/forgot-password pages.
  *
  * If already authenticated as a customer:
+ *
+ *   → go to the requested redirect page
+ *     when ?redirect=... is present.
+ *
+ * Otherwise:
+ *
  *   → go to customer dashboard.
  *
  * If authenticated as admin:
@@ -84,20 +145,42 @@ export function requireAuth() {
  */
 export function redirectIfAuthenticated() {
   return new Promise((resolve) => {
-    const unsubscribe = onAuthChange((user) => {
-      unsubscribe();
 
-      if (!user) {
-        resolve(null);
-        return;
-      }
+    const unsubscribe =
+      onAuthChange((user) => {
 
-      if (isAdminUser(user)) {
-        window.location.replace("../../admin.html");
-        return;
-      }
+        unsubscribe();
 
-      window.location.replace(DASHBOARD_PAGE);
-    });
+
+        if (!user) {
+
+          resolve(null);
+
+          return;
+        }
+
+
+        if (isAdminUser(user)) {
+
+          window.location.replace(
+            "../../admin.html"
+          );
+
+          return;
+        }
+
+
+        const target =
+          getSafeRedirect(
+            DASHBOARD_PAGE
+          );
+
+
+        window.location.replace(
+          target
+        );
+
+      });
+
   });
 }

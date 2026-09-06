@@ -11,7 +11,14 @@
  *   The current page remains visible and selected.
  *
  * All pages:
- *   Header shows the logo on the left and Logout on the right.
+ *   Header shows the logo on the left.
+ *
+ * Logged-in users:
+ *   Header shows Logout on the right.
+ *
+ * Guest users:
+ *   Header shows Login on the right.
+ *   Guest navigation contains only Explore Menu + Cart + Login.
  *
  * Logout:
  *   Shows a small custom confirmation popup before signing out.
@@ -126,6 +133,44 @@ const LOGOUT_ICON = `
     <path d="M21 12H9"></path>
   </svg>
 `;
+
+
+const LOGIN_ICON = `
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M9 4h10v16H9"></path>
+    <path d="M13 12H3"></path>
+    <path d="m7 8-4 4 4 4"></path>
+  </svg>
+`;
+
+
+/* -----------------------------------------------------------------------
+   Login markup
+   ----------------------------------------------------------------------- */
+
+function loginMarkup() {
+
+  return `
+    <a
+      class="nav-link nav-link--login"
+      href="login.html"
+      data-nav-link="login"
+    >
+
+      <span
+        class="nav-link__icon"
+        aria-hidden="true"
+      >
+        ${LOGIN_ICON}
+      </span>
+
+      <span class="nav-link__label">
+        Login
+      </span>
+
+    </a>
+  `;
+}
 
 
 /* -----------------------------------------------------------------------
@@ -698,7 +743,7 @@ function bindLogout(id) {
    Render navigation
    ----------------------------------------------------------------------- */
 
-export function renderNav(activeKey) {
+export function renderNav(activeKey, options = {}) {
 
   const mount =
     document.getElementById(
@@ -710,12 +755,34 @@ export function renderNav(activeKey) {
   }
 
 
+  const isGuest =
+    options.guest === true;
+
+
   const isDashboard =
     activeKey === "dashboard";
 
 
+  /*
+   * Guest users can browse only the
+   * Explore Menu and Cart sections.
+   *
+   * Favorites, Orders, Profile and
+   * Dashboard remain account-only.
+   */
+
+  const visibleNavItems =
+    isGuest
+      ? NAV_ITEMS.filter(
+          (item) =>
+            item.key === "menu" ||
+            item.key === "cart"
+        )
+      : NAV_ITEMS;
+
+
   const linksHtml =
-    NAV_ITEMS
+    visibleNavItems
       .map((item) => {
 
         const isActive =
@@ -787,8 +854,8 @@ export function renderNav(activeKey) {
 
         <a
           class="topnav__brand"
-          href="dashboard.html"
-          aria-label="Charroti Kitchen Dashboard"
+          href="${isGuest ? "index.html" : "dashboard.html"}"
+          aria-label="Charroti Kitchen"
         >
 
           <img
@@ -800,15 +867,19 @@ export function renderNav(activeKey) {
         </a>
 
 
-        <!-- Universal mobile logout -->
+        <!-- Universal mobile logout / login -->
 
         <div
           class="topnav__mobile-logout"
         >
 
-          ${logoutMarkup(
-            "mobile-logout-link"
-          )}
+          ${
+            isGuest
+              ? loginMarkup()
+              : logoutMarkup(
+                  "mobile-logout-link"
+                )
+          }
 
         </div>
 
@@ -837,9 +908,13 @@ export function renderNav(activeKey) {
 
           ${linksHtml}
 
-          ${logoutMarkup(
-            "nav-logout-link"
-          )}
+          ${
+            isGuest
+              ? loginMarkup()
+              : logoutMarkup(
+                  "nav-logout-link"
+                )
+          }
 
         </div>
 
@@ -890,13 +965,22 @@ export function renderNav(activeKey) {
     );
 
 
-  bindLogout(
-    "nav-logout-link"
-  );
+  /*
+   * Logout is available only for
+   * authenticated customers.
+   */
+
+  if (!isGuest) {
+
+    bindLogout(
+      "nav-logout-link"
+    );
 
 
-  bindLogout(
-    "mobile-logout-link"
-  );
+    bindLogout(
+      "mobile-logout-link"
+    );
+
+  }
 
 }
