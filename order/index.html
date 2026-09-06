@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Charroti Kitchen — Ordering</title>
+  <link rel="stylesheet" href="css/order-base.css" />
+  <link rel="stylesheet" href="css/auth.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+  <div class="auth-shell">
+    <div class="state-panel state-panel--loading">
+      <span class="spinner" aria-hidden="true"></span>
+      <p>Loading Charroti Kitchen...</p>
+    </div>
+  </div>
+
+  <script type="module">
+    import { onAuthChange } from "./js/auth.js";
+
+    // This page is the single entry point customers land on after
+    // clicking "ORDER NOW" on the main marketing website. It never
+    // renders its own UI — it just decides where to send the customer
+    // based on whether they already have a session.
+    onAuthChange((user) => {
+      window.location.replace(user ? "dashboard.html" : "login.html");
+    });
+  </script>
+</body>
+</html>

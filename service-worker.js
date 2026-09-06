@@ -34,6 +34,13 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
+
+  // Never try to cache POST/PUT/DELETE/PATCH requests.
+  // Firebase Authentication and other APIs use these methods.
+  if (event.request.method !== "GET") {
+    return;
+  }
+
   event.respondWith(
     fetch(event.request)
       .then((response) => {

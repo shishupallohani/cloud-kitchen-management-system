@@ -1,0 +1,131 @@
+/* =========================================================================
+   responsive.css — mobile-first breakpoint overrides.
+   Loaded LAST on every page so it can override component styles.
+   Tested against: 320, 375, 425, 768, 1024, 1440.
+   ========================================================================= */
+
+/* Prevent horizontal scroll on any viewport. */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* ---------- ≤ 768px : tablets / large phones ---------- */
+@media (max-width: 768px) {
+  .cart-layout,
+  .checkout-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .cart-summary {
+    position: static;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .order-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page-container {
+    padding: var(--space-4) var(--space-3) var(--space-6);
+  }
+}
+
+/* ---------- ≤ 640px : nav becomes a collapsible drawer ---------- */
+@media (max-width: 640px) {
+  .topnav__menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .topnav__links {
+    position: fixed;
+    top: var(--nav-height);
+    left: 0;
+    right: 0;
+    background: var(--color-surface);
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: var(--shadow-md);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease;
+  }
+
+  .topnav__links--open {
+    max-height: 420px;
+  }
+
+  .topnav__links .nav-link {
+    padding: 14px var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+    border-left: 3px solid transparent;
+  }
+
+  .topnav__links .nav-link--active {
+    border-left-color: var(--color-primary);
+    background: var(--color-primary-light);
+  }
+
+  .nav-cart-badge {
+    top: 12px;
+    right: var(--space-4);
+    left: auto;
+  }
+
+  .dashboard-hero {
+    padding: var(--space-5);
+  }
+
+  .dish-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: var(--space-3);
+  }
+
+  .status-tracker {
+    overflow-x: auto;
+  }
+}
+
+/* ---------- ≤ 480px : small phones ---------- */
+@media (max-width: 480px) {
+  .auth-card {
+    padding: var(--space-5) var(--space-4);
+  }
+
+  .dish-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .cart-item,
+  .favorite-row {
+    flex-wrap: wrap;
+  }
+
+  .cart-item__line-total {
+    text-align: left;
+    margin-left: 84px;
+  }
+
+  .order-card__meta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ---------- ≥ 1024px : add breathing room on larger desktops ---------- */
+@media (min-width: 1024px) {
+  .page-container {
+    padding-top: var(--space-6);
+  }
+}

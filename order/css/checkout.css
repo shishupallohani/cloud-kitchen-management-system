@@ -1,0 +1,116 @@
+/* =========================================================================
+   checkout.css
+   ========================================================================= */
+
+.checkout-layout {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.checkout-section {
+  margin-bottom: var(--space-5);
+}
+
+.checkout-section__title {
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin-bottom: var(--space-3);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.payment-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.payment-option {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.payment-option--selected {
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+
+.payment-option input {
+  width: auto;
+  margin-top: 3px;
+}
+
+.payment-option__label {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.payment-option__desc {
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+  margin-top: 2px;
+}
+
+.upi-panel {
+  margin-top: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  text-align: center;
+  display: none;
+}
+
+.upi-panel--visible {
+  display: block;
+}
+
+.upi-panel img {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+  margin: 0 auto var(--space-3);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  border: 1px solid var(--color-border);
+}
+
+.upi-panel__id {
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: var(--space-1);
+}
+
+.upi-panel__hint {
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+}
+
+.order-review-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.88rem;
+  padding: var(--space-2) 0;
+  border-bottom: 1px dashed var(--color-border);
+}
+
+.order-review-item:last-child {
+  border-bottom: none;
+}
+
+.delivery-info-view p {
+  font-size: 0.9rem;
+  margin-bottom: var(--space-1);
+  color: var(--color-text-muted);
+}
+
+.delivery-info-view strong {
+  color: var(--color-text);
+}

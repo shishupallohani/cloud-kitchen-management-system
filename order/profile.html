@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Profile — Charroti Kitchen</title>
+  <link rel="stylesheet" href="css/order-base.css" />
+  <link rel="stylesheet" href="css/auth.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <div id="app-topnav"></div>
+
+    <main class="page-container" style="max-width: 640px;">
+      <div class="page-header">
+        <h1>My Profile</h1>
+        <p>Manage your account details.</p>
+      </div>
+
+      <div id="profile-loading" class="state-panel state-panel--loading">
+        <span class="spinner" aria-hidden="true"></span>
+        <p>Loading profile...</p>
+      </div>
+
+      <div class="card card--padded" id="profile-card" style="display:none;">
+        <div id="form-message" class="auth-form-message"></div>
+
+        <form id="profile-form" novalidate>
+          <div class="form-group">
+            <label for="profile-email">Email</label>
+            <input type="email" id="profile-email" disabled />
+          </div>
+          <div class="form-group">
+            <label for="profile-name">Full Name</label>
+            <input type="text" id="profile-name" required />
+          </div>
+          <div class="form-group">
+            <label for="profile-mobile">Mobile Number</label>
+            <input type="tel" id="profile-mobile" required />
+          </div>
+          <div class="form-group">
+            <label for="profile-address">Address</label>
+            <textarea id="profile-address" required></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="profile-landmark">Landmark</label>
+              <input type="text" id="profile-landmark" />
+            </div>
+            <div class="form-group">
+              <label for="profile-city">City</label>
+              <input type="text" id="profile-city" required />
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn--primary btn--block" id="profile-save-btn">Save Changes</button>
+        </form>
+
+        <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--space-5) 0;" />
+
+        <button type="button" class="btn btn--secondary btn--block" id="profile-reset-password-btn">
+          Send Password Reset Email
+        </button>
+      </div>
+    </main>
+
+    <p class="footer-note">Charroti Kitchen Ordering</p>
+  </div>
+
+  <script type="module" src="js/pages/profile.js"></script>
+</body>
+</html>

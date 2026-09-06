@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Charroti Kitchen</title>
+  <link rel="stylesheet" href="css/order-base.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <div id="app-topnav"></div>
+
+    <main class="page-container">
+      <section class="dashboard-hero">
+        <div class="dashboard-hero__greeting" id="dashboard-greeting">Welcome back!</div>
+        <div class="dashboard-hero__sub">Craving something delicious? Explore today's menu.</div>
+        <a href="menu.html" class="btn btn--primary">Explore Menu</a>
+      </section>
+
+      <div class="dashboard-grid">
+        <a class="card dashboard-tile" href="menu.html">
+          <span class="dashboard-tile__icon">🍽️</span>
+          <span class="dashboard-tile__label">Explore Menu</span>
+          <span class="dashboard-tile__desc">Browse today's dishes</span>
+        </a>
+        <a class="card dashboard-tile" href="favorites.html">
+          <span class="dashboard-tile__icon">❤️</span>
+          <span class="dashboard-tile__label">Favorites</span>
+          <span class="dashboard-tile__desc">Your saved dishes</span>
+        </a>
+        <a class="card dashboard-tile" href="cart.html">
+          <span class="dashboard-tile__icon">🛒</span>
+          <span class="dashboard-tile__label">Cart</span>
+          <span class="dashboard-tile__desc">Review before checkout</span>
+          <span class="dashboard-tile__badge" id="dashboard-cart-badge" style="display:none;">0</span>
+        </a>
+        <a class="card dashboard-tile" href="orders.html">
+          <span class="dashboard-tile__icon">📦</span>
+          <span class="dashboard-tile__label">My Orders</span>
+          <span class="dashboard-tile__desc">Track past & current orders</span>
+        </a>
+        <a class="card dashboard-tile" href="profile.html">
+          <span class="dashboard-tile__icon">👤</span>
+          <span class="dashboard-tile__label">Profile</span>
+          <span class="dashboard-tile__desc">Manage your details</span>
+        </a>
+      </div>
+    </main>
+
+    <p class="footer-note">Charroti Kitchen Ordering</p>
+  </div>
+
+  <script type="module" src="js/pages/dashboard.js"></script>
+</body>
+</html>

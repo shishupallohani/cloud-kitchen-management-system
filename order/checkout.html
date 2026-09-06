@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout — Charroti Kitchen</title>
+  <link rel="stylesheet" href="css/order-base.css" />
+  <link rel="stylesheet" href="css/checkout.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <div id="app-topnav"></div>
+
+    <main class="page-container">
+      <div class="page-header">
+        <h1>Checkout</h1>
+        <p>Confirm your delivery details and payment method.</p>
+      </div>
+
+      <div id="checkout-loading" class="state-panel state-panel--loading">
+        <span class="spinner" aria-hidden="true"></span>
+        <p>Loading checkout...</p>
+      </div>
+
+      <div class="checkout-layout" id="checkout-layout" style="display:none;">
+        <div>
+          <section class="checkout-section card card--padded">
+            <div class="checkout-section__title">
+              Delivery Information
+              <button type="button" class="btn btn--ghost btn--sm" id="edit-delivery-btn">Edit</button>
+            </div>
+
+            <div id="delivery-info-view" class="delivery-info-view"></div>
+
+            <form id="delivery-info-form" style="display:none;" novalidate>
+              <div class="form-group">
+                <label for="checkout-name">Full Name</label>
+                <input type="text" id="checkout-name" required />
+              </div>
+              <div class="form-group">
+                <label for="checkout-mobile">Mobile Number</label>
+                <input type="tel" id="checkout-mobile" required />
+              </div>
+              <div class="form-group">
+                <label for="checkout-address">Address</label>
+                <textarea id="checkout-address" required></textarea>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="checkout-landmark">Landmark</label>
+                  <input type="text" id="checkout-landmark" />
+                </div>
+                <div class="form-group">
+                  <label for="checkout-city">City</label>
+                  <input type="text" id="checkout-city" required />
+                </div>
+              </div>
+              <button type="button" class="btn btn--secondary" id="save-delivery-btn">Save Details</button>
+            </form>
+          </section>
+
+          <section class="checkout-section card card--padded">
+            <div class="checkout-section__title">Payment Method</div>
+            <div class="payment-options" id="payment-options"></div>
+
+            <div class="upi-panel" id="upi-panel">
+              <img id="upi-qr-image" alt="UPI QR Code" />
+              <div class="upi-panel__id" id="upi-id-text"></div>
+              <div class="upi-panel__hint">Scan with any UPI app, then place your order. We'll confirm payment shortly after.</div>
+            </div>
+          </section>
+        </div>
+
+        <div>
+          <section class="card card--padded">
+            <div class="checkout-section__title">Order Summary</div>
+            <div id="order-review-items"></div>
+            <div class="summary-row" style="margin-top: var(--space-4);">
+              <span>Subtotal</span>
+              <span id="checkout-subtotal">₹0</span>
+            </div>
+            <div class="summary-row">
+              <span>Delivery Charge</span>
+              <span id="checkout-delivery">₹0</span>
+            </div>
+            <div class="summary-row summary-row--total">
+              <span>Total Amount</span>
+              <span id="checkout-total">₹0</span>
+            </div>
+            <button type="button" class="btn btn--primary btn--block" id="place-order-btn" style="margin-top: var(--space-4);">
+              Place Order
+            </button>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <p class="footer-note">Charroti Kitchen Ordering</p>
+  </div>
+
+  <script type="module" src="js/pages/checkout.js"></script>
+</body>
+</html>

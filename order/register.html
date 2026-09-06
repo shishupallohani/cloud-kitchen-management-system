@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Account — Charroti Kitchen</title>
+  <link rel="stylesheet" href="css/order-base.css" />
+  <link rel="stylesheet" href="css/auth.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+  <div class="auth-shell">
+    <div class="card auth-card" style="max-width: 520px;">
+      <div class="auth-brand">
+        <div class="auth-brand__logo">🍛</div>
+        <div class="auth-brand__name">Charroti Kitchen</div>
+        <div class="auth-brand__tagline">Fresh, home-style meals delivered.</div>
+      </div>
+
+      <h2>Create your account</h2>
+      <p class="auth-subtitle">It only takes a minute.</p>
+
+      <div id="form-message" class="auth-form-message"></div>
+
+      <form id="register-form" novalidate>
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" name="name" autocomplete="name" required />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" autocomplete="email" required />
+          </div>
+          <div class="form-group">
+            <label for="mobile">Mobile Number</label>
+            <input type="tel" id="mobile" name="mobile" autocomplete="tel" placeholder="10-digit number" required />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" autocomplete="new-password" required />
+          </div>
+          <div class="form-group">
+            <label for="confirmPassword">Confirm Password</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" autocomplete="new-password" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="address">Address</label>
+          <textarea id="address" name="address" required></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="landmark">Landmark (optional)</label>
+            <input type="text" id="landmark" name="landmark" />
+          </div>
+          <div class="form-group">
+            <label for="city">City</label>
+            <input type="text" id="city" name="city" required />
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn--primary btn--block" id="register-submit-btn">Create Account</button>
+      </form>
+
+      <p class="auth-footer-text">
+        Already have an account? <a href="login.html">Log In</a>
+      </p>
+    </div>
+  </div>
+
+  <script type="module" src="js/pages/register.js"></script>
+</body>
+</html>

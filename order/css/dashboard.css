@@ -1,0 +1,74 @@
+/* =========================================================================
+   dashboard.css — customer dashboard home screen
+   ========================================================================= */
+
+.dashboard-hero {
+  background: var(--color-secondary);
+  color: #fff;
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: var(--space-6);
+}
+
+.dashboard-hero__greeting {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: var(--space-1);
+}
+
+.dashboard-hero__sub {
+  opacity: 0.85;
+  font-size: 0.92rem;
+}
+
+.dashboard-hero .btn {
+  margin-top: var(--space-4);
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-4);
+}
+
+.dashboard-tile {
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.dashboard-tile:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.dashboard-tile__icon {
+  font-size: 1.7rem;
+}
+
+.dashboard-tile__label {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.dashboard-tile__desc {
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+}
+
+.dashboard-tile__badge {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 9px;
+  border-radius: 999px;
+}

@@ -1,0 +1,154 @@
+/* =========================================================================
+   orders.css — order history + order details + status tracker
+   ========================================================================= */
+
+.order-card {
+  padding: var(--space-4) var(--space-5);
+  margin-bottom: var(--space-3);
+}
+
+.order-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-3);
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.order-card__id {
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+.order-card__date {
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+}
+
+.order-card__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.order-card__total {
+  font-weight: 700;
+  color: var(--color-primary-dark);
+}
+
+.order-card__badges {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+/* ---------- Status tracker ---------- */
+
+.status-tracker {
+  display: flex;
+  align-items: flex-start;
+  margin: var(--space-5) 0;
+}
+
+.status-step {
+  flex: 1;
+  text-align: center;
+  position: relative;
+}
+
+.status-step__dot {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--color-border);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--space-2);
+  font-size: 0.8rem;
+  font-weight: 700;
+  position: relative;
+  z-index: 2;
+}
+
+.status-step__line {
+  position: absolute;
+  top: 13px;
+  left: -50%;
+  width: 100%;
+  height: 3px;
+  background: var(--color-border);
+  z-index: 1;
+}
+
+.status-step:first-child .status-step__line {
+  display: none;
+}
+
+.status-step__label {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+.status-step--done .status-step__dot {
+  background: var(--color-success);
+}
+
+.status-step--done .status-step__line {
+  background: var(--color-success);
+}
+
+.status-step--current .status-step__dot {
+  background: var(--color-primary);
+}
+
+.status-step--current .status-step__label {
+  color: var(--color-primary-dark);
+}
+
+.status-tracker--cancelled .status-step__dot {
+  background: var(--color-error) !important;
+}
+
+.status-tracker--cancelled .status-step__line {
+  background: var(--color-error) !important;
+}
+
+/* ---------- Order details ---------- */
+
+.order-details-item {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-2) 0;
+  font-size: 0.9rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.order-details-item:last-child {
+  border-bottom: none;
+}
+
+.order-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+  font-size: 0.88rem;
+}
+
+.order-info-grid dt {
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 2px;
+}
+
+.order-info-grid dd {
+  margin: 0 0 var(--space-3) 0;
+  font-weight: 600;
+}

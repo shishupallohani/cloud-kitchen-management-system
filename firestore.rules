@@ -40,6 +40,16 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    match /users/{uid} {
+      allow create: if request.auth != null
+                && request.auth.uid == uid;
+
+      allow read, update: if request.auth != null
+                       && request.auth.uid == uid;
+
+      allow delete: if false;
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }
