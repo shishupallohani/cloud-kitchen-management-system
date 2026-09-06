@@ -27,7 +27,7 @@ export const APP_CONFIG = {
 
   // Payment
   upi: {
-    upiId: "charrotikitchen@upi",
+    upiId: "7903481464-2@ybl",
     payeeName: "Charroti Kitchen",
     // Place a real QR image at assets/images/upi-qr.png, or leave this
     // pointing at the placeholder and it will be used to build a QR
