@@ -37,7 +37,13 @@ export function renderNav(activeKey) {
   mount.innerHTML = `
     <nav class="topnav">
       <div class="topnav__inner">
-        <a class="topnav__brand" href="dashboard.html">🍛 ${APP_CONFIG.kitchenName}</a>
+        <a class="topnav__brand" href="dashboard.html">
+  <img
+    src="assets/images/favicon.png"
+    alt="Charroti Kitchen"
+    class="topnav__logo"
+  />
+</a>
         <button type="button" class="topnav__menu-toggle" id="nav-menu-toggle" aria-label="Toggle menu">☰</button>
         <div class="topnav__links" id="nav-links">
           ${linksHtml}
