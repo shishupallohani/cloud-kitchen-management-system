@@ -4,48 +4,133 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login — Charroti Kitchen</title>
+
   <link rel="stylesheet" href="css/order-base.css" />
   <link rel="stylesheet" href="css/auth.css" />
   <link rel="stylesheet" href="css/responsive.css" />
 </head>
+
 <body>
+
   <div class="auth-shell">
+
     <div class="card auth-card">
+
       <div class="auth-brand">
-        <div class="auth-brand__logo">🍛</div>
-        <div class="auth-brand__name">Charroti Kitchen</div>
-        <div class="auth-brand__tagline">Fresh, home-style meals delivered.</div>
+
+        <img
+          src="assets/images/favicon.png"
+          alt="Charroti Kitchen"
+          class="auth-brand__logo"
+          style="
+            width: 130px;
+            height: 130px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+          "
+        />
+
+        <div class="auth-brand__tagline">
+          Fresh, home-style meals delivered.
+        </div>
+
       </div>
 
-      <h2>Welcome back</h2>
-      <p class="auth-subtitle">Log in to continue your order.</p>
 
-      <div id="form-message" class="auth-form-message"></div>
+      <h2>Welcome to Charroti Kitchen</h2>
 
-      <form id="login-form" novalidate>
+      <p class="auth-subtitle">
+        Log in to continue your delicious journey.
+      </p>
+
+
+      <div
+        id="form-message"
+        class="auth-form-message"
+      ></div>
+
+
+      <form
+        id="login-form"
+        novalidate
+      >
+
         <div class="form-group">
-          <label for="email">Email</label>
-          <input type="email" id="email" name="email" autocomplete="email" required />
+
+          <label for="email">
+            Email
+          </label>
+
+          <input
+            type="email"
+            id="email"
+            name="email"
+            autocomplete="email"
+            required
+          />
+
         </div>
+
+
         <div class="form-group">
-          <label for="password">Password</label>
-          <input type="password" id="password" name="password" autocomplete="current-password" required />
+
+          <label for="password">
+            Password
+          </label>
+
+          <input
+            type="password"
+            id="password"
+            name="password"
+            autocomplete="current-password"
+            required
+          />
+
         </div>
+
 
         <div class="auth-links-row">
+
           <span></span>
-          <a href="forgot-password.html">Forgot Password?</a>
+
+          <a href="forgot-password.html">
+            Forgot Password?
+          </a>
+
         </div>
 
-        <button type="submit" class="btn btn--primary btn--block" id="login-submit-btn">Log In</button>
+
+        <button
+          type="submit"
+          class="btn btn--primary btn--block"
+          id="login-submit-btn"
+        >
+          Log In
+        </button>
+
       </form>
 
+
       <p class="auth-footer-text">
-        New to Charroti Kitchen? <a href="register.html">Create Account</a>
+
+        New to Charroti Kitchen?
+
+        <a href="register.html">
+          Create Account
+        </a>
+
       </p>
+
     </div>
+
   </div>
 
-  <script type="module" src="js/pages/login.js"></script>
+
+  <script
+    type="module"
+    src="js/pages/login.js"
+  ></script>
+
 </body>
 </html>
