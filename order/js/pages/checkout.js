@@ -223,9 +223,17 @@ document.getElementById("place-order-btn").addEventListener("click", async (even
     showSuccess("Order placed successfully!");
     window.location.href = `order-details.html?orderId=${encodeURIComponent(order.orderId)}`;
   } catch (error) {
-    showError("We couldn't place your order. Please try again.");
-    restore();
-  }
+  console.error("PLACE ORDER ERROR:", error);
+  console.error("ERROR CODE:", error?.code);
+  console.error("ERROR MESSAGE:", error?.message);
+
+  showError(
+    error?.message ||
+    "We couldn't place your order. Please try again."
+  );
+
+  restore();
+}
 });
 
 init();

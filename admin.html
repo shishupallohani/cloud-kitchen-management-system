@@ -31,6 +31,7 @@
   <div id="admin-app" class="admin-shell" hidden>
     <nav class="admin-tabs" aria-label="Admin sections">
       <button class="admin-tab is-active" data-tab="overview">Dashboard</button>
+      <button class="admin-tab" data-tab="orders">Orders</button>
       <button class="admin-tab" data-tab="live">Live Thali</button>
       <button class="admin-tab" data-tab="menu">Menu Management</button>
       <button class="admin-tab" data-tab="theme">Website Theme</button>
@@ -53,6 +54,32 @@
       <h2 class="admin-subhead">Upcoming Menus (next 7 days)</h2>
       <ul id="upcoming-list" class="upcoming-list"></ul>
     </section>
+
+    <!-- ============ ORDERS ============ -->
+<section class="admin-panel" id="panel-orders">
+
+  <div class="admin-section-header">
+    <div>
+      <h1>Orders</h1>
+      <p>Manage customer orders and update their status.</p>
+    </div>
+
+    <button
+      type="button"
+      id="refresh-orders-btn"
+      class="btn btn--ghost btn--small"
+    >
+      Refresh
+    </button>
+  </div>
+
+  <p id="orders-status" class="admin-status" role="status"></p>
+
+  <div id="orders-list" class="orders-admin-list">
+    <p>Loading orders...</p>
+  </div>
+
+</section>
 
     <!-- ============ LIVE THALI (persistent, date-independent) ============ -->
     <section class="admin-panel" id="panel-live">

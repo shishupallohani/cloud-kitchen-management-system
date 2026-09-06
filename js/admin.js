@@ -26,8 +26,9 @@ import {
   setDoc,
   deleteDoc,
   addDoc,
+  updateDoc,
   writeBatch,
-  serverTimestamp,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
 // ---------------------------------------------------------------------
@@ -119,9 +120,11 @@ let booted = false;
 function bootDashboard() {
   if (booted) return;
   booted = true;
+
   initOverview();
   initLiveMenuEditor();
   initMenuEditor();
+  initOrders();
   initCustomers();
   initReviewStatus();
   initSiteThemeControl();
@@ -574,6 +577,415 @@ async function initCustomers() {
       true
     );
   }
+}
+
+
+// ---------------------------------------------------------------------
+// Orders Management
+// ---------------------------------------------------------------------
+
+const ordersList = document.getElementById("orders-list");
+const ordersStatus = document.getElementById("orders-status");
+const refreshOrdersBtn = document.getElementById("refresh-orders-btn");
+
+const ADMIN_ORDER_STATUSES = [
+  "Pending",
+  "Confirmed",
+  "Preparing",
+  "Ready",
+  "Delivered",
+  "Cancelled",
+];
+
+const ADMIN_PAYMENT_STATUSES = [
+  "Pending",
+  "Awaiting Confirmation",
+  "Paid",
+  "Failed",
+];
+
+function formatOrderDate(value) {
+  if (!value) return "—";
+
+  try {
+    let date;
+
+    if (typeof value?.toDate === "function") {
+      date = value.toDate();
+    } else {
+      date = new Date(value);
+    }
+
+    if (Number.isNaN(date.getTime())) {
+      return "—";
+    }
+
+    return date.toLocaleString("en-IN", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  } catch {
+    return "—";
+  }
+}
+
+function escapeOrderHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function orderStatusClass(status) {
+  return String(status || "")
+    .toLowerCase()
+    .replace(/\s+/g, "-");
+}
+
+function paymentStatusClass(status) {
+  return String(status || "")
+    .toLowerCase()
+    .replace(/\s+/g, "-");
+}
+
+function renderStatusOptions(options, selectedValue) {
+  return options
+    .map(
+      (option) => `
+        <option
+          value="${escapeOrderHtml(option)}"
+          ${option === selectedValue ? "selected" : ""}
+        >
+          ${escapeOrderHtml(option)}
+        </option>
+      `
+    )
+    .join("");
+}
+
+function renderAdminOrder(order) {
+  const orderId = order.orderId || "Unknown";
+  const customerName = order.customerName || "Customer";
+  const mobile = order.mobile || "—";
+  const address = order.address || "—";
+  const city = order.city || "";
+  const landmark = order.landmark || "";
+
+  const items = Array.isArray(order.items)
+    ? order.items
+    : [];
+
+  const itemsHtml = items
+    .map((item) => {
+      const quantity = Number(item.quantity) || 0;
+      const price = Number(item.price) || 0;
+
+      return `
+        <div class="admin-order-item">
+          <span>
+            ${escapeOrderHtml(item.name || "Item")}
+            × ${quantity}
+          </span>
+
+          <strong>
+            ₹${(price * quantity).toFixed(0)}
+          </strong>
+        </div>
+      `;
+    })
+    .join("");
+
+  return `
+    <article class="admin-order-card">
+
+      <div class="admin-order-card__top">
+
+        <div>
+          <h2>
+            Order #${escapeOrderHtml(orderId)}
+          </h2>
+
+          <p class="admin-order-card__date">
+            ${escapeOrderHtml(formatOrderDate(order.createdAt))}
+          </p>
+        </div>
+
+        <div class="admin-order-card__badges">
+
+          <span
+            class="admin-order-badge admin-order-badge--${escapeOrderHtml(
+              orderStatusClass(order.orderStatus)
+            )}"
+          >
+            ${escapeOrderHtml(order.orderStatus || "Pending")}
+          </span>
+
+          <span
+            class="admin-order-badge admin-order-badge--${escapeOrderHtml(
+              paymentStatusClass(order.paymentStatus)
+            )}"
+          >
+            ${escapeOrderHtml(order.paymentStatus || "Pending")}
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div class="admin-order-card__customer">
+
+        <div>
+          <span class="admin-order-label">Customer</span>
+          <strong>${escapeOrderHtml(customerName)}</strong>
+        </div>
+
+        <div>
+          <span class="admin-order-label">Mobile</span>
+          <strong>${escapeOrderHtml(mobile)}</strong>
+        </div>
+
+        <div class="admin-order-address">
+          <span class="admin-order-label">Delivery Address</span>
+
+          <strong>
+            ${escapeOrderHtml(address)}
+            ${landmark ? `, ${escapeOrderHtml(landmark)}` : ""}
+            ${city ? `, ${escapeOrderHtml(city)}` : ""}
+          </strong>
+        </div>
+
+      </div>
+
+
+      <div class="admin-order-card__items">
+
+        <h3>Items</h3>
+
+        ${itemsHtml || "<p>No items found.</p>"}
+
+      </div>
+
+
+      <div class="admin-order-card__summary">
+
+        <div>
+          <span>Subtotal</span>
+          <strong>₹${Number(order.subtotal || 0).toFixed(0)}</strong>
+        </div>
+
+        <div>
+          <span>Delivery</span>
+          <strong>₹${Number(order.deliveryCharge || 0).toFixed(0)}</strong>
+        </div>
+
+        <div class="admin-order-total">
+          <span>Total</span>
+          <strong>₹${Number(order.totalAmount || 0).toFixed(0)}</strong>
+        </div>
+
+      </div>
+
+
+      <div class="admin-order-card__payment">
+
+        <div>
+          <span class="admin-order-label">Payment Method</span>
+          <strong>${escapeOrderHtml(order.paymentMethod || "—")}</strong>
+        </div>
+
+        <div>
+          <span class="admin-order-label">Customer Email</span>
+          <strong>${escapeOrderHtml(order.email || "—")}</strong>
+        </div>
+
+      </div>
+
+
+      <div class="admin-order-card__actions">
+
+        <div class="admin-order-control">
+
+          <label for="order-status-${escapeOrderHtml(orderId)}">
+            Order Status
+          </label>
+
+          <select
+            id="order-status-${escapeOrderHtml(orderId)}"
+            class="field-input"
+            data-order-status="${escapeOrderHtml(orderId)}"
+          >
+            ${renderStatusOptions(
+              ADMIN_ORDER_STATUSES,
+              order.orderStatus || "Pending"
+            )}
+          </select>
+
+        </div>
+
+
+        <div class="admin-order-control">
+
+          <label for="payment-status-${escapeOrderHtml(orderId)}">
+            Payment Status
+          </label>
+
+          <select
+            id="payment-status-${escapeOrderHtml(orderId)}"
+            class="field-input"
+            data-payment-status="${escapeOrderHtml(orderId)}"
+          >
+            ${renderStatusOptions(
+              ADMIN_PAYMENT_STATUSES,
+              order.paymentStatus || "Pending"
+            )}
+          </select>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="btn btn--primary admin-order-save"
+          data-order-id="${escapeOrderHtml(orderId)}"
+        >
+          Save Changes
+        </button>
+
+      </div>
+
+    </article>
+  `;
+}
+
+async function updateAdminOrder(orderId) {
+  const statusSelect = document.querySelector(
+    `[data-order-status="${CSS.escape(orderId)}"]`
+  );
+
+  const paymentSelect = document.querySelector(
+    `[data-payment-status="${CSS.escape(orderId)}"]`
+  );
+
+  if (!statusSelect || !paymentSelect) {
+    showToast("Order controls not found.", true);
+    return;
+  }
+
+  const newOrderStatus = statusSelect.value;
+  const newPaymentStatus = paymentSelect.value;
+
+  try {
+    await updateDoc(
+      doc(db, "orders", orderId),
+      {
+        orderStatus: newOrderStatus,
+        paymentStatus: newPaymentStatus,
+        updatedAt: serverTimestamp(),
+      }
+    );
+
+    showToast(`Order #${orderId} updated successfully.`);
+
+    await initOrders();
+  } catch (error) {
+    console.error("Failed to update order:", error);
+
+    showToast(
+      "Couldn't update the order. Please try again.",
+      true
+    );
+  }
+}
+
+async function initOrders() {
+  if (!ordersList) return;
+
+  ordersList.innerHTML =
+    "<p>Loading orders...</p>";
+
+  if (ordersStatus) {
+    ordersStatus.textContent = "";
+    ordersStatus.classList.remove("is-error");
+  }
+
+  try {
+    const snapshot = await getDocs(
+      collection(db, "orders")
+    );
+
+    if (snapshot.empty) {
+      ordersList.innerHTML =
+        '<p class="orders-empty">No orders yet.</p>';
+      return;
+    }
+
+    const orders = snapshot.docs
+      .map((orderDoc) => ({
+        ...orderDoc.data(),
+        orderId:
+          orderDoc.data().orderId || orderDoc.id,
+      }))
+      .sort((a, b) => {
+        const dateA =
+          typeof a.createdAt?.toDate === "function"
+            ? a.createdAt.toDate()
+            : new Date(a.createdAt || 0);
+
+        const dateB =
+          typeof b.createdAt?.toDate === "function"
+            ? b.createdAt.toDate()
+            : new Date(b.createdAt || 0);
+
+        return dateB - dateA;
+      });
+
+    ordersList.innerHTML = orders
+      .map(renderAdminOrder)
+      .join("");
+
+    ordersList
+      .querySelectorAll(".admin-order-save")
+      .forEach((button) => {
+        button.addEventListener("click", async () => {
+          const orderId = button.dataset.orderId;
+
+          button.disabled = true;
+          button.textContent = "Saving...";
+
+          try {
+            await updateAdminOrder(orderId);
+          } finally {
+            button.disabled = false;
+            button.textContent = "Save Changes";
+          }
+        });
+      });
+
+  } catch (error) {
+    console.error("Failed to load orders:", error);
+
+    ordersList.innerHTML =
+      '<p class="orders-empty">Couldn\'t load orders.</p>';
+
+    if (ordersStatus) {
+      ordersStatus.textContent =
+        "Couldn't load orders. Please try again.";
+      ordersStatus.classList.add("is-error");
+    }
+  }
+}
+
+if (refreshOrdersBtn) {
+  refreshOrdersBtn.addEventListener(
+    "click",
+    initOrders
+  );
 }
 
 // ---------------------------------------------------------------------

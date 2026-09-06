@@ -52,30 +52,89 @@ service cloud.firestore {
     // ---------------------------------------------------------------------
     // ORDERS: orders/{orderId}
     // ---------------------------------------------------------------------
-    match /orders/{orderId} {
-      // A customer may only read their own orders.
-      allow read: if request.auth != null && request.auth.uid == resource.data.userId;
+// ---------------------------------------------------------------------
+// ORDERS: orders/{orderId}
+// ---------------------------------------------------------------------
+match /orders/{orderId} {
 
-      // A customer may create an order only for themselves, with a
-      // safe/expected initial status. Payment status is allowed to be one
-      // of the two values the app's own payment-service.js ever produces
-      // at creation time.
-      allow create: if request.auth != null
-                    && request.auth.uid == request.resource.data.userId
-                    && request.resource.data.orderStatus == "Pending"
-                    && request.resource.data.paymentStatus in ["Pending", "Awaiting Confirmation"]
-                    && request.resource.data.items is list
-                    && request.resource.data.items.size() > 0
-                    && request.resource.data.totalAmount is number
-                    && request.resource.data.totalAmount > 0;
+  // Customer can read ONLY their own orders.
+  allow read: if request.auth != null
+              && resource.data.userId == request.auth.uid;
 
-      // Customers can NEVER update or delete an order once placed —
-      // status changes are reserved for a future admin tool using the
-      // Admin SDK, which is not subject to these rules.
-      allow update: if false;
-      allow delete: if false;
-    }
 
+  // Customer can create ONLY their own order.
+  //
+  // Important:
+  // - orderStatus must start as Pending
+  // - paymentStatus must be a valid initial status
+  // - paymentMethod must be COD or UPI
+  // - orderId in document must match the Firestore document ID
+  // - basic customer/order fields must have the expected types
+  // - amount fields must be positive/non-negative numbers
+  //
+  allow create: if request.auth != null
+
+                // Order belongs to the logged-in customer
+                && request.resource.data.userId == request.auth.uid
+
+                // Document ID must match stored orderId
+                && request.resource.data.orderId == orderId
+
+                // Initial order status
+                && request.resource.data.orderStatus == "Pending"
+
+                // Initial payment status
+                && request.resource.data.paymentStatus
+                   in ["Pending", "Awaiting Confirmation"]
+
+                // Valid payment method
+                && request.resource.data.paymentMethod
+                   in ["COD", "UPI"]
+
+                // Order must contain at least one item
+                && request.resource.data.items is list
+                && request.resource.data.items.size() > 0
+
+                // Amount validation
+                && request.resource.data.subtotal is number
+                && request.resource.data.subtotal >= 0
+
+                && request.resource.data.deliveryCharge is number
+                && request.resource.data.deliveryCharge >= 0
+
+                && request.resource.data.totalAmount is number
+                && request.resource.data.totalAmount > 0
+
+                // Basic customer information
+                && request.resource.data.customerName is string
+                && request.resource.data.email is string
+                && request.resource.data.mobile is string
+                && request.resource.data.address is string
+                && request.resource.data.city is string
+
+                // Payment-method/status consistency
+                && (
+                  (
+                    request.resource.data.paymentMethod == "COD"
+                    && request.resource.data.paymentStatus == "Pending"
+                  )
+                  ||
+                  (
+                    request.resource.data.paymentMethod == "UPI"
+                    && request.resource.data.paymentStatus
+                       == "Awaiting Confirmation"
+                  )
+                );
+
+
+  // Customer can NEVER modify an existing order.
+  //
+  // Admin/back-office will handle status/payment updates later.
+  allow update: if false;
+
+  // Customer can NEVER delete an order.
+  allow delete: if false;
+}
     // ---------------------------------------------------------------------
     // MENU: menu/{dishId}
     // Public read-only. Only trusted back-end/admin contexts should write
