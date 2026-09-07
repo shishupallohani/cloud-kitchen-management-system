@@ -110,48 +110,323 @@
   100% { transform: translateY(-220px) rotate(25deg) scale(1.1); opacity: 0; }
 }
 
-/*
- * Rotating "attractive text + emoji" strip inside the hero card.
- * dashboard.js swaps the text every few seconds and re-triggers the
- * --in animation each time for a smooth continuous 3D flip effect.
- */
-.dashboard-hero__ticker {
-  margin-top: var(--space-3);
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 9px 16px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.16);
-  backdrop-filter: blur(6px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  font-size: 0.88rem;
-  font-weight: 700;
-  color: var(--color-on-hero, #fff);
-  text-shadow: var(--text-shadow-on-hero, 0 1px 3px rgba(0, 0, 0, 0.5));
-  position: relative;
-  z-index: 2;
-  min-height: 1.4em;
+/* =========================================================================
+   The hero card AS a screen — a smart-TV panel playing a looping Charroti
+   ad. Everything below is additive/decorative and reads its colours from
+   the theme variables, so switching the theme in the admin panel still
+   looks correct; nothing here touches auth/cart/nav logic.
+   ========================================================================= */
+
+/* Faint CRT-style scanlines across the whole card, so it visually reads
+   as "a screen" rather than a plain gradient block. */
+.dashboard-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.05) 0px,
+    rgba(255, 255, 255, 0.05) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: 1;
 }
 
-.dashboard-hero__ticker--in {
-  animation: dashboardHeroTickerFlip 0.65s var(--ease-spring) both;
+/* Small blinking "ON AIR" style bug in the corner, like a broadcast
+   channel logo — created once by dashboard.js and left running. */
+.dashboard-hero__live-badge {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-5);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px 4px 8px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(4px);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--color-on-hero, #fff);
+  z-index: 3;
+}
+
+.dashboard-hero__live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-primary) 70%, transparent);
+  animation: dashboardHeroLiveDot 1.6s ease-in-out infinite;
+}
+
+@keyframes dashboardHeroLiveDot {
+  0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-primary) 55%, transparent); opacity: 1; }
+  70%  { box-shadow: 0 0 0 6px transparent; opacity: 0.6; }
+  100% { box-shadow: 0 0 0 0 transparent; opacity: 1; }
+}
+
+/* Bright flash that fires for an instant right as the ad content swaps —
+   the "channel change" moment. Created once, toggled by dashboard.js. */
+.dashboard-hero__flash {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.9), transparent 70%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.dashboard-hero__flash--fire {
+  animation: dashboardHeroFlash 0.4s ease-out both;
+}
+
+@keyframes dashboardHeroFlash {
+  0%   { opacity: 0; }
+  15%  { opacity: 0.85; }
+  100% { opacity: 0; }
+}
+
+/*
+ * The ad "screen" itself. Full width, sits below the greeting, and
+ * changes both its LAYOUT and its content on every slide — this is what
+ * dashboard.js swaps every few seconds so it plays like a real looping
+ * commercial rather than a static line of text.
+ */
+.dashboard-hero__ticker {
+  position: relative;
+  z-index: 2;
+  margin-top: var(--space-4);
+  /*
+   * FIXED size on purpose — this box never grows or shrinks no matter
+   * what content/layout/font-size is swapped in. That keeps the hero
+   * card's total height constant, so the tile grid below never jumps
+   * around (and never shifts the whole mobile page) between slides.
+   * Every animation below happens strictly inside this fixed frame.
+   */
+  height: 62px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: var(--color-on-hero, #fff);
+  text-shadow: var(--text-shadow-on-hero, 0 1px 3px rgba(0, 0, 0, 0.5));
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+/* Layout: centered "hero moment" — big emoji + bold statement, used for
+   the punchiest lines. */
+.dashboard-hero__ticker--center {
+  justify-content: center;
+  gap: 10px;
+  padding: 0 18px;
+  text-align: center;
+}
+
+/* Layout: lower-third — a classic TV news/ad banner with a solid accent
+   stripe down the left edge, content left-aligned. */
+.dashboard-hero__ticker--lower {
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 0 16px 0 14px;
+  border-left: 5px solid var(--color-primary);
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--color-primary) 30%, rgba(0, 0, 0, 0.25)) 0%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  font-size: 0.88rem;
+}
+
+/* Layout: brand sting — the logo/channel-ident moment, logo + name with
+   a soft glow behind it. */
+.dashboard-hero__ticker--brand {
+  justify-content: center;
+  gap: 10px;
+  padding: 0 18px;
+  background: linear-gradient(
+    100deg,
+    color-mix(in srgb, var(--color-primary) 45%, transparent) 0%,
+    rgba(255, 255, 255, 0.14) 100%
+  );
+}
+
+.dashboard-hero__ticker--brand::before {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--color-primary) 55%, transparent) 0%, transparent 65%);
+  animation: dashboardHeroStingGlow 2.4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes dashboardHeroStingGlow {
+  0%, 100% { opacity: 0.35; transform: scale(0.9); }
+  50%      { opacity: 0.7; transform: scale(1.1); }
+}
+
+.dashboard-hero__ad-emoji {
+  display: inline-block;
+  flex: 0 0 auto;
+  line-height: 1;
+  font-size: 1.4rem;
+  position: relative;
+  transform-origin: center;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.35));
+}
+
+/* "Kabhi bada" — occasional oversized, extra-3D emoji moment. Capped so
+   it still comfortably fits inside the fixed 62px frame. */
+.dashboard-hero__ad-emoji--big {
+  font-size: 2.1rem;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3))
+    drop-shadow(0 8px 14px rgba(0, 0, 0, 0.4));
+  animation: dashboardHeroEmojiPop 1.1s var(--ease-spring) both;
+}
+
+@keyframes dashboardHeroEmojiPop {
+  0%   { transform: scale(0.4) rotate(-12deg); opacity: 0; }
+  55%  { transform: scale(1.2) rotate(6deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+.dashboard-hero__ad-text {
+  display: inline-block;
+  min-width: 0;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+/* Font-style variants — all system fonts, no network fetch, so this can
+   never fail to load or look broken on any device/theme. */
+.dashboard-hero__ad-text--rounded {
+  font-family: "Trebuchet MS", Verdana, sans-serif;
+  letter-spacing: 0.2px;
+}
+
+.dashboard-hero__ad-text--serif {
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+}
+
+.dashboard-hero__ad-text--caps {
+  font-family: Impact, "Arial Narrow", Arial, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1.1px;
+  font-weight: 400;
+  font-size: 1.02rem;
+}
+
+.dashboard-hero__ad-text--mono {
+  font-family: "Courier New", monospace;
+  letter-spacing: 0.4px;
+}
+
+.dashboard-hero__ad-logo {
+  flex: 0 0 auto;
+  height: 1.8rem;
+  width: 1.8rem;
+  border-radius: 8px;
+  vertical-align: middle;
+  object-fit: cover;
+  box-shadow: 0 3px 10px -2px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.35);
+  animation: dashboardHeroLogoPulse 2.2s ease-in-out infinite;
+  position: relative;
+}
+
+@keyframes dashboardHeroLogoPulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.1); }
+}
+
+.dashboard-hero__ad-text--brand {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: 0.3px;
+}
+
+/*
+ * Entrance animations for the ad content each time a slide swaps in.
+ * dashboard.js rotates through these so consecutive frames never repeat
+ * the exact same motion — kept snappy and "channel-changey" with a
+ * quick jitter baked into each one.
+ */
+.dashboard-hero__ticker--in-center {
+  animation: dashboardHeroTickerFlip 0.6s var(--ease-spring) both;
 }
 
 @keyframes dashboardHeroTickerFlip {
-  0%   { transform: perspective(600px) rotateX(75deg) translateY(8px) scale(0.9); opacity: 0; }
-  55%  { transform: perspective(600px) rotateX(-10deg) translateY(-2px) scale(1.03); opacity: 1; }
+  0%   { transform: perspective(600px) rotateX(70deg) translateY(8px) scale(0.9); opacity: 0; }
+  55%  { transform: perspective(600px) rotateX(-8deg) translateY(-2px) scale(1.03); opacity: 1; }
   100% { transform: perspective(600px) rotateX(0deg) translateY(0) scale(1); opacity: 1; }
+}
+
+.dashboard-hero__ticker--in-lower {
+  animation: dashboardHeroTickerSlide 0.55s var(--ease-smooth) both;
+}
+
+@keyframes dashboardHeroTickerSlide {
+  0%   { transform: translateX(-32px) skewX(-4deg); opacity: 0; }
+  60%  { transform: translateX(4px) skewX(1deg); opacity: 1; }
+  100% { transform: translateX(0) skewX(0); opacity: 1; }
+}
+
+.dashboard-hero__ticker--in-brand {
+  animation: dashboardHeroTickerZoom 0.6s var(--ease-spring) both;
+}
+
+@keyframes dashboardHeroTickerZoom {
+  0%   { transform: scale(0.6); opacity: 0; }
+  60%  { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* One-off "pop" the badge plays on top of its usual endless bob, timed to
+   the bigger/brand slides for extra punch. */
+.dashboard-hero__badge.dashboard-hero__badge--pop {
+  animation:
+    dashboardHeroBob 3.2s ease-in-out infinite,
+    dashboardHeroBadgePop 0.6s var(--ease-spring);
+}
+
+@keyframes dashboardHeroBadgePop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.35) rotate(-6deg); }
+  100% { transform: scale(1); }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .dashboard-hero,
+  .dashboard-hero::after,
   .dashboard-hero__badge,
-  .dashboard-hero__particle {
+  .dashboard-hero__particle,
+  .dashboard-hero__live-dot,
+  .dashboard-hero__flash--fire,
+  .dashboard-hero__ticker--brand::before {
     animation: none;
   }
 
-  .dashboard-hero__ticker--in {
+  .dashboard-hero__ticker--in-center,
+  .dashboard-hero__ticker--in-lower,
+  .dashboard-hero__ticker--in-brand,
+  .dashboard-hero__ad-emoji--big,
+  .dashboard-hero__ad-logo,
+  .dashboard-hero__badge--pop {
     animation: none;
   }
 }
@@ -169,24 +444,35 @@
   flex-direction: column;
   align-items: flex-start;
   gap: var(--space-2);
+  background: var(--surface-glass);
+  backdrop-filter: blur(var(--glass-blur));
   transition: transform 0.4s var(--ease-spring), box-shadow 0.4s var(--ease-smooth), border-color 0.4s ease;
   cursor: pointer;
   position: relative;
   overflow: hidden;
   transform-style: preserve-3d;
+  -webkit-tap-highlight-color: transparent;
   /*
-   * Idle "come click me" pulse - a slow, subtle glow using the
-   * theme's own primary colour, so it always matches whatever theme
-   * is active. Stops as soon as the user actually hovers/interacts.
+   * Pops in on page load (staggered per tile below), then settles into
+   * the same slow "come click me" idle glow as before — both rolled
+   * into one animation list so nothing needs extra markup or JS.
    */
-  animation: dashboardTilePulse 4.5s ease-in-out infinite;
+  animation: dashboardTileEnter 0.55s var(--ease-spring) both,
+    dashboardTilePulse 4.5s ease-in-out infinite;
+  animation-delay: 0s, 0.7s;
 }
 
-/* Stagger each tile's pulse slightly so all 5 don't glow in lockstep. */
-.dashboard-grid .dashboard-tile:nth-child(2) { animation-delay: 0.3s; }
-.dashboard-grid .dashboard-tile:nth-child(3) { animation-delay: 0.6s; }
-.dashboard-grid .dashboard-tile:nth-child(4) { animation-delay: 0.9s; }
-.dashboard-grid .dashboard-tile:nth-child(5) { animation-delay: 1.2s; }
+@keyframes dashboardTileEnter {
+  0%   { opacity: 0; transform: translateY(22px) scale(0.94); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Stagger both the entrance and the idle pulse so all 5 tiles never
+   move in lockstep. */
+.dashboard-grid .dashboard-tile:nth-child(2) { animation-delay: 0.08s, 0.78s; }
+.dashboard-grid .dashboard-tile:nth-child(3) { animation-delay: 0.16s, 0.86s; }
+.dashboard-grid .dashboard-tile:nth-child(4) { animation-delay: 0.24s, 0.94s; }
+.dashboard-grid .dashboard-tile:nth-child(5) { animation-delay: 0.32s, 1.02s; }
 
 @keyframes dashboardTilePulse {
   0%, 100% {
@@ -197,6 +483,33 @@
     box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-primary) 35%, transparent), var(--shadow-md);
     border-color: color-mix(in srgb, var(--color-primary) 45%, transparent);
   }
+}
+
+/* Thin brand accent bar across the top of every tile — a small, always
+   -on hint that these are "live" interactive cards, that brightens and
+   glows on hover instead of appearing out of nowhere. */
+.dashboard-tile::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--color-primary),
+    color-mix(in srgb, var(--color-secondary) 55%, var(--color-primary) 45%)
+  );
+  opacity: 0.55;
+  transition: opacity 0.4s ease, box-shadow 0.4s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.dashboard-tile:hover::before,
+.dashboard-tile:focus-visible::before {
+  opacity: 1;
+  box-shadow: 0 0 14px 1px var(--glow-primary-strong);
 }
 
 /*
@@ -242,25 +555,54 @@
   animation-play-state: paused;
 }
 
-.dashboard-tile:active {
-  transform: translateY(-4px) rotateX(2deg) rotateY(-1deg) scale(0.985);
-  transition-duration: 0.15s;
+.dashboard-tile:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
 }
 
+/* Stronger, snappier tactile feedback on press/tap — this is what makes
+   the card feel physically "clickable" rather than just decorative. */
+.dashboard-tile:active {
+  transform: translateY(-3px) rotateX(2deg) rotateY(-1deg) scale(0.96);
+  box-shadow: 0 8px 18px -8px color-mix(in srgb, var(--color-primary) 45%, transparent), var(--shadow-sm);
+  transition-duration: 0.12s;
+}
+
+/* Icon rendered as a proper rounded "app icon" chip instead of a bare
+   emoji floating in space — reads as a tappable control at a glance. */
 .dashboard-tile__icon {
-  font-size: 1.9rem;
-  transition: transform 0.35s var(--ease-spring);
-  filter: drop-shadow(0 4px 8px color-mix(in srgb, var(--color-primary) 30%, transparent));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 95px;
+  height: 95px;
+  border-radius: 16px;
+  font-size: 1.7rem;
+  position: relative;
+  z-index: 2;
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--color-primary) 20%, var(--color-surface) 80%),
+    color-mix(in srgb, var(--color-primary) 8%, var(--color-surface) 92%)
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    0 8px 16px -8px color-mix(in srgb, var(--color-primary) 45%, transparent);
+  transition: transform 0.35s var(--ease-spring), box-shadow 0.35s ease;
 }
 
 .dashboard-tile:hover .dashboard-tile__icon {
-  transform: scale(1.25) rotate(-8deg) translateZ(20px);
+  transform: scale(1.18) rotate(-6deg) translateZ(20px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    0 14px 24px -8px color-mix(in srgb, var(--color-primary) 60%, transparent);
 }
 
 .dashboard-tile__label {
   font-weight: 800;
-  font-size: 1.02rem;
+  font-size: 1.04rem;
   position: relative;
+  z-index: 2;
   /*
    * Eye-catching gradient label text, blended from the theme's own
    * primary colour into the normal readable text colour - so it pops
@@ -281,6 +623,29 @@
 .dashboard-tile__desc {
   color: var(--color-text-muted);
   font-size: 0.82rem;
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* A small arrow that slides in on hover — a quiet "go on, tap this"
+   nudge rather than a loud effect. */
+.dashboard-tile__desc::after {
+  content: "\2192";
+  display: inline-block;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity 0.3s ease, transform 0.3s var(--ease-smooth);
+  color: var(--color-primary);
+  font-weight: 800;
+}
+
+.dashboard-tile:hover .dashboard-tile__desc::after,
+.dashboard-tile:focus-visible .dashboard-tile__desc::after {
+  opacity: 1;
+  transform: translateX(2px);
 }
 
 .dashboard-tile__badge {
@@ -299,11 +664,31 @@
   padding: 3px 10px;
   border-radius: 999px;
   box-shadow: 0 4px 10px -2px var(--glow-primary-strong);
+  z-index: 2;
+}
+
+/* A soft expanding ring behind the cart count so it reads as "live" —
+   the kind of subtle motion that draws the eye without being loud. */
+.dashboard-tile__badge::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 999px;
+  border: 1.5px solid color-mix(in srgb, var(--color-primary) 65%, transparent);
+  opacity: 0.7;
+  animation: dashboardBadgeRing 1.8s ease-out infinite;
+  pointer-events: none;
+}
+
+@keyframes dashboardBadgeRing {
+  0%   { transform: scale(0.85); opacity: 0.7; }
+  100% { transform: scale(1.7); opacity: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .dashboard-tile,
-  .dashboard-tile::after {
+  .dashboard-tile::after,
+  .dashboard-tile__badge::after {
     animation: none;
   }
 }
