@@ -1,10 +1,15 @@
 import { redirectIfAuthenticated } from "../auth-guard.js";
+
 import { loginWithEmail } from "../auth.js";
+
 import { mergeGuestCart } from "../cart-service.js";
+
 import { setButtonLoading } from "../ui.js";
 
 
+
 await redirectIfAuthenticated();
+
 
 
 const form =
@@ -17,21 +22,159 @@ const submitBtn =
   document.getElementById("login-submit-btn");
 
 
+/* ================================================================
+   LOGOUT FLOW
+   ================================================================ */
+
+const logoutParams =
+  new URLSearchParams(
+    window.location.search
+  );
+
+const isLogoutFlow =
+  logoutParams.get("loggedOut") === "1";
+
+
+if (isLogoutFlow) {
+
+  const logoutEmail =
+    sessionStorage.getItem(
+      "ck-logout-email"
+    ) || "";
+
+
+  /*
+   * Restore only the previous email.
+   * Password is intentionally cleared.
+   */
+  const emailInput =
+    document.getElementById("email");
+
+  const passwordInput =
+    document.getElementById("password");
+
+
+  if (emailInput) {
+
+    emailInput.value =
+      logoutEmail;
+  }
+
+
+  if (passwordInput) {
+
+    passwordInput.value = "";
+
+    passwordInput.autocomplete =
+      "new-password";
+  }
+
+
+  /*
+   * First visit after logout:
+   *
+   * Login page is placed immediately before
+   * the guest Explore Menu page.
+   */
+  const logoutPhase =
+    sessionStorage.getItem(
+      "ck-logout-phase"
+    );
+
+
+  if (logoutPhase !== "guest") {
+
+    sessionStorage.setItem(
+      "ck-logout-phase",
+      "guest"
+    );
+
+
+    history.pushState(
+      {
+        charrotiLogoutGuest: true
+      },
+      "",
+      "index.html?logoutGuest=1"
+    );
+
+
+    window.location.reload();
+
+  } else {
+
+    /*
+     * We reached the Login page by pressing
+     * Browser Back from the guest Explore Menu.
+     *
+     * Create a temporary history state so that
+     * the next Back can be redirected directly
+     * to the main Charroti Kitchen website.
+     */
+    history.pushState(
+      {
+        charrotiLogoutLogin: true
+      },
+      "",
+      window.location.href
+    );
+
+
+    window.addEventListener(
+      "popstate",
+      () => {
+
+        sessionStorage.removeItem(
+          "ck-logout-email"
+        );
+
+        sessionStorage.removeItem(
+          "ck-logout-phase"
+        );
+
+
+        document.body.classList.add(
+          "page-transition-out"
+        );
+
+
+        setTimeout(() => {
+
+          window.location.replace(
+            "../index.html"
+          );
+
+        }, 220);
+
+      },
+      { once: true }
+    );
+
+  }
+}
+
+
+
 function showMessage(
   text,
   type
 ) {
-  messageBox.textContent = text;
+
+  messageBox.textContent =
+    text;
 
   messageBox.className =
     `auth-form-message auth-form-message--visible auth-form-message--${type}`;
 }
 
 
+
 function hideMessage() {
+
   messageBox.className =
     "auth-form-message";
 }
+
 
 
 /* ================================================================
@@ -53,19 +196,20 @@ function getRedirectTarget() {
    * Only allow redirecting back to a
    * same-app HTML page.
    */
-
   if (
     redirect &&
     /^[a-zA-Z0-9_-]+\.html$/.test(
       redirect
     )
   ) {
+
     return redirect;
   }
 
 
   return "dashboard.html";
 }
+
 
 
 /* ================================================================
@@ -88,6 +232,7 @@ if (registerLink) {
       target
     )}`;
 }
+
 
 
 /* ================================================================
@@ -138,7 +283,6 @@ form.addEventListener(
     /*
      * Login itself failed.
      */
-
     if (!result.success) {
 
       restore();
@@ -150,6 +294,7 @@ form.addEventListener(
 
       return;
     }
+
 
 
     /* ============================================================
@@ -166,7 +311,6 @@ form.addEventListener(
        * If there is no guest cart, this simply
        * does nothing.
        */
-
       await mergeGuestCart(
         result.user.uid
       );
@@ -192,6 +336,21 @@ form.addEventListener(
     }
 
 
+    /*
+     * Login was successful.
+     *
+     * The special logout history flow is no
+     * longer needed once the customer logs in.
+     */
+    sessionStorage.removeItem(
+      "ck-logout-email"
+    );
+
+    sessionStorage.removeItem(
+      "ck-logout-phase"
+    );
+
+
     restore();
 
 
@@ -205,7 +364,6 @@ form.addEventListener(
      *             ↓
      * checkout.html
      */
-
     window.location.href =
       getRedirectTarget();
 

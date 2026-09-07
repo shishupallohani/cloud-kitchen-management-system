@@ -29,7 +29,11 @@
  * -----------------------------------------------------------------------
  */
 
-import { logout } from "./auth.js";
+import {
+  logout,
+  getCurrentUser
+} from "./auth.js";
+
 import { showError } from "./ui.js";
 
 
@@ -37,156 +41,245 @@ import { showError } from "./ui.js";
    Ordering page transitions + entry splash
    ----------------------------------------------------------------------- */
 
-/* -----------------------------------------------------------------------
-   Ordering page transitions + entry splash
-   ----------------------------------------------------------------------- */
-
 function initOrderPageTransition() {
+
   if (window.__orderPageTransitionInitialized) {
     return;
   }
 
   window.__orderPageTransitionInitialized = true;
 
+
   /*
    * IMPORTANT:
    * Browser Back/Forward can restore a page from BFCache.
    * Always clear transition state when a page becomes visible again.
    */
-  window.addEventListener("pageshow", () => {
-    document.body.classList.remove("page-transition-out");
-    document.body.classList.remove("page-transition-in");
-  });
+  window.addEventListener(
+    "pageshow",
+    () => {
+
+      document.body.classList.remove(
+        "page-transition-out"
+      );
+
+      document.body.classList.remove(
+        "page-transition-in"
+      );
+
+    }
+  );
+
 
   /*
    * Entry splash is used only on order/index.html.
    */
-  const splash = document.getElementById("order-splash");
+  const splash =
+    document.getElementById(
+      "order-splash"
+    );
+
 
   if (splash) {
+
     const hideSplash = () => {
-      splash.classList.add("order-splash--hide");
+
+      splash.classList.add(
+        "order-splash--hide"
+      );
+
 
       setTimeout(() => {
+
         splash.remove();
+
       }, 700);
+
     };
 
-    if (document.readyState === "complete") {
-      setTimeout(hideSplash, 650);
+
+    if (
+      document.readyState ===
+      "complete"
+    ) {
+
+      setTimeout(
+        hideSplash,
+        650
+      );
+
     } else {
+
       window.addEventListener(
         "load",
         () => {
-          setTimeout(hideSplash, 450);
+
+          setTimeout(
+            hideSplash,
+            450
+          );
+
         },
-        { once: true }
+        {
+          once: true
+        }
       );
+
     }
+
   }
+
 
   /*
    * Smooth transition for normal internal navigation.
    */
-  document.addEventListener("click", (event) => {
-    const link = event.target.closest("a");
+  document.addEventListener(
+    "click",
+    (event) => {
 
-    if (!link) {
-      return;
-    }
+      const link =
+        event.target.closest("a");
 
-    const href = link.getAttribute("href");
 
-    if (!href) {
-      return;
-    }
+      if (!link) {
+        return;
+      }
 
-    /*
-     * Never interfere with external links, anchors,
-     * downloads, new tabs or special protocols.
-     */
-    if (
-      href.startsWith("#") ||
-      href.startsWith("http://") ||
-      href.startsWith("https://") ||
-      href.startsWith("mailto:") ||
-      href.startsWith("tel:") ||
-      link.target === "_blank" ||
-      link.hasAttribute("download")
-    ) {
-      return;
-    }
 
-    /*
-     * Never interfere with logout handlers.
-     */
-    if (
-      link.hasAttribute("data-nav-logout") ||
-      href === "#"
-    ) {
-      return;
-    }
+      const href =
+        link.getAttribute("href");
 
-    /*
-     * Only animate internal HTML pages.
-     */
-    if (!/\.html(?:[?#].*)?$/i.test(href)) {
-      return;
-    }
 
-    /*
-     * Prevent double clicks from creating multiple navigations.
-     */
-    if (document.body.classList.contains("page-transition-out")) {
+      if (!href) {
+        return;
+      }
+
+
+      /*
+       * Never interfere with external links,
+       * anchors, downloads, new tabs or
+       * special protocols.
+       */
+      if (
+        href.startsWith("#") ||
+        href.startsWith("http://") ||
+        href.startsWith("https://") ||
+        href.startsWith("mailto:") ||
+        href.startsWith("tel:") ||
+        link.target === "_blank" ||
+        link.hasAttribute("download")
+      ) {
+
+        return;
+
+      }
+
+
+      /*
+       * Never interfere with logout handlers.
+       */
+      if (
+        link.hasAttribute(
+          "data-nav-logout"
+        ) ||
+        href === "#"
+      ) {
+
+        return;
+
+      }
+
+
+      /*
+       * Only animate internal HTML pages.
+       */
+      if (
+        !/\.html(?:[?#].*)?$/i.test(
+          href
+        )
+      ) {
+
+        return;
+
+      }
+
+
+      /*
+       * Prevent double clicks from
+       * creating multiple navigations.
+       */
+      if (
+        document.body.classList.contains(
+          "page-transition-out"
+        )
+      ) {
+
+        event.preventDefault();
+
+        return;
+
+      }
+
+
       event.preventDefault();
-      return;
+
+
+      document.body.classList.add(
+        "page-transition-out"
+      );
+
+
+      setTimeout(() => {
+
+        window.location.assign(
+          href
+        );
+
+      }, 220);
+
     }
+  );
 
-    event.preventDefault();
-
-    document.body.classList.add("page-transition-out");
-
-    setTimeout(() => {
-      window.location.assign(href);
-    }, 220);
-  });
 }
 
 
 /*
  * Start transition system.
  */
-if (document.readyState === "loading") {
+if (
+  document.readyState ===
+  "loading"
+) {
+
   document.addEventListener(
     "DOMContentLoaded",
     initOrderPageTransition,
-    { once: true }
+    {
+      once: true
+    }
   );
+
 } else {
+
   initOrderPageTransition();
+
 }
 
-/*
- * Start transition system as early as possible.
- */
-if (document.readyState === "loading") {
-  document.addEventListener(
-    "DOMContentLoaded",
-    initOrderPageTransition,
-    { once: true }
-  );
-} else {
-  initOrderPageTransition();
-}
+
 const NAV_ITEMS = [
 
   {
     key: "dashboard",
+
     href: "dashboard.html",
+
     label: "Dashboard",
 
     icon: `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
         <path d="M3 10.5 12 3l9 7.5"></path>
         <path d="M5 9.5V21h14V9.5"></path>
         <path d="M9 21v-6h6v6"></path>
@@ -197,11 +290,16 @@ const NAV_ITEMS = [
 
   {
     key: "menu",
+
     href: "menu.html",
+
     label: "Explore Menu",
 
     icon: `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
         <path d="M6 3v7"></path>
         <path d="M4 3v4c0 1.1.9 2 2 2s2-.9 2-2V3"></path>
         <path d="M6 9v12"></path>
@@ -214,11 +312,16 @@ const NAV_ITEMS = [
 
   {
     key: "favorites",
+
     href: "favorites.html",
+
     label: "Favorites",
 
     icon: `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
         <path d="M20.8 8.7c0 5.2-8.8 10.3-8.8 10.3S3.2 13.9 3.2 8.7A4.7 4.7 0 0 1 12 6.3a4.7 4.7 0 0 1 8.8 2.4Z"></path>
       </svg>
     `,
@@ -227,12 +330,18 @@ const NAV_ITEMS = [
 
   {
     key: "cart",
+
     href: "cart.html",
+
     label: "Cart",
+
     showBadge: true,
 
     icon: `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
         <path d="M3 4h2l2.1 10.1a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 1.9-1.4L20 8H6"></path>
         <circle cx="10" cy="20" r="1.5"></circle>
         <circle cx="18" cy="20" r="1.5"></circle>
@@ -243,11 +352,16 @@ const NAV_ITEMS = [
 
   {
     key: "orders",
+
     href: "orders.html",
+
     label: "My Orders",
 
     icon: `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
         <path d="M6 3h12v18H6z"></path>
         <path d="M9 7h6M9 11h6M9 15h4"></path>
       </svg>
@@ -257,12 +371,22 @@ const NAV_ITEMS = [
 
   {
     key: "profile",
+
     href: "profile.html",
+
     label: "Profile",
 
     icon: `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <circle cx="12" cy="8" r="4"></circle>
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <circle
+          cx="12"
+          cy="8"
+          r="4"
+        ></circle>
+
         <path d="M4 21a8 8 0 0 1 16 0"></path>
       </svg>
     `,
@@ -272,7 +396,10 @@ const NAV_ITEMS = [
 
 
 const LOGOUT_ICON = `
-  <svg viewBox="0 0 24 24" aria-hidden="true">
+  <svg
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+  >
     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
     <path d="M16 17l5-5-5-5"></path>
     <path d="M21 12H9"></path>
@@ -281,7 +408,10 @@ const LOGOUT_ICON = `
 
 
 const LOGIN_ICON = `
-  <svg viewBox="0 0 24 24" aria-hidden="true">
+  <svg
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+  >
     <path d="M9 4h10v16H9"></path>
     <path d="M13 12H3"></path>
     <path d="m7 8-4 4 4 4"></path>
@@ -315,6 +445,7 @@ function loginMarkup() {
 
     </a>
   `;
+
 }
 
 
@@ -332,7 +463,9 @@ function logoutMarkup(id) {
       data-nav-logout
     >
 
-      <span class="nav-link__icon nav-link__logout-icon">
+      <span
+        class="nav-link__icon nav-link__logout-icon"
+      >
         ${LOGOUT_ICON}
       </span>
 
@@ -342,6 +475,7 @@ function logoutMarkup(id) {
 
     </a>
   `;
+
 }
 
 
@@ -351,14 +485,26 @@ function logoutMarkup(id) {
 
 function ensureLogoutModalStyles() {
 
-  if (document.getElementById("logout-confirm-styles")) {
+  if (
+    document.getElementById(
+      "logout-confirm-styles"
+    )
+  ) {
+
     return;
+
   }
 
 
-  const style = document.createElement("style");
+  const style =
+    document.createElement(
+      "style"
+    );
 
-  style.id = "logout-confirm-styles";
+
+  style.id =
+    "logout-confirm-styles";
+
 
   style.textContent = `
 
@@ -378,36 +524,52 @@ function ensureLogoutModalStyles() {
 
       padding: 20px;
 
-      background: rgba(0, 0, 0, 0.42);
+      background:
+        rgba(0, 0, 0, 0.42);
 
-      backdrop-filter: blur(3px);
+      backdrop-filter:
+        blur(3px);
 
-      -webkit-backdrop-filter: blur(3px);
+      -webkit-backdrop-filter:
+        blur(3px);
 
-      animation: logoutOverlayIn 0.16s ease-out;
+      animation:
+        logoutOverlayIn
+        0.16s ease-out;
     }
 
 
     .logout-confirm {
 
-      width: min(100%, 330px);
+      width:
+        min(100%, 330px);
 
-      padding: 24px 22px 20px;
+      padding:
+        24px 22px 20px;
 
-      background: var(--color-surface);
+      background:
+        var(--color-surface);
 
-      color: var(--color-text);
+      color:
+        var(--color-text);
 
-      border: 1px solid var(--color-border);
+      border:
+        1px solid
+        var(--color-border);
 
-      border-radius: 18px;
+      border-radius:
+        18px;
 
       box-shadow:
-        0 18px 45px rgba(0, 0, 0, 0.20);
+        0 18px 45px
+        rgba(0, 0, 0, 0.20);
 
-      text-align: center;
+      text-align:
+        center;
 
-      animation: logoutPopupIn 0.18s ease-out;
+      animation:
+        logoutPopupIn
+        0.18s ease-out;
     }
 
 
@@ -417,7 +579,8 @@ function ensureLogoutModalStyles() {
 
       height: 46px;
 
-      margin: 0 auto 13px;
+      margin:
+        0 auto 13px;
 
       display: flex;
 
@@ -425,14 +588,18 @@ function ensureLogoutModalStyles() {
 
       justify-content: center;
 
-      border-radius: 14px;
+      border-radius:
+        14px;
 
-      background: var(--color-primary-light);
+      background:
+        var(--color-primary-light);
 
-      color: var(--color-primary-dark);
+      color:
+        var(--color-primary-dark);
 
       box-shadow:
-        inset 0 0 0 1px var(--color-border);
+        inset 0 0 0 1px
+        var(--color-border);
     }
 
 
@@ -444,39 +611,52 @@ function ensureLogoutModalStyles() {
 
       fill: none;
 
-      stroke: currentColor;
+      stroke:
+        currentColor;
 
-      stroke-width: 1.8;
+      stroke-width:
+        1.8;
 
-      stroke-linecap: round;
+      stroke-linecap:
+        round;
 
-      stroke-linejoin: round;
+      stroke-linejoin:
+        round;
     }
 
 
     .logout-confirm__title {
 
-      margin: 0 0 7px;
+      margin:
+        0 0 7px;
 
-      font-size: 1.08rem;
+      font-size:
+        1.08rem;
 
-      line-height: 1.3;
+      line-height:
+        1.3;
 
-      font-weight: 800;
+      font-weight:
+        800;
 
-      color: var(--color-text);
+      color:
+        var(--color-text);
     }
 
 
     .logout-confirm__message {
 
-      margin: 0;
+      margin:
+        0;
 
-      font-size: 0.84rem;
+      font-size:
+        0.84rem;
 
-      line-height: 1.5;
+      line-height:
+        1.5;
 
-      color: var(--color-text-muted);
+      color:
+        var(--color-text-muted);
     }
 
 
@@ -486,7 +666,8 @@ function ensureLogoutModalStyles() {
 
       gap: 9px;
 
-      margin-top: 19px;
+      margin-top:
+        19px;
     }
 
 
@@ -494,25 +675,36 @@ function ensureLogoutModalStyles() {
 
       flex: 1;
 
-      min-height: 40px;
+      min-height:
+        40px;
 
-      padding: 8px 13px;
+      padding:
+        8px 13px;
 
-      border-radius: 10px;
+      border-radius:
+        10px;
 
-      border: 1px solid var(--color-border);
+      border:
+        1px solid
+        var(--color-border);
 
-      background: var(--color-surface);
+      background:
+        var(--color-surface);
 
-      color: var(--color-text);
+      color:
+        var(--color-text);
 
-      font-family: inherit;
+      font-family:
+        inherit;
 
-      font-size: 0.82rem;
+      font-size:
+        0.82rem;
 
-      font-weight: 700;
+      font-weight:
+        700;
 
-      cursor: pointer;
+      cursor:
+        pointer;
 
       transition:
         transform 0.15s ease,
@@ -524,35 +716,46 @@ function ensureLogoutModalStyles() {
 
     .logout-confirm__button:hover {
 
-      transform: translateY(-1px);
+      transform:
+        translateY(-1px);
 
-      box-shadow: var(--shadow-sm);
+      box-shadow:
+        var(--shadow-sm);
 
-      border-color: var(--color-primary);
+      border-color:
+        var(--color-primary);
     }
 
 
     .logout-confirm__button--logout {
 
-      background: var(--color-primary);
+      background:
+        var(--color-primary);
 
-      border-color: var(--color-primary);
+      border-color:
+        var(--color-primary);
 
-      color: #fff;
+      color:
+        #fff;
 
-      box-shadow: var(--shadow-sm);
+      box-shadow:
+        var(--shadow-sm);
     }
 
 
     .logout-confirm__button--logout:hover {
 
-      background: var(--color-primary-dark);
+      background:
+        var(--color-primary-dark);
 
-      border-color: var(--color-primary-dark);
+      border-color:
+        var(--color-primary-dark);
 
-      color: #fff;
+      color:
+        #fff;
 
-      box-shadow: var(--shadow-md);
+      box-shadow:
+        var(--shadow-md);
     }
 
 
@@ -565,6 +768,7 @@ function ensureLogoutModalStyles() {
       to {
         opacity: 1;
       }
+
     }
 
 
@@ -574,15 +778,20 @@ function ensureLogoutModalStyles() {
 
         opacity: 0;
 
-        transform: scale(0.94) translateY(6px);
+        transform:
+          scale(0.94)
+          translateY(6px);
       }
 
       to {
 
         opacity: 1;
 
-        transform: scale(1) translateY(0);
+        transform:
+          scale(1)
+          translateY(0);
       }
+
     }
 
 
@@ -590,23 +799,32 @@ function ensureLogoutModalStyles() {
 
       .logout-confirm {
 
-        width: min(100%, 310px);
+        width:
+          min(100%, 310px);
 
-        padding: 21px 18px 18px;
+        padding:
+          21px 18px 18px;
 
-        border-radius: 16px;
+        border-radius:
+          16px;
       }
+
 
       .logout-confirm__actions {
 
-        margin-top: 17px;
+        margin-top:
+          17px;
       }
+
     }
 
   `;
 
 
-  document.head.appendChild(style);
+  document.head.appendChild(
+    style
+  );
+
 }
 
 
@@ -621,11 +839,17 @@ function closeLogoutModal() {
       "logout-confirm-overlay"
     );
 
+
   if (overlay) {
+
     overlay.remove();
+
   }
 
-  document.body.style.overflow = "";
+
+  document.body.style.overflow =
+    "";
+
 }
 
 
@@ -638,13 +862,14 @@ function showLogoutConfirmation() {
   /*
    * Prevent duplicate popup.
    */
-
   if (
     document.getElementById(
       "logout-confirm-overlay"
     )
   ) {
+
     return;
+
   }
 
 
@@ -652,23 +877,30 @@ function showLogoutConfirmation() {
 
 
   const overlay =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
+
 
   overlay.id =
     "logout-confirm-overlay";
 
+
   overlay.className =
     "logout-confirm-overlay";
+
 
   overlay.setAttribute(
     "role",
     "dialog"
   );
 
+
   overlay.setAttribute(
     "aria-modal",
     "true"
   );
+
 
   overlay.setAttribute(
     "aria-labelledby",
@@ -699,12 +931,16 @@ function showLogoutConfirmation() {
       </h3>
 
 
-      <p class="logout-confirm__message">
+      <p
+        class="logout-confirm__message"
+      >
         Are you sure you want to logout?
       </p>
 
 
-      <div class="logout-confirm__actions">
+      <div
+        class="logout-confirm__actions"
+      >
 
         <button
           type="button"
@@ -739,7 +975,6 @@ function showLogoutConfirmation() {
    * Prevent background page scrolling
    * while the popup is open.
    */
-
   document.body.style.overflow =
     "hidden";
 
@@ -771,12 +1006,46 @@ function showLogoutConfirmation() {
             "logout-confirm-btn"
           );
 
+
         if (button) {
 
-          button.disabled = true;
+          button.disabled =
+            true;
 
           button.textContent =
             "Logging out...";
+
+        }
+
+
+        /*
+         * IMPORTANT:
+         * Capture the current Firebase user
+         * BEFORE signOut().
+         *
+         * Firebase auth.currentUser may become
+         * null after logout.
+         */
+        const currentUser =
+          getCurrentUser();
+
+
+        const currentUserEmail =
+          currentUser?.email ||
+          "";
+
+
+        /*
+         * Save email immediately so the
+         * logout login screen can restore it.
+         */
+        if (currentUserEmail) {
+
+          sessionStorage.setItem(
+            "ck-logout-email",
+            currentUserEmail
+          );
+
         }
 
 
@@ -786,11 +1055,37 @@ function showLogoutConfirmation() {
 
         if (result.success) {
 
-          window.location.href =
-            "login.html";
+          /*
+           * Smooth transition before starting
+           * the logout navigation flow.
+           */
+          document.body.classList.add(
+            "page-transition-out"
+          );
+
+
+          setTimeout(() => {
+
+            window.location.replace(
+              "login.html?loggedOut=1"
+            );
+
+          }, 220);
+
 
           return;
+
         }
+
+
+        /*
+         * Logout failed.
+         * Remove the temporary email because
+         * the customer is still logged in.
+         */
+        sessionStorage.removeItem(
+          "ck-logout-email"
+        );
 
 
         closeLogoutModal();
@@ -798,6 +1093,7 @@ function showLogoutConfirmation() {
         showError(
           result.message
         );
+
       }
     );
 
@@ -806,7 +1102,6 @@ function showLogoutConfirmation() {
    * Clicking outside the small popup
    * closes the confirmation.
    */
-
   overlay.addEventListener(
     "click",
     (event) => {
@@ -818,6 +1113,7 @@ function showLogoutConfirmation() {
         closeLogoutModal();
 
       }
+
     }
   );
 
@@ -825,7 +1121,6 @@ function showLogoutConfirmation() {
   /*
    * ESC key closes the popup.
    */
-
   const handleEscape =
     (event) => {
 
@@ -839,7 +1134,9 @@ function showLogoutConfirmation() {
           "keydown",
           handleEscape
         );
+
       }
+
     };
 
 
@@ -854,12 +1151,12 @@ function showLogoutConfirmation() {
    * so accidental Enter does not
    * immediately logout.
    */
-
   document
     .getElementById(
       "logout-cancel-btn"
     )
     ?.focus();
+
 }
 
 
@@ -881,6 +1178,7 @@ function bindLogout(id) {
 
       }
     );
+
 }
 
 
@@ -888,12 +1186,16 @@ function bindLogout(id) {
    Render navigation
    ----------------------------------------------------------------------- */
 
-export function renderNav(activeKey, options = {}) {
+export function renderNav(
+  activeKey,
+  options = {}
+) {
 
   const mount =
     document.getElementById(
       "app-topnav"
     );
+
 
   if (!mount) {
     return;
@@ -915,7 +1217,6 @@ export function renderNav(activeKey, options = {}) {
    * Favorites, Orders, Profile and
    * Dashboard remain account-only.
    */
-
   const visibleNavItems =
     isGuest
       ? NAV_ITEMS.filter(
@@ -974,14 +1275,19 @@ export function renderNav(activeKey, options = {}) {
               ${item.icon}
             </span>
 
-            <span class="nav-link__label">
+
+            <span
+              class="nav-link__label"
+            >
               ${item.label}
             </span>
+
 
             ${badgeHtml}
 
           </a>
         `;
+
       })
       .join("");
 
@@ -989,17 +1295,27 @@ export function renderNav(activeKey, options = {}) {
   mount.innerHTML = `
 
     <nav
-      class="topnav${isDashboard ? " topnav--dashboard" : ""}"
+      class="topnav${
+        isDashboard
+          ? " topnav--dashboard"
+          : ""
+      }"
     >
 
-      <div class="topnav__inner">
+      <div
+        class="topnav__inner"
+      >
 
 
         <!-- Logo -->
 
         <a
           class="topnav__brand"
-          href="${isGuest ? "index.html" : "dashboard.html"}"
+          href="${
+            isGuest
+              ? "index.html"
+              : "dashboard.html"
+          }"
           aria-label="Charroti Kitchen"
         >
 
@@ -1053,6 +1369,7 @@ export function renderNav(activeKey, options = {}) {
 
           ${linksHtml}
 
+
           ${
             isGuest
               ? ""
@@ -1067,6 +1384,7 @@ export function renderNav(activeKey, options = {}) {
       </div>
 
     </nav>
+
   `;
 
 
@@ -1088,6 +1406,7 @@ export function renderNav(activeKey, options = {}) {
             "nav-links"
           );
 
+
         const toggle =
           document.getElementById(
             "nav-menu-toggle"
@@ -1106,6 +1425,7 @@ export function renderNav(activeKey, options = {}) {
           "aria-expanded",
           String(isOpen)
         );
+
       }
     );
 
@@ -1114,7 +1434,6 @@ export function renderNav(activeKey, options = {}) {
    * Logout is available only for
    * authenticated customers.
    */
-
   if (!isGuest) {
 
     bindLogout(
