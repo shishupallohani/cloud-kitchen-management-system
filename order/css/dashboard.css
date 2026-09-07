@@ -60,13 +60,6 @@
   position: relative;
 }
 
-.dashboard-hero .btn {
-  margin-top: var(--space-3);
-  padding: 8px 16px;
-  font-size: 0.85rem;
-  position: relative;
-}
-
 /*
  * Big 3D-feeling emoji badge above the greeting. Purely decorative -
  * gently bobs/rotates forever. The emoji itself carries the colour,
@@ -167,6 +160,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: var(--space-4);
+  perspective: 1200px;
 }
 
 .dashboard-tile {
@@ -175,29 +169,113 @@
   flex-direction: column;
   align-items: flex-start;
   gap: var(--space-2);
-  transition: transform 0.4s var(--ease-spring), box-shadow 0.4s var(--ease-smooth);
+  transition: transform 0.4s var(--ease-spring), box-shadow 0.4s var(--ease-smooth), border-color 0.4s ease;
   cursor: pointer;
   position: relative;
+  overflow: hidden;
   transform-style: preserve-3d;
+  /*
+   * Idle "come click me" pulse - a slow, subtle glow using the
+   * theme's own primary colour, so it always matches whatever theme
+   * is active. Stops as soon as the user actually hovers/interacts.
+   */
+  animation: dashboardTilePulse 4.5s ease-in-out infinite;
+}
+
+/* Stagger each tile's pulse slightly so all 5 don't glow in lockstep. */
+.dashboard-grid .dashboard-tile:nth-child(2) { animation-delay: 0.3s; }
+.dashboard-grid .dashboard-tile:nth-child(3) { animation-delay: 0.6s; }
+.dashboard-grid .dashboard-tile:nth-child(4) { animation-delay: 0.9s; }
+.dashboard-grid .dashboard-tile:nth-child(5) { animation-delay: 1.2s; }
+
+@keyframes dashboardTilePulse {
+  0%, 100% {
+    box-shadow: var(--shadow-sm);
+    border-color: var(--border-glass);
+  }
+  50% {
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-primary) 35%, transparent), var(--shadow-md);
+    border-color: color-mix(in srgb, var(--color-primary) 45%, transparent);
+  }
+}
+
+/*
+ * Diagonal "shine" sweep that glides across every tile every few
+ * seconds - a common, low-cost way to draw the eye without being
+ * distracting. Pure decoration, sits above the card but below icon
+ * and text (z-index handled by paint order + pointer-events: none).
+ */
+.dashboard-tile::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    color-mix(in srgb, var(--color-primary) 35%, white 65%) 50%,
+    transparent 100%
+  );
+  opacity: 0.35;
+  transform: skewX(-20deg);
+  pointer-events: none;
+  animation: dashboardTileShine 5s ease-in-out infinite;
+}
+
+.dashboard-grid .dashboard-tile:nth-child(2)::after { animation-delay: 0.4s; }
+.dashboard-grid .dashboard-tile:nth-child(3)::after { animation-delay: 0.8s; }
+.dashboard-grid .dashboard-tile:nth-child(4)::after { animation-delay: 1.2s; }
+.dashboard-grid .dashboard-tile:nth-child(5)::after { animation-delay: 1.6s; }
+
+@keyframes dashboardTileShine {
+  0%   { left: -60%; }
+  35%  { left: 130%; }
+  100% { left: 130%; }
 }
 
 .dashboard-tile:hover {
-  transform: translateY(-8px) rotateX(3deg) rotateY(-2deg) scale(1.02);
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-10px) rotateX(6deg) rotateY(-4deg) scale(1.035);
+  box-shadow: 0 20px 40px -12px color-mix(in srgb, var(--color-primary) 40%, transparent), var(--shadow-lg);
+  border-color: var(--color-primary);
+  animation-play-state: paused;
+}
+
+.dashboard-tile:active {
+  transform: translateY(-4px) rotateX(2deg) rotateY(-1deg) scale(0.985);
+  transition-duration: 0.15s;
 }
 
 .dashboard-tile__icon {
-  font-size: 1.8rem;
+  font-size: 1.9rem;
   transition: transform 0.35s var(--ease-spring);
+  filter: drop-shadow(0 4px 8px color-mix(in srgb, var(--color-primary) 30%, transparent));
 }
 
 .dashboard-tile:hover .dashboard-tile__icon {
-  transform: scale(1.2) rotate(-6deg);
+  transform: scale(1.25) rotate(-8deg) translateZ(20px);
 }
 
 .dashboard-tile__label {
-  font-weight: 700;
-  font-size: 1rem;
+  font-weight: 800;
+  font-size: 1.02rem;
+  position: relative;
+  /*
+   * Eye-catching gradient label text, blended from the theme's own
+   * primary colour into the normal readable text colour - so it pops
+   * without ever drifting into low-contrast territory on any theme
+   * (it's still anchored to --color-text, never a fixed hue).
+   */
+  background: linear-gradient(
+    100deg,
+    var(--color-text) 30%,
+    color-mix(in srgb, var(--color-primary) 75%, var(--color-text) 25%) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: var(--color-text);
 }
 
 .dashboard-tile__desc {
@@ -221,4 +299,11 @@
   padding: 3px 10px;
   border-radius: 999px;
   box-shadow: 0 4px 10px -2px var(--glow-primary-strong);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-tile,
+  .dashboard-tile::after {
+    animation: none;
+  }
 }
