@@ -850,10 +850,14 @@ function openDishModal(dish) {
   const heartBtn =
     overlay.querySelector(".dish-modal__fav-btn");
 
-  heartBtn.addEventListener("click", () => {
+  heartBtn.addEventListener("click", async () => {
     heartBtn.disabled = true;
-    onToggleFavorite(dish.dishId, heartBtn);
-    setTimeout(refreshDishModalFooter, 60);
+    // Wait for the favorite save to actually finish before refreshing
+    // the heart icon - a fixed setTimeout guessed at the save time and
+    // could refresh too early, showing a stale (unfilled) heart even
+    // though the favorite was saved successfully.
+    await onToggleFavorite(dish.dishId, heartBtn);
+    refreshDishModalFooter();
   });
 
   wireModalFooterButtons(dish);

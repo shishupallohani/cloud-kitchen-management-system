@@ -34,11 +34,12 @@
 
 .category-tab--active {
   /*
-   * FIX: some admin themes set --color-primary to a light/pastel
-   * shade. A plain primary-color background made white text
-   * nearly invisible. We now darken both gradient stops with
-   * color-mix() (works for ANY theme colour) and add a text-shadow
-   * as a second safety net, so the label always stays readable.
+   * FIX: hard-coding white label text here was the bug - light/pastel
+   * admin themes produce a light pill background, and white-on-light
+   * is what made the label disappear. --color-on-primary is
+   * recalculated by theme-sync.js for whichever theme is active
+   * (dark ink on light themes, white on dark themes), so the label
+   * stays readable no matter what colour is picked in the admin panel.
    */
   background: linear-gradient(
     135deg,
@@ -46,8 +47,8 @@
     color-mix(in srgb, var(--color-primary-dark) 85%, black 15%)
   );
   border-color: var(--color-primary);
-  color: #fff;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+  color: var(--color-on-primary, #fff);
+  text-shadow: var(--text-shadow-on-primary, 0 1px 2px rgba(0, 0, 0, 0.45));
   box-shadow: 0 8px 18px -6px var(--glow-primary-strong);
 }
 

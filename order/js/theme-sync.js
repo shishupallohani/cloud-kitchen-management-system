@@ -97,6 +97,43 @@ function darken(hex, amount = 0.15) {
 }
 
 
+/*
+ * Picks a readable label colour (white or near-black) for text that
+ * sits on top of a --color-primary background (active filter pills,
+ * solid buttons, etc).
+ *
+ * This is what makes the fix work for EVERY admin theme: instead of
+ * hard-coding white text and hoping the theme colour is always dark
+ * enough, we measure the actual brightness of the colour the pill will
+ * be painted with and flip the text between white and dark ink so it
+ * always stays legible - light gold themes get dark text, deep/maroon
+ * themes get white text.
+ */
+function getReadableTextOn(hex) {
+  const rgb = hexToRgb(hex);
+
+  if (!rgb) {
+    return { color: "#ffffff", shadow: "0 1px 2px rgba(0, 0, 0, 0.45)" };
+  }
+
+  // Perceived brightness (YIQ), 0 (dark) - 255 (light).
+  const brightness =
+    (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000;
+
+  const isLight = brightness > 150;
+
+  return isLight
+    ? {
+        color: "#1a1408",
+        shadow: "0 1px 1px rgba(255, 255, 255, 0.35)",
+      }
+    : {
+        color: "#ffffff",
+        shadow: "0 1px 2px rgba(0, 0, 0, 0.45)",
+      };
+}
+
+
 /* -----------------------------------------------------------------------
    Cached theme
    ----------------------------------------------------------------------- */
@@ -214,14 +251,37 @@ function applyOrderTheme(theme) {
     gold
   );
 
+  const primaryDark = darken(gold, 0.16);
+
   root.style.setProperty(
     "--color-primary-dark",
-    darken(gold, 0.16)
+    primaryDark
   );
 
   root.style.setProperty(
     "--color-primary-light",
     primaryLight
+  );
+
+
+  /*
+   * Readable label colour for anything painted with --color-primary /
+   * --color-primary-dark (e.g. the active "Explore Menu" category
+   * pill). Computed from the actual pill colours so it adapts to any
+   * theme instead of assuming white always shows up.
+   */
+  const onPrimary = getReadableTextOn(
+    mixColors(gold, primaryDark, 0.5)
+  );
+
+  root.style.setProperty(
+    "--color-on-primary",
+    onPrimary.color
+  );
+
+  root.style.setProperty(
+    "--text-shadow-on-primary",
+    onPrimary.shadow
   );
 
 

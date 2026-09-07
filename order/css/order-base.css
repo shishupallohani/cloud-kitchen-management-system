@@ -26,6 +26,16 @@
   --color-warning: #e8590c;
   --color-warning-bg: #fff4e6;
 
+  /*
+   * Text colour to use ON TOP of --color-primary (e.g. active filter
+   * pills, solid buttons). theme-sync.js recalculates this for every
+   * admin theme so the label always has enough contrast, no matter how
+   * light or dark the chosen theme colour is. These are just the
+   * fallback values used before the theme script runs.
+   */
+  --color-on-primary: #ffffff;
+  --text-shadow-on-primary: 0 1px 2px rgba(0, 0, 0, 0.45);
+
   --radius-sm: 8px;
   --radius-md: 14px;
   --radius-lg: 22px;
