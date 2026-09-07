@@ -662,3 +662,36 @@ body {
     padding-top: var(--space-6);
   }
 }
+
+
+/* -----------------------------------------------------------------------
+   MOBILE NAV HOVER FIX
+
+   On touch devices, :hover can remain stuck on the previously tapped
+   navigation card after Browser Back/Forward.
+
+   Only the actual current page should remain highlighted.
+   ----------------------------------------------------------------------- */
+
+@media (max-width: 640px) {
+
+  .topnav:not(.topnav--dashboard)
+    .nav-link:hover:not(.nav-link--active) {
+
+    color:
+      var(--color-text);
+
+    border-color:
+      var(--color-border);
+
+    background:
+      var(--color-surface);
+
+    box-shadow:
+      var(--shadow-sm);
+
+    transform:
+      none;
+  }
+
+}

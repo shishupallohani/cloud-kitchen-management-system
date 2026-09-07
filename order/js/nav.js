@@ -66,7 +66,7 @@ function initOrderPageTransition() {
       document.body.classList.remove(
         "page-transition-in"
       );
-
+      document.activeElement?.blur();
     }
   );
 
