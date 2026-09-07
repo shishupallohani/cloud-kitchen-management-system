@@ -14,6 +14,23 @@
 
     <main class="page-container">
       <section class="dashboard-hero" id="dashboard-hero">
+        <!--
+          Looping background video. Drop your 10s muted video file at:
+            order/assets/videos/hero-bg.mp4
+          (create the "videos" folder inside assets if it doesn't exist yet).
+          No other changes needed — it will auto-fill the card and loop.
+        -->
+        <video
+          class="dashboard-hero__bg-video"
+          id="dashboard-hero-video"
+          src="assets/videos/hero-bg.mp4"
+          autoplay
+          loop
+          muted
+          playsinline
+          preload="auto"
+        ></video>
+        <div class="dashboard-hero__tint" aria-hidden="true"></div>
         <div class="dashboard-hero__badge" id="dashboard-hero-badge">🍛</div>
         <div class="dashboard-hero__greeting" id="dashboard-greeting">Welcome back!</div>
         <div class="dashboard-hero__sub">Craving something delicious? Explore today's menu.</div>

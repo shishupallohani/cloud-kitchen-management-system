@@ -187,4 +187,4 @@ function initHeroParticles() {
 }
 
 initHeroTicker();
-initHeroParticles();
+// initHeroParticles(); // disabled — replaced by the hero background video
