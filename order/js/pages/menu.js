@@ -1,4 +1,4 @@
-import { onAuthChange } from "../auth.js";
+import { onAuthChange, getCurrentUser } from "../auth.js";
 import { renderNav } from "../nav.js";
 import { getMenu, getCategories } from "../menu-service.js";
 import { getFavorites, toggleFavorite } from "../favorites-service.js";
@@ -37,6 +37,30 @@ let activeCategory = "All";
    AUTH STATE
    ================================================================ */
 
+// Marquee is a guest-only touch — logged-in customers never see it.
+// Kept as its own function (instead of only inside onAuthChange) so it
+// can be re-applied synchronously and on bfcache restores below —
+// onAuthStateChanged alone can be slow/stale, which was leaving the
+// marquee stuck in whatever state it was last rendered in.
+function syncMarqueeVisibility(currentUser) {
+  if (marqueeEl) {
+    marqueeEl.hidden = Boolean(currentUser);
+  }
+}
+
+// Apply immediately using whatever Firebase already knows synchronously
+// (usually null on first paint), instead of waiting for the async
+// onAuthChange callback below.
+syncMarqueeVisibility(getCurrentUser());
+
+// If the browser restores this page from back/forward cache (bfcache) —
+// e.g. after a login → logout → back-to-menu flow — the module script
+// doesn't re-run, so re-sync against the current auth state whenever the
+// page becomes visible again.
+window.addEventListener("pageshow", () => {
+  syncMarqueeVisibility(getCurrentUser());
+});
+
 onAuthChange(async (authUser) => {
   user = authUser || null;
 
@@ -51,10 +75,7 @@ onAuthChange(async (authUser) => {
     guest: !user,
   });
 
-  // Marquee is a guest-only touch — logged-in customers never see it.
-  if (marqueeEl) {
-    marqueeEl.hidden = Boolean(user);
-  }
+  syncMarqueeVisibility(user);
 
   await loadData();
 });
