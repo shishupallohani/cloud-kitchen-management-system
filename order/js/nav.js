@@ -1309,15 +1309,11 @@ export function renderNav(
 
         <!-- Logo -->
 
-        <a
-          class="topnav__brand"
-          href="${
-            isGuest
-              ? "index.html"
-              : "dashboard.html"
-          }"
-          aria-label="Charroti Kitchen"
-        >
+     <a
+  class="topnav__brand"
+  href="../index.html"
+  aria-label="Charroti Kitchen"
+>
 
           <img
             src="assets/images/favicon.png"
