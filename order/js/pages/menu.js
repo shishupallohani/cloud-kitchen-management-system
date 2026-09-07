@@ -23,6 +23,7 @@ import {
 
 const tabsEl = document.getElementById("category-tabs");
 const contentEl = document.getElementById("menu-content");
+const marqueeEl = document.getElementById("menu-marquee");
 
 let user = null;
 
@@ -49,6 +50,11 @@ onAuthChange(async (authUser) => {
   renderNav("menu", {
     guest: !user,
   });
+
+  // Marquee is a guest-only touch — logged-in customers never see it.
+  if (marqueeEl) {
+    marqueeEl.hidden = Boolean(user);
+  }
 
   await loadData();
 });

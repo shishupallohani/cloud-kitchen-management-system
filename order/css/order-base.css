@@ -139,13 +139,28 @@ button {
 }
 
 .page-header {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 9px 22px;
+  border-radius: 999px;
+  background: linear-gradient(
+    120deg,
+    color-mix(in srgb, var(--color-primary) 12%, var(--color-surface) 88%),
+    color-mix(in srgb, var(--color-primary) 4%, var(--color-surface) 96%)
+  );
+  border: 1px solid var(--border-glass);
+  box-shadow: var(--shadow-sm);
   margin-bottom: var(--space-5);
+  max-width: 100%;
 }
 
 .page-header h1 {
-  font-size: 1.7rem;
+  margin: 0;
+  font-size: 1.05rem;
   font-weight: 800;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
   background: linear-gradient(120deg, var(--color-text) 40%, var(--color-primary-dark) 120%);
   -webkit-background-clip: text;
   background-clip: text;
@@ -153,8 +168,12 @@ button {
 }
 
 .page-header p {
+  margin: 0;
+  font-size: 0.72rem;
   color: var(--color-text-muted);
-  margin-top: var(--space-1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* ---------- Top navigation ---------- */
