@@ -1066,9 +1066,7 @@ function showLogoutConfirmation() {
 
           setTimeout(() => {
 
-            window.location.replace(
-              "login.html?loggedOut=1"
-            );
+            window.location.replace("index.html?logoutGuest=1");
 
           }, 220);
 
@@ -1368,7 +1366,7 @@ export function renderNav(
 
           ${
             isGuest
-              ? ""
+              ? loginMarkup()
               : logoutMarkup(
                   "nav-logout-link"
                 )

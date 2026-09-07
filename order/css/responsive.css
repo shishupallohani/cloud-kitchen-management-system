@@ -597,6 +597,12 @@ body {
   .status-tracker {
     overflow-x: auto;
   }
+
+  /* Hide desktop Login copy on mobile.
+   Mobile Login is already shown in .topnav__mobile-logout */
+.topnav__links .nav-link--login {
+  display: none !important;
+}
 }
 
 
