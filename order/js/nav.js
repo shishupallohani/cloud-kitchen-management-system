@@ -33,6 +33,151 @@ import { logout } from "./auth.js";
 import { showError } from "./ui.js";
 
 
+/* -----------------------------------------------------------------------
+   Ordering page transitions + entry splash
+   ----------------------------------------------------------------------- */
+
+/* -----------------------------------------------------------------------
+   Ordering page transitions + entry splash
+   ----------------------------------------------------------------------- */
+
+function initOrderPageTransition() {
+  if (window.__orderPageTransitionInitialized) {
+    return;
+  }
+
+  window.__orderPageTransitionInitialized = true;
+
+  /*
+   * IMPORTANT:
+   * Browser Back/Forward can restore a page from BFCache.
+   * Always clear transition state when a page becomes visible again.
+   */
+  window.addEventListener("pageshow", () => {
+    document.body.classList.remove("page-transition-out");
+    document.body.classList.remove("page-transition-in");
+  });
+
+  /*
+   * Entry splash is used only on order/index.html.
+   */
+  const splash = document.getElementById("order-splash");
+
+  if (splash) {
+    const hideSplash = () => {
+      splash.classList.add("order-splash--hide");
+
+      setTimeout(() => {
+        splash.remove();
+      }, 700);
+    };
+
+    if (document.readyState === "complete") {
+      setTimeout(hideSplash, 650);
+    } else {
+      window.addEventListener(
+        "load",
+        () => {
+          setTimeout(hideSplash, 450);
+        },
+        { once: true }
+      );
+    }
+  }
+
+  /*
+   * Smooth transition for normal internal navigation.
+   */
+  document.addEventListener("click", (event) => {
+    const link = event.target.closest("a");
+
+    if (!link) {
+      return;
+    }
+
+    const href = link.getAttribute("href");
+
+    if (!href) {
+      return;
+    }
+
+    /*
+     * Never interfere with external links, anchors,
+     * downloads, new tabs or special protocols.
+     */
+    if (
+      href.startsWith("#") ||
+      href.startsWith("http://") ||
+      href.startsWith("https://") ||
+      href.startsWith("mailto:") ||
+      href.startsWith("tel:") ||
+      link.target === "_blank" ||
+      link.hasAttribute("download")
+    ) {
+      return;
+    }
+
+    /*
+     * Never interfere with logout handlers.
+     */
+    if (
+      link.hasAttribute("data-nav-logout") ||
+      href === "#"
+    ) {
+      return;
+    }
+
+    /*
+     * Only animate internal HTML pages.
+     */
+    if (!/\.html(?:[?#].*)?$/i.test(href)) {
+      return;
+    }
+
+    /*
+     * Prevent double clicks from creating multiple navigations.
+     */
+    if (document.body.classList.contains("page-transition-out")) {
+      event.preventDefault();
+      return;
+    }
+
+    event.preventDefault();
+
+    document.body.classList.add("page-transition-out");
+
+    setTimeout(() => {
+      window.location.assign(href);
+    }, 220);
+  });
+}
+
+
+/*
+ * Start transition system.
+ */
+if (document.readyState === "loading") {
+  document.addEventListener(
+    "DOMContentLoaded",
+    initOrderPageTransition,
+    { once: true }
+  );
+} else {
+  initOrderPageTransition();
+}
+
+/*
+ * Start transition system as early as possible.
+ */
+if (document.readyState === "loading") {
+  document.addEventListener(
+    "DOMContentLoaded",
+    initOrderPageTransition,
+    { once: true }
+  );
+} else {
+  initOrderPageTransition();
+}
 const NAV_ITEMS = [
 
   {

@@ -459,3 +459,181 @@ textarea {
   font-size: 0.8rem;
   padding: var(--space-5) var(--space-4);
 }
+/* =========================================================================
+   CHARROTI KITCHEN ORDERING SPLASH + PAGE TRANSITIONS
+   Added without changing the original ordering UI components.
+   ========================================================================= */
+
+.order-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg);
+  color: var(--color-text);
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1),
+    visibility 0.65s ease;
+  overflow: hidden;
+}
+
+.order-splash::before {
+  content: "";
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  opacity: 0.055;
+  filter: blur(60px);
+  pointer-events: none;
+}
+
+.order-splash__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  animation: orderSplashEnter 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.order-splash__logo-wrap {
+  width: 92px;
+  height: 92px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  border-radius: 24px;
+  background: var(--color-surface);
+  box-shadow:
+    0 10px 35px rgba(20, 20, 20, 0.08),
+    0 0 0 1px rgba(20, 20, 20, 0.04);
+  animation: orderSplashLogoPulse 1.8s ease-in-out infinite;
+}
+
+.order-splash__logo {
+  width: 68px;
+  height: 68px;
+  object-fit: contain;
+  display: block;
+}
+
+.order-splash__brand {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.order-splash__brand span {
+  font-weight: 500;
+}
+
+.order-splash__brand strong {
+  color: var(--color-primary);
+  font-weight: 800;
+}
+
+.order-splash.order-splash--hide {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.page-container,
+.footer-note {
+  transition:
+    opacity 0.28s ease,
+    transform 0.28s ease;
+}
+
+body.page-transition-out .page-container,
+body.page-transition-out .footer-note {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+body.page-transition-in .page-container,
+body.page-transition-in .footer-note {
+  animation: orderPageEnter 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes orderSplashEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(14px) scale(0.97);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes orderSplashLogoPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.025);
+  }
+}
+
+@keyframes orderPageEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .order-splash,
+  .page-container,
+  .footer-note,
+  .order-splash__content,
+  .order-splash__logo-wrap {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  body.page-transition-out .page-container,
+  body.page-transition-out .footer-note {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .order-splash__logo-wrap {
+    width: 82px;
+    height: 82px;
+    border-radius: 21px;
+    margin-bottom: 14px;
+  }
+
+  .order-splash__logo {
+    width: 60px;
+    height: 60px;
+  }
+
+  .order-splash__brand {
+    font-size: 20px;
+  }
+}
