@@ -670,3 +670,224 @@ function sumQuantities() {
 
   return total;
 }
+
+/* ================================================================
+   DISH DETAIL MODAL — NEW FEATURE (fully additive)
+   ----------------------------------------------------------------
+   Nothing above this line was changed. This block only ADDS a
+   click-to-preview modal on top of the existing menu page. It
+   reuses the exact same onAddToCart / onChangeQuantity /
+   onToggleFavorite functions already defined above, so cart and
+   favorite behaviour is 100% identical to the existing Add
+   button / heart icon / qty stepper on the grid.
+   ================================================================ */
+
+let dishModalOverlay = null;
+let currentModalDishId = null;
+
+function buildModalFooterHtml(dish) {
+
+  const qty =
+    cartQuantities.get(dish.dishId) || 0;
+
+  const available =
+    dish.available !== false;
+
+  if (!available) {
+    return `<span style="color: var(--color-text-muted); font-size: 0.9rem;">Currently unavailable</span>`;
+  }
+
+  if (qty > 0) {
+    return `<div class="qty-stepper" data-dish-id="${escapeHtml(dish.dishId)}">
+      <button type="button" class="qty-decrease" aria-label="Decrease quantity">−</button>
+      <span>${qty}</span>
+      <button type="button" class="qty-increase" aria-label="Increase quantity">+</button>
+    </div>`;
+  }
+
+  return `<button type="button" class="btn btn--primary add-to-cart-btn" data-dish-id="${escapeHtml(dish.dishId)}">Add to Cart</button>`;
+}
+
+function wireModalFooterButtons(dish) {
+
+  if (!dishModalOverlay) return;
+
+  const footerEl =
+    dishModalOverlay.querySelector(".dish-modal__footer-control");
+
+  if (!footerEl) return;
+
+  const addBtn = footerEl.querySelector(".add-to-cart-btn");
+  if (addBtn) {
+    addBtn.addEventListener("click", async () => {
+      await onAddToCart(dish.dishId);
+      refreshDishModalFooter();
+    });
+  }
+
+  const incBtn = footerEl.querySelector(".qty-increase");
+  if (incBtn) {
+    incBtn.addEventListener("click", async () => {
+      await onChangeQuantity(dish.dishId, 1);
+      refreshDishModalFooter();
+    });
+  }
+
+  const decBtn = footerEl.querySelector(".qty-decrease");
+  if (decBtn) {
+    decBtn.addEventListener("click", async () => {
+      await onChangeQuantity(dish.dishId, -1);
+      refreshDishModalFooter();
+    });
+  }
+}
+
+function refreshDishModalFooter() {
+
+  if (!dishModalOverlay || !currentModalDishId) return;
+
+  const dish =
+    allDishes.find((d) => d.dishId === currentModalDishId);
+
+  if (!dish) return;
+
+  const footerEl =
+    dishModalOverlay.querySelector(".dish-modal__footer-control");
+
+  if (footerEl) {
+    footerEl.innerHTML = buildModalFooterHtml(dish);
+  }
+
+  const heartBtn =
+    dishModalOverlay.querySelector(".dish-modal__fav-btn");
+
+  if (heartBtn) {
+    const isFav = favoriteIds.has(currentModalDishId);
+    heartBtn.classList.toggle("dish-card__fav-btn--active", isFav);
+    heartBtn.textContent = isFav ? "♥" : "♡";
+    heartBtn.disabled = false;
+  }
+
+  wireModalFooterButtons(dish);
+}
+
+function closeDishModal() {
+
+  if (!dishModalOverlay) return;
+
+  dishModalOverlay.classList.remove("dish-modal-overlay--visible");
+
+  const overlayToRemove = dishModalOverlay;
+
+  setTimeout(() => {
+    overlayToRemove.remove();
+  }, 280);
+
+  dishModalOverlay = null;
+  currentModalDishId = null;
+
+  document.removeEventListener("keydown", escCloseHandler);
+}
+
+function escCloseHandler(event) {
+  if (event.key === "Escape") {
+    closeDishModal();
+  }
+}
+
+function openDishModal(dish) {
+
+  if (dishModalOverlay) {
+    closeDishModal();
+  }
+
+  currentModalDishId = dish.dishId;
+
+  const isFav = favoriteIds.has(dish.dishId);
+
+  const overlay = document.createElement("div");
+  overlay.className = "dish-modal-overlay";
+
+  overlay.innerHTML = `
+    <div class="dish-modal" role="dialog" aria-modal="true" aria-label="${escapeHtml(dish.name)}">
+      <button type="button" class="dish-modal__close" aria-label="Close">✕</button>
+      <div class="dish-modal__image-wrap">
+        <img src="${escapeHtml(dish.image)}" alt="${escapeHtml(dish.name)}" class="dish-modal__image" />
+        <button
+          type="button"
+          class="dish-card__fav-btn dish-modal__fav-btn${isFav ? " dish-card__fav-btn--active" : ""}"
+          aria-label="Toggle favorite"
+        >${isFav ? "♥" : "♡"}</button>
+      </div>
+      <div class="dish-modal__body">
+        <div class="dish-modal__name">${escapeHtml(dish.name)}</div>
+        <div class="dish-modal__desc">${escapeHtml(dish.description || "")}</div>
+        <div class="dish-modal__footer">
+          <span class="dish-modal__price">${formatCurrency(dish.price)}</span>
+          <div class="dish-modal__footer-control">${buildModalFooterHtml(dish)}</div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+  dishModalOverlay = overlay;
+
+  requestAnimationFrame(() => {
+    overlay.classList.add("dish-modal-overlay--visible");
+  });
+
+  overlay
+    .querySelector(".dish-modal__close")
+    .addEventListener("click", closeDishModal);
+
+  overlay.addEventListener("click", (event) => {
+    if (event.target === overlay) {
+      closeDishModal();
+    }
+  });
+
+  const heartBtn =
+    overlay.querySelector(".dish-modal__fav-btn");
+
+  heartBtn.addEventListener("click", () => {
+    heartBtn.disabled = true;
+    onToggleFavorite(dish.dishId, heartBtn);
+    setTimeout(refreshDishModalFooter, 60);
+  });
+
+  wireModalFooterButtons(dish);
+
+  document.addEventListener("keydown", escCloseHandler);
+}
+
+/*
+ * Delegated click listener on contentEl.
+ * contentEl itself is never replaced (only its innerHTML, inside
+ * renderDishes()), so this single listener survives every
+ * re-render without needing any change to attachDishHandlers().
+ *
+ * Clicks on the favorite button, Add button, or qty stepper are
+ * ignored here so their existing behaviour keeps working exactly
+ * as before — only a click on the card itself (image/name/desc
+ * area) opens the detail view.
+ */
+contentEl.addEventListener("click", (event) => {
+
+  const card = event.target.closest(".dish-card");
+  if (!card) return;
+
+  const isControlClick =
+    event.target.closest(".dish-card__fav-btn") ||
+    event.target.closest(".add-to-cart-btn") ||
+    event.target.closest(".qty-stepper");
+
+  if (isControlClick) return;
+
+  const dishId = card.dataset.dishId;
+  const dish = allDishes.find((d) => d.dishId === dishId);
+
+  if (dish) {
+    openDishModal(dish);
+  }
+});

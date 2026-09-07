@@ -3,26 +3,46 @@
    ========================================================================= */
 
 .dashboard-hero {
-  background: var(--color-secondary);
+  background: linear-gradient(135deg, var(--color-secondary) 0%, color-mix(in srgb, var(--color-secondary) 60%, black) 100%);
   color: #fff;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
   padding: var(--space-6);
   margin-bottom: var(--space-6);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
+.dashboard-hero::before {
+  content: "";
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  opacity: 0.25;
+  filter: blur(70px);
+  top: -80px;
+  right: -60px;
+  pointer-events: none;
 }
 
 .dashboard-hero__greeting {
-  font-size: 1.4rem;
-  font-weight: 700;
+  font-size: 1.5rem;
+  font-weight: 800;
   margin-bottom: var(--space-1);
+  position: relative;
 }
 
 .dashboard-hero__sub {
   opacity: 0.85;
   font-size: 0.92rem;
+  position: relative;
 }
 
 .dashboard-hero .btn {
   margin-top: var(--space-4);
+  position: relative;
 }
 
 .dashboard-grid {
@@ -37,18 +57,24 @@
   flex-direction: column;
   align-items: flex-start;
   gap: var(--space-2);
-  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  transition: transform 0.4s var(--ease-spring), box-shadow 0.4s var(--ease-smooth);
   cursor: pointer;
   position: relative;
+  transform-style: preserve-3d;
 }
 
 .dashboard-tile:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-8px) rotateX(3deg) rotateY(-2deg) scale(1.02);
+  box-shadow: var(--shadow-lg);
 }
 
 .dashboard-tile__icon {
-  font-size: 1.7rem;
+  font-size: 1.8rem;
+  transition: transform 0.35s var(--ease-spring);
+}
+
+.dashboard-tile:hover .dashboard-tile__icon {
+  transform: scale(1.2) rotate(-6deg);
 }
 
 .dashboard-tile__label {
@@ -65,10 +91,16 @@
   position: absolute;
   top: var(--space-4);
   right: var(--space-4);
-  background: var(--color-primary);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--color-primary) 80%, black 10%),
+    color-mix(in srgb, var(--color-primary-dark) 88%, black 14%)
+  );
   color: #fff;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
   font-size: 0.7rem;
   font-weight: 700;
-  padding: 2px 9px;
+  padding: 3px 10px;
   border-radius: 999px;
+  box-shadow: 0 4px 10px -2px var(--glow-primary-strong);
 }

@@ -2,566 +2,278 @@
    checkout.css
    ========================================================================= */
 
-
-/* =========================================================================
-   CHECKOUT LAYOUT
-   ========================================================================= */
-
 .checkout-layout {
-
   display: grid;
-
-  grid-template-columns:
-    1fr 360px;
-
+  grid-template-columns: 1fr 360px;
   gap: var(--space-5);
-
   align-items: start;
-
 }
-
 
 .checkout-section {
-
-  margin-bottom:
-    var(--space-5);
-
+  margin-bottom: var(--space-5);
 }
-
 
 .checkout-section__title {
-
-  font-weight: 700;
-
+  font-weight: 800;
   font-size: 1.05rem;
-
-  margin-bottom:
-    var(--space-3);
-
+  margin-bottom: var(--space-3);
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
-
 }
 
-
-/* =========================================================================
-   PAYMENT OPTIONS
-   ========================================================================= */
+/* ---------- Payment options ---------- */
 
 .payment-options {
-
   display: flex;
-
   flex-direction: column;
-
   gap: var(--space-3);
-
 }
-
 
 .payment-option {
-
   display: flex;
-
   align-items: flex-start;
-
   gap: var(--space-3);
-
   padding: var(--space-4);
-
-  border:
-    1px solid
-    var(--color-border);
-
-  border-radius:
-    var(--radius-md);
-
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   cursor: pointer;
-
-  transition:
-    border-color 0.15s ease,
-    background 0.15s ease,
-    box-shadow 0.15s ease;
-
+  background: var(--surface-glass);
+  transition: border-color 0.3s var(--ease-smooth), background 0.3s ease, box-shadow 0.3s var(--ease-smooth), transform 0.3s var(--ease-spring);
 }
-
 
 .payment-option:hover {
-
-  border-color:
-    var(--color-primary);
-
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
 }
-
 
 .payment-option--selected {
-
-  border-color:
-    var(--color-primary);
-
-  background:
-    var(--color-primary-light);
-
-  box-shadow:
-    0 4px 12px
-    rgba(20, 20, 20, 0.06);
-
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 15%, transparent), 0 10px 24px -10px var(--glow-primary-strong);
 }
-
 
 .payment-option input {
-
   width: auto;
-
   margin-top: 3px;
-
 }
-
 
 .payment-option__label {
-
   font-weight: 700;
-
   font-size: 0.95rem;
-
 }
-
 
 .payment-option__desc {
-
-  color:
-    var(--color-text-muted);
-
+  color: var(--color-text-muted);
   font-size: 0.82rem;
-
   margin-top: 2px;
-
 }
 
-
-/* =========================================================================
-   UPI PANEL
-   ========================================================================= */
+/* ---------- UPI panel ---------- */
 
 .upi-panel {
-
-  margin-top:
-    var(--space-3);
-
-  padding:
-    var(--space-5);
-
-  border-radius:
-    var(--radius-md);
-
-  background:
-    var(--color-bg);
-
+  margin-top: var(--space-3);
+  padding: var(--space-5);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
   text-align: center;
-
   display: none;
-
 }
-
 
 .upi-panel--visible {
-
   display: block;
-
+  animation: orderPageEnter 0.4s var(--ease-smooth) both;
 }
-
 
 .upi-panel__heading {
-
   font-size: 1.05rem;
-
   font-weight: 700;
-
-  color:
-    var(--color-text);
-
+  color: var(--color-text);
 }
-
 
 .upi-panel__subheading {
-
   margin-top: 3px;
-
-  margin-bottom:
-    var(--space-4);
-
+  margin-bottom: var(--space-4);
   font-size: 0.82rem;
-
-  color:
-    var(--color-text-muted);
-
+  color: var(--color-text-muted);
 }
 
-
-/* =========================================================================
-   UPI APP GRID
-   ========================================================================= */
+/* ---------- UPI app grid ---------- */
 
 .upi-app-grid {
-
   display: grid;
-
-  grid-template-columns:
-    repeat(5, minmax(0, 1fr));
-
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 10px;
-
   width: 100%;
-
 }
-
 
 .upi-app-button {
-
   min-width: 0;
-
   min-height: 105px;
-
-  padding:
-    12px 8px;
-
+  padding: 12px 8px;
   display: flex;
-
   flex-direction: column;
-
   align-items: center;
-
   justify-content: center;
-
   gap: 8px;
-
-  border:
-    1px solid
-    var(--color-border);
-
-  border-radius:
-    var(--radius-md);
-
-  background:
-    var(--color-surface);
-
-  color:
-    var(--color-text);
-
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
   cursor: pointer;
-
   font-family: inherit;
-
   font-size: 0.75rem;
-
   font-weight: 700;
-
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease,
-    border-color 0.15s ease,
-    background 0.15s ease;
-
+  transition: transform 0.3s var(--ease-spring), box-shadow 0.3s var(--ease-smooth), border-color 0.25s ease, background 0.25s ease;
 }
-
 
 .upi-app-button:hover {
-
-  transform:
-    translateY(-2px);
-
-  border-color:
-    var(--color-primary);
-
-  background:
-    var(--color-primary-light);
-
-  box-shadow:
-    var(--shadow-md);
-
+  transform: translateY(-4px) scale(1.03);
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
+  box-shadow: var(--shadow-md);
 }
-
 
 .upi-app-button:active {
-
-  transform:
-    translateY(0);
-
+  transform: translateY(0) scale(0.98);
 }
-
 
 .upi-app-button:focus-visible {
-
-  outline:
-    2px solid
-    var(--color-primary);
-
+  outline: 2px solid var(--color-primary);
   outline-offset: 2px;
-
 }
-
 
 .upi-app-button img {
   width: 44px !important;
   height: 44px !important;
   max-width: 44px !important;
   max-height: 44px !important;
-
   object-fit: contain;
-
   display: block;
-
   margin: 0;
-
   padding: 0;
-
   border: none;
-
   border-radius: 10px;
-
   background: transparent;
 }
 
-
 .upi-app-button span {
-
   display: block;
-
   max-width: 100%;
-
   overflow: hidden;
-
   text-overflow: ellipsis;
-
   white-space: nowrap;
-
 }
 
-
-/* =========================================================================
-   UPI DIVIDER
-   ========================================================================= */
+/* ---------- UPI divider ---------- */
 
 .upi-divider {
-
   display: flex;
-
   align-items: center;
-
   gap: 12px;
-
-  margin:
-    var(--space-5) 0;
-
-  color:
-    var(--color-text-muted);
-
+  margin: var(--space-5) 0;
+  color: var(--color-text-muted);
   font-size: 0.75rem;
-
   font-weight: 700;
-
 }
-
 
 .upi-divider::before,
 .upi-divider::after {
-
   content: "";
-
   height: 1px;
-
   flex: 1;
-
-  background:
-    var(--color-border);
-
+  background: var(--color-border);
 }
-
 
 .upi-divider span {
-
   flex: 0 0 auto;
-
 }
 
-
-/* =========================================================================
-   QR SECTION
-   ========================================================================= */
+/* ---------- QR section ---------- */
 
 .upi-qr-section {
-
-  padding:
-    var(--space-4);
-
-  border:
-    1px solid
-    var(--color-border);
-
-  border-radius:
-    var(--radius-md);
-
-  background:
-    var(--color-surface);
-
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
 }
-
 
 .upi-qr-section__title {
-
   font-size: 0.95rem;
-
   font-weight: 700;
-
-  color:
-    var(--color-text);
-
+  color: var(--color-text);
 }
-
 
 .upi-qr-section__hint {
-
   margin-top: 2px;
-
-  margin-bottom:
-    var(--space-3);
-
-  color:
-    var(--color-text-muted);
-
+  margin-bottom: var(--space-3);
+  color: var(--color-text-muted);
   font-size: 0.78rem;
-
 }
-
 
 .upi-panel img {
-
   width: 180px;
-
   height: 180px;
-
   object-fit: contain;
-
-  margin:
-    0 auto var(--space-3);
-
-  border-radius:
-    var(--radius-sm);
-
+  margin: 0 auto var(--space-3);
+  border-radius: var(--radius-sm);
   background: #fff;
-
-  border:
-    1px solid
-    var(--color-border);
-
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-md);
 }
-
 
 .upi-panel__id {
-
   font-weight: 700;
-
   font-size: 0.95rem;
-
-  margin-bottom:
-    var(--space-1);
-
+  margin-bottom: var(--space-1);
 }
-
 
 .upi-panel__hint {
-
-  color:
-    var(--color-text-muted);
-
+  color: var(--color-text-muted);
   font-size: 0.8rem;
-
   line-height: 1.5;
-
 }
 
-
-/* =========================================================================
-   ORDER REVIEW
-   ========================================================================= */
+/* ---------- Order review ---------- */
 
 .order-review-item {
-
   display: flex;
-
   justify-content: space-between;
-
   gap: var(--space-3);
-
   font-size: 0.88rem;
-
-  padding:
-    var(--space-2) 0;
-
-  border-bottom:
-    1px dashed
-    var(--color-border);
-
+  padding: var(--space-2) 0;
+  border-bottom: 1px dashed var(--color-border);
 }
-
 
 .order-review-item:last-child {
-
   border-bottom: none;
-
 }
 
-
-/* =========================================================================
-   DELIVERY INFO
-   ========================================================================= */
+/* ---------- Delivery info ---------- */
 
 .delivery-info-view p {
-
   font-size: 0.9rem;
-
-  margin-bottom:
-    var(--space-1);
-
-  color:
-    var(--color-text-muted);
-
+  margin-bottom: var(--space-1);
+  color: var(--color-text-muted);
 }
-
 
 .delivery-info-view strong {
-
-  color:
-    var(--color-text);
-
+  color: var(--color-text);
 }
 
-
-/* =========================================================================
-   TABLET
-   ========================================================================= */
+/* ---------- Tablet ---------- */
 
 @media (max-width: 900px) {
-
   .upi-app-grid {
-
-    grid-template-columns:
-      repeat(3, minmax(0, 1fr));
-
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-
 }
 
-
-/* =========================================================================
-   SMALL MOBILE
-   ========================================================================= */
+/* ---------- Small mobile ---------- */
 
 @media (max-width: 480px) {
-
   .upi-app-button {
     min-height: 78px;
     padding: 9px 6px;
@@ -573,19 +285,12 @@
     max-width: 40px !important;
     max-height: 40px !important;
   }
-
 }
 
-
   .upi-app-grid {
-
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
-
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 9px;
-
   }
-
 
   .upi-app-button {
   min-width: 0;
@@ -613,36 +318,23 @@
   font-weight: 700;
 
   transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease,
-    border-color 0.15s ease,
-    background 0.15s ease;
+    transform 0.3s var(--ease-spring),
+    box-shadow 0.3s var(--ease-smooth),
+    border-color 0.25s ease,
+    background 0.25s ease;
 }
 
-
   .upi-app-button img {
-
     width: 44px;
-
     height: 44px;
-
   }
-
 
   .upi-qr-section {
-
-    padding:
-      var(--space-3);
-
+    padding: var(--space-3);
   }
-
 
   .upi-panel img {
-
     width: 170px;
-
     height: 170px;
-
   }
-
 }
