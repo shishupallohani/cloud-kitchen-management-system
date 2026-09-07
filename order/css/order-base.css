@@ -36,6 +36,13 @@
   --color-on-primary: #ffffff;
   --text-shadow-on-primary: 0 1px 2px rgba(0, 0, 0, 0.45);
 
+  /*
+   * Same idea as --color-on-primary, but for text/emoji sitting on
+   * the dashboard hero card (--color-secondary based gradient).
+   */
+  --color-on-hero: #ffffff;
+  --text-shadow-on-hero: 0 1px 2px rgba(0, 0, 0, 0.45);
+
   --radius-sm: 8px;
   --radius-md: 14px;
   --radius-lg: 22px;

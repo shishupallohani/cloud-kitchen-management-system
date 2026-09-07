@@ -286,6 +286,25 @@ function applyOrderTheme(theme) {
 
 
   /*
+   * Same idea, but sampled from the dashboard hero card's own
+   * gradient blend (55% secondary / 45% primary - matches the CSS in
+   * dashboard.css) so its text/emoji stay readable on any theme too.
+   */
+  const heroBlend = mixColors(bg, gold, 0.55);
+  const onHero = getReadableTextOn(heroBlend);
+
+  root.style.setProperty(
+    "--color-on-hero",
+    onHero.color
+  );
+
+  root.style.setProperty(
+    "--text-shadow-on-hero",
+    onHero.shadow
+  );
+
+
+  /*
    * Website dark theme colour becomes the
    * strong secondary colour in Order UI.
    */
